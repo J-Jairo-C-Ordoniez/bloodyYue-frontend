@@ -3,9 +3,9 @@ import Button from '../atoms/Button';
 import Icon from '../atoms/Icon';
 import Label from '../atoms/Label';
 import usePosts from '../../hooks/usePosts';
-import LoaderCard from '../atoms/LoaderCard';
+import LoaderCard from '../molecules/LoaderCard';
 import PostRandom from '../molecules/PostRandom';
-import Error from '../molecules/Error';
+import ErrorCard from '../molecules/ErrorCard';
 
 export default function HeroSection({ subtitle, abaut }) {
     const { post, isLoadingPost, errorPost } = usePosts();
@@ -57,7 +57,7 @@ export default function HeroSection({ subtitle, abaut }) {
                 <div className="relative w-full aspect-4/5 max-w-[500px] mx-auto lg:ml-auto">
                     <div className="rotate-4 w-full h-full rounded-3xl overflow-hidden shadow-2xl shadow-indigo-500/20 transform transition-all duration-500 hover:shadow-indigo-500/40">
                         {isLoadingPost && <LoaderCard />}
-                        {errorPost || post?.error && <Error message={post.message} typeError={post.typeError} />}
+                        {errorPost || post?.error && <ErrorCard />}
                         {post?.data && <PostRandom post={post.data} width={500} height={700} />}
                     </div>
                 </div>

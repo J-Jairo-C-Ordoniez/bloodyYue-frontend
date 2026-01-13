@@ -1,50 +1,113 @@
-import React from 'react';
+import useReactions from '../../hooks/useReactions';
 import Image from '../atoms/Image';
+import formatDate from '../../utils/formatDate';
+import Icon from '../atoms/Icon';
+import Button from '../atoms/Button';
 import Typography from '../atoms/Typography';
+import likesCount from '../../utils/likesCount';
 
-export default function WorkCard({ title, description, image, onClick }) {
+export default function WorkCard({ postId, userId, title, description, content, typePost = 'image', createdAt }) {
+    const { reactions, isLoadingReactions, errorReactions } = useReactions({ id: postId }, 'getReactions');
+
+    const handleLike = (e) => {
+        e.stopPropagation();
+    };
+
+    if (typePost === 'short') {
+        return (
+            <article className="group relative overflow-hidden rounded-3xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-sm hover:shadow-md transition-all duration-300 p-6 flex flex-col justify-between h-full min-h-[200px]">
+                <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-2">
+                            <div className="w-8 h-8 rounded-full bg-linear-to-tr from-purple-500 to-pink-500 flex items-center justify-center text-white text-xs font-bold">
+                                {userId ? userId.toString().charAt(0) : 'U'}
+                            </div>
+                            <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">User {userId}</span>
+                        </div>
+                        <span className="text-xs text-zinc-500">{formatDate(createdAt)}</span>
+                    </div>
+                    <div>
+                        <Typography variant="h4" className="text-lg font-bold text-zinc-900 dark:text-zinc-100 mb-2">
+                            {title}
+                        </Typography>
+                        <p className="text-zinc-600 dark:text-zinc-400 text-sm leading-relaxed line-clamp-4">
+                            {description || content}
+                        </p>
+                    </div>
+                </div>
+                <div className="mt-4 pt-4 border-t border-zinc-100 dark:border-zinc-800 flex items-center justify-between text-zinc-500">
+                    <button
+                        onClick={handleLike}
+                        className={`flex items-center space-x-1.5 text-sm transition-colors ${isLiked ? 'text-red-500' : 'hover:text-red-500'}`}
+                    >
+                        <Heart size={18} fill={isLiked ? "currentColor" : "none"} />
+                        <span>{likesCount}</span>
+                    </button>
+                    <button className="hover:text-blue-500 transition-colors">
+                        <Share2 size={18} />
+                    </button>
+                </div>
+            </article>
+        );
+    }
+
     return (
-        <div
-            className="group relative overflow-hidden rounded-2xl bg-white dark:bg-gray-900 shadow-lg cursor-pointer transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
-            onClick={onClick}
-        >
-            {/* Image Container with Overlay */}
-            <div className="relative aspect-video w-full overflow-hidden">
-                <div className="absolute inset-0 z-10 bg-linear-to-t from-black/80 via-black/20 to-transparent opacity-60 transition-opacity duration-300 group-hover:opacity-40" />
-                <div className="h-full w-full transition-transform duration-500 group-hover:scale-110">
-                    <Image
-                        src={image}
-                        alt={title}
-                        width={400} // Default reasonable width
-                        height={225}
-                        variant="default"
-                        className="h-full w-full object-cover"
-                    />
+        <article className="group relative rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+            {/* <header className="p-4 flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                    <div className="w-9 h-9 rounded-full p-[2px] bg-linear-to-tr from-yellow-400 via-red-500 to-purple-500">
+                        <div className="w-full h-full rounded-full bg-white dark:bg-zinc-900 p-[2px]">
+                            <div className="w-full h-full rounded-full bg-zinc-200 dark:bg-zinc-700 overflow-hidden">
+                                <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userId || 'felix'}`} alt="avatar" className="w-full h-full object-cover" />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="flex flex-col">
+                        <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 leading-none">User {userId}</span>
+                        <span className="text-xs text-zinc-500 mt-0.5">{formatDate(createdAt)}</span>
+                    </div>
                 </div>
+            </header> */}
+
+            <div className="relative aspect-square w-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
+                <Image
+                    src={content}
+                    alt={title}
+                    width={500}
+                    height={500}
+                />
             </div>
 
-            {/* Content Content - Positioned to overlay on bottom or just below */}
-            <div className="relative z-20 p-6">
-                <Typography
-                    variant="h3"
-                    className="mb-2 text-xl font-bold bg-clip-text text-transparent bg-linear-to-r from-purple-500 to-blue-500"
-                >
-                    {title}
-                </Typography>
-                <Typography
-                    variant="body"
-                    className="line-clamp-2 text-gray-600 dark:text-gray-300"
-                >
-                    {description}
-                </Typography>
+            <footer className="px-4 pt-3 pb-2">
+                <div>
+                    <div className="flex items-center justify-between">
+                        <Button
+                            onClick={handleLike}
+                            variant='ghost'
+                        >
+                            <Icon name="Heart" size={24} />
+                        </Button>
 
-                <div className="mt-4 flex items-center text-sm font-medium text-blue-500 dark:text-blue-400 opacity-0 transform translate-y-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0">
-                    View Project
-                    <svg className="ml-1 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
+                        <Button
+                            onClick={handleLike}
+                            variant='ghost'
+                        >
+                            <Icon name="Share2" size={24} />
+                        </Button>
+                    </div>
                 </div>
-            </div>
-        </div>
+
+                <div className="font-semibold text-sm text-zinc-900 dark:text-zinc-100 mb-1 px-4">
+                    {reactions?.data ? likesCount(reactions?.data) : 0} likes
+                </div>
+
+                <div className="space-y-1 px-4">
+                    <Typography variant="small" className="text-sm text-zinc-700 dark:text-zinc-300">
+                        <span className="font-semibold text-zinc-900 dark:text-zinc-100 mr-2">{title}</span>
+                        {description}
+                    </Typography>
+                </div>
+            </footer>
+        </article>
     );
 }

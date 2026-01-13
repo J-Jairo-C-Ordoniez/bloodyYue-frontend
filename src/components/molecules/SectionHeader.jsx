@@ -23,11 +23,11 @@ export default function SectionHeader({ title, subtitle, content = null, classNa
                 </div>
             )}
 
-            <Typography variant="caption" className="uppercase text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-purple-600">
+            <Typography variant="caption" className="uppercase text-white">
                 {title}
             </Typography>
 
-            <Typography variant="subtitle" className="max-w-2xl text-gray-400">
+            <Typography variant="subtitle" className="max-w-2xl text-gray-600">
                 {subtitle}
             </Typography>
         </header>

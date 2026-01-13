@@ -28,9 +28,13 @@ export default function LandingPage({ data }) {
                     abaut={abaut}
                 />
 
-                <AboutSection abaut={abaut} work={work} content={contentHero} />
+                <AboutSection 
+                    abaut={abaut} 
+                    work={work} 
+                    content={contentHero} 
+                />
 
-                {/* <WorkSection content={work} /> */}
+                <WorkSection />
             </main>
 
             {/* <div id="contact">

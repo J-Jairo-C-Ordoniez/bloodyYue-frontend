@@ -8,6 +8,7 @@ export default function usePosts(body = null, variant = 'random') {
 
   const variants = {
     random: posts.getPostRandom,
+    list: posts.getPostList,
   }
 
   useEffect(() => {

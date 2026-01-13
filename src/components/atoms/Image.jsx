@@ -16,9 +16,8 @@ export default function Image({
         card: 'rounded-xl overflow-hidden aspect-video',
     };
 
-    const wrapperClasses = `${variants[variant]} ${className} relative`;
+    const wrapperClasses = `${variants[variant]} ${className}`;
 
-    // If fill is true, we don't pass width/height to NextImage, and reliance is on parent container or variant styles
     if (fill) {
         return (
             <div className={wrapperClasses}>

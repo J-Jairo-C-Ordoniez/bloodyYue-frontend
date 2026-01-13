@@ -22,14 +22,13 @@ export default function LandingPage({ data }) {
         
         <div id={settingId} className="bg-foreground dark:bg-background min-h-screen">
             <HeaderSection title={title} />
-
             <main>
                 <HeroSection
                     subtitle={subtitle}
                     abaut={abaut}
                 />
 
-                <AboutSection content={abaut} />
+                <AboutSection abaut={abaut} work={work} content={contentHero} />
 
                 {/* <WorkSection content={work} /> */}
             </main>

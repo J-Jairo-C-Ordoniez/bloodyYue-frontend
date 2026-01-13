@@ -12,7 +12,7 @@ export default function Typography({
         subtitle: 'text-lg md:text-xl font-medium opacity-90 text-black dark:text-white',
         body: 'text-base leading-relaxed opacity-80 text-gray-500 dark:text-gray-300',
         small: 'text-sm opacity-70 text-black dark:text-white',
-        caption: 'text-xs uppercase tracking-widest font-semibold'
+        caption: 'text-lg md:text-2xl text-xs uppercase tracking-widest font-semibold'
     };
 
     const Component =
@@ -20,7 +20,7 @@ export default function Typography({
             variant === 'h2' ? 'h2' :
                 variant === 'h3' ? 'h3' :
                     variant === 'subtitle' ? 'p' :
-                        variant === 'caption' ? 'span' :
+                        variant === 'caption' ? 'h4' :
                             'p';
 
     return (

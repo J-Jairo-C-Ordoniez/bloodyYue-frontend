@@ -6,13 +6,13 @@ import Loader from '../molecules/Loader';
 import Error from '../molecules/Error';
 
 export const SettingsLoader = ({ id = 1 }) => {
-    const { setting, isLoading, error } = useSettings(id);
+    const { setting, isLoadingSetting, errorSetting } = useSettings(id);
 
-    if (isLoading) {
+    if (isLoadingSetting) {
         return <Loader />;
     }
 
-    if (error || setting.error) {
+    if (errorSetting || setting.error) {
         return <Error message={setting.message} typeError={setting.typeError} />;
     }
 

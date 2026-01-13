@@ -1,6 +1,6 @@
 import Typography from "../atoms/Typography";
 import Button from "../atoms/Button";
-import Link from "../atoms/Link";
+import Menu from "../molecules/Menu";
 
 export default function HeaderSection({ title }) {
     const menu = [
@@ -18,15 +18,7 @@ export default function HeaderSection({ title }) {
                     <Typography variant="h1">{title}</Typography>
                 </div>
 
-                <nav>
-                    <ul className="flex gap-4">
-                        {menu.map((item, index) => (
-                            <li key={index}>
-                                <Link href={item.href} variant="primary">{item.title}</Link>
-                            </li>
-                        ))}
-                    </ul>
-                </nav>
+                <Menu links={menu} />
 
                 <div className="flex gap-4">
                     <Button variant="secondary">Acceder</Button>

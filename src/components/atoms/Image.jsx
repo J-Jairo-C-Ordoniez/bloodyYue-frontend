@@ -12,7 +12,7 @@ export default function Image({
     const variants = {
         default: 'rounded-lg overflow-hidden',
         avatar: 'rounded-full overflow-hidden border-2 border-white/20',
-        hero: 'absolute inset-0 -z-10',
+        hero: '',
         card: 'rounded-xl overflow-hidden aspect-video',
     };
 
@@ -34,14 +34,12 @@ export default function Image({
     }
 
     return (
-        <div className={wrapperClasses} style={{ width: width ? width : 'auto', height: height ? height : 'auto' }}>
-            <NextImage
-                src={src}
-                alt={alt}
-                width={width}
-                height={height}
-                className="object-cover h-full w-full"
-            />
-        </div>
+        <NextImage
+            src={src}
+            alt={alt}
+            width={width}
+            height={height}
+            className="object-cover h-full w-full"
+        />
     );
 };

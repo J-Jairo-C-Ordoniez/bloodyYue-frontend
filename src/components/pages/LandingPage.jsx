@@ -19,23 +19,24 @@ export default function LandingPage({ data }) {
     } = data;
 
     return (
+        
         <div id={settingId} className="bg-foreground dark:bg-background min-h-screen">
+            <HeaderSection title={title} />
+
             <main>
                 <HeroSection
-                    title={title}
                     subtitle={subtitle}
                     abaut={abaut}
-                    image={contentHero}
                 />
 
                 <AboutSection content={abaut} />
 
-                <WorkSection content={work} />
+                {/* <WorkSection content={work} /> */}
             </main>
 
-            <div id="contact">
+            {/* <div id="contact">
                 <Footer email={email} redes={redes} />
-            </div>
+            </div> */}
         </div>
     );
 };

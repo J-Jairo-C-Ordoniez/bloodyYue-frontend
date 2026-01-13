@@ -3,8 +3,8 @@ import settings from '../api/settings/index';
 
 export default function useSettings(id) {
   const [setting, setSetting] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [isLoadingSetting, setIsLoadingSetting] = useState(true);
+  const [errorSetting, setErrorSetting] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -12,16 +12,16 @@ export default function useSettings(id) {
             const data = await settings.getSettings(id)
             setSetting(data)
         } catch (err) {
-            setError(true)
+            setErrorSetting(true)
         } finally {
-            setIsLoading(false)
+            setIsLoadingSetting(false)
         }
     })()
   }, []);
 
   return {
     setting,
-    isLoading,
-    error,
+    isLoadingSetting,
+    errorSetting,
   };
 }

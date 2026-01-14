@@ -38,7 +38,7 @@ export default function Image({
             alt={alt}
             width={width}
             height={height}
-            className="object-cover h-full w-full"
+            className="object-cover h-full w-full rounded-md"
         />
     );
 };

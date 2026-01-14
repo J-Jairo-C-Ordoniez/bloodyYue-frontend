@@ -5,9 +5,8 @@ import Menu from "../molecules/Menu";
 export default function HeaderSection({ title }) {
     const menu = [
         { title: 'Sobre mí', href: '#about' },
-        { title: 'Portafolio', href: '#portfolio' },
+        { title: 'Trabajos', href: '#works' },
         { title: 'Comisiones', href: '#commissions' },
-        { title: 'Trabajo', href: '#work' },
         { title: 'Testimonios', href: '#testimonials' },
     ];
 

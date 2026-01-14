@@ -52,23 +52,7 @@ export default function WorkCard({ postId, userId, title, description, content, 
     }
 
     return (
-        <article className="group relative rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
-            {/* <header className="p-4 flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                    <div className="w-9 h-9 rounded-full p-[2px] bg-linear-to-tr from-yellow-400 via-red-500 to-purple-500">
-                        <div className="w-full h-full rounded-full bg-white dark:bg-zinc-900 p-[2px]">
-                            <div className="w-full h-full rounded-full bg-zinc-200 dark:bg-zinc-700 overflow-hidden">
-                                <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${userId || 'felix'}`} alt="avatar" className="w-full h-full object-cover" />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="flex flex-col">
-                        <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 leading-none">User {userId}</span>
-                        <span className="text-xs text-zinc-500 mt-0.5">{formatDate(createdAt)}</span>
-                    </div>
-                </div>
-            </header> */}
-
+        <article id={postId} className="group relative rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
             <div className="relative aspect-square w-full bg-zinc-100 dark:bg-zinc-800 overflow-hidden">
                 <Image
                     src={content}

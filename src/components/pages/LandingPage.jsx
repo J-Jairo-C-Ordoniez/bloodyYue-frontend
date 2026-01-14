@@ -2,6 +2,7 @@ import HeaderSection from '../organisms/HeaderSection';
 import HeroSection from '../organisms/HeroSection';
 import AboutSection from '../organisms/AboutSection';
 import WorkSection from '../organisms/WorkSection';
+import CommissionSection from '../organisms/CommisionSection';
 import Footer from '../organisms/Footer';
 
 export default function LandingPage({ data }) {
@@ -19,7 +20,7 @@ export default function LandingPage({ data }) {
     } = data;
 
     return (
-        
+
         <div id={settingId} className="bg-foreground dark:bg-background min-h-screen">
             <HeaderSection title={title} />
             <main>
@@ -28,18 +29,18 @@ export default function LandingPage({ data }) {
                     abaut={abaut}
                 />
 
-                <AboutSection 
-                    abaut={abaut} 
-                    work={work} 
-                    content={contentHero} 
+                <AboutSection
+                    abaut={abaut}
+                    work={work}
+                    content={contentHero}
                 />
 
                 <WorkSection />
+
+                <CommissionSection />
             </main>
 
-            {/* <div id="contact">
-                <Footer email={email} redes={redes} />
-            </div> */}
+            {/* <Footer email={email} redes={redes} /> */}
         </div>
     );
 };

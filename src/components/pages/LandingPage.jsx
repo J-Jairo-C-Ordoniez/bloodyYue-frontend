@@ -3,6 +3,7 @@ import HeroSection from '../organisms/HeroSection';
 import AboutSection from '../organisms/AboutSection';
 import WorkSection from '../organisms/WorkSection';
 import CommissionSection from '../organisms/CommisionSection';
+import TestimonialsSection from '../organisms/TestimonialsSection';
 import Footer from '../organisms/Footer';
 
 export default function LandingPage({ data }) {
@@ -38,6 +39,8 @@ export default function LandingPage({ data }) {
                 <WorkSection />
 
                 <CommissionSection />
+
+                <TestimonialsSection />
             </main>
 
             {/* <Footer email={email} redes={redes} /> */}

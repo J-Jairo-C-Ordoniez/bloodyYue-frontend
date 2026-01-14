@@ -13,7 +13,7 @@ export const SettingsLoader = ({ id = 1 }) => {
     }
 
     if (errorSetting || setting.error) {
-        return <Error message={setting.message} typeError={setting.typeError} />;
+        return <Error message={setting?.message} typeError={setting?.typeError} />;
     }
 
     return <LandingPage data={setting.data} />;

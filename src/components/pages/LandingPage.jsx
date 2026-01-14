@@ -43,7 +43,7 @@ export default function LandingPage({ data }) {
                 <TestimonialsSection />
             </main>
 
-            {/* <Footer email={email} redes={redes} /> */}
+            <Footer email={email} redes={redes} />
         </div>
     );
 };

@@ -1,6 +1,5 @@
 import Icon from '../atoms/Icon';
 
-// Simple map of common social icons (SVG paths)
 const socialIcons = {
     facebook: "M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z",
     twitter: "M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-12.7 12.5 4.1.7 8.3-2.3 8.3-2.3-4.2 0-5.8-3-5.8-3 .7 0 1.6.4 1.6.4-4.2-.7-5.1-4.8-5.1-4.8.7.4 1.2.4 1.2.4-1.9-1.3-2.3-4.5-2.3-4.5 1.9 1.1 4.6 1.8 4.6 1.8-1.9-2.5.4-5.6.4-5.6 1.9 2.1 6.6 2.3 6.6 2.3-.5-2 2-4 4.3-3.6 1.4.3 2.1 1.4 2.1 1.4.9-.2 2.1-.5 2.1-.5-.2 1-1.2 1.9-1.2 1.9.9-.1 1.9-.5 1.9-.5-.5 1-1.4 1.6-1.4 1.6z",
@@ -9,23 +8,11 @@ const socialIcons = {
     github: "M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"
 };
 
-export default function SocialBar({ redes, className = '' }) {
-    if (!redes || redes.length === 0) return null;
-
-    // Assuming 'redes' is an array of objects/strings or key-value pairs. 
-    // Based on the prompt "redes JSON NOT NULL", it's likely an array of objects.
-    // I'll handle both object {name, url} and just key-value if it's an object.
-
-    let socialLinks = [];
-    if (Array.isArray(redes)) {
-        socialLinks = redes;
-    } else if (typeof redes === 'object') {
-        socialLinks = Object.entries(redes).map(([name, url]) => ({ name, url }));
-    }
+export default function SocialBar({ redes, className = '', itemClassName = 'p-2 bg-white/5 rounded-full hover:bg-white/20 hover:scale-110 transition-all duration-300 text-white' }) {
 
     return (
         <div className={`flex items-center gap-4 ${className}`}>
-            {socialLinks.map((link, index) => {
+            {values.map((link, index) => {
                 const name = link.name?.toLowerCase() || link.platform?.toLowerCase() || '';
                 const url = link.url || link.link || '#';
                 const iconPath = socialIcons[name] || socialIcons.github; // Default to github if unknown
@@ -36,7 +23,7 @@ export default function SocialBar({ redes, className = '' }) {
                         href={url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="p-2 bg-white/5 rounded-full hover:bg-white/20 hover:scale-110 transition-all duration-300 text-white"
+                        className={itemClassName}
                         aria-label={name}
                     >
                         <Icon path={iconPath} size={20} />

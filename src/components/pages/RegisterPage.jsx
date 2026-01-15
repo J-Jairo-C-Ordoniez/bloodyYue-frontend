@@ -6,6 +6,8 @@ import FeaturedWorkSidePanel from '../organisms/FeaturedWorkSidePanel';
 import FormRegisterPanel from '../organisms/FormRegisterPanel';
 import validatorInput from '../../utils/validatorsInputs';
 import useAuth from '../../hooks/useAuth'
+import useLoginStore from '../../store/login.store';
+import useCodeStore from '../../store/code.store';
 
 export default function RegisterPage({ data }) {
     const router = useRouter();
@@ -51,7 +53,10 @@ export default function RegisterPage({ data }) {
             return setErrors(res.message);
         }
 
-        router.replace('/users/login');
+        useCodeStore.getState().setEmail(formData.email);
+        useLoginStore.getState().setLoginData({email: formData.email, password: formData.password});
+
+        router.replace('/users/verify-account');
     };
 
     return (

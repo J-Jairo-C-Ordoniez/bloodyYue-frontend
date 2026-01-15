@@ -1,7 +1,9 @@
-export default function VerifyAccountPage() {
+'use client';
+
+import VerifyAccountLoader from "../../../components/pages/VerifyAccountLoader";
+
+export default function VerifyAccount() {
     return (
-        <main className="w-full min-h-screen bg-black">
-            <p>Verify Account</p>
-        </main>
+        <VerifyAccountLoader />
     );
 }

@@ -6,7 +6,7 @@ import useAuth from "../../hooks/useAuth";
 import validatorInput from "../../utils/validatorsInputs";
 import useCodeStore from "../../store/code.store";
 
-export default function CodeVerify({ title, setStep = null }) {
+export default function CodeVerify({ title, setStep = null, onSuccess = null }) {
     const { auth } = useAuth('codeVerify');
     const [errors, setErrors] = useState(null);
     const [formData, setFormData] = useState({ otp: '' });
@@ -20,12 +20,19 @@ export default function CodeVerify({ title, setStep = null }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const email = useCodeStore.getState().email;
+        console.log(formData.otp, email);
         const res = await auth({ code: formData.otp, email })
         if (res.error) {
             return setErrors(res.message)
         }
 
-        setStep(3);
+        if (onSuccess) {
+            await onSuccess();
+        }
+
+        if (setStep) {
+            setStep(3);
+        }
     };
 
     return (

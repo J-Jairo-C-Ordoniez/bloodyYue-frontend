@@ -1,15 +1,27 @@
 import LinkA from 'next/link';
 
-export default function Link({ variant= 'backdrop', href, children }) {
+export default function Link({ variant = 'backdrop', href, children, size = 'medium' }) {
+    const baseStyles = 'inline-flex items-center justify-center font-medium transition-all duration-300 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+
     const variants = {
-        backdrop: 'text-white-500 p-4 bg-blue-600 rounded-lg hover:text-white-500 hover:bg-blue-700 transition-colors duration-200',
-        primary: 'text-base leading-relaxed opacity-80 text-gray-300 hover:text-gray-100 transition-colors duration-200 font-sans',
-        secondary: 'text-white-500 p-4 bg-blue-600 rounded-lg hover:text-white-500 hover:bg-blue-700 transition-colors duration-200',
+        default: 'text-gray-500 hover:text-white focus:ring-white',
+        primary: 'bg-white text-black hover:bg-gray-200 focus:ring-white px-4 py-2',
+        secondary: 'bg-transparent border-2 border-white/20 text-white hover:bg-white/10 focus:ring-white/50 backdrop-blur-sm px-4 py-2',
+        ghost: 'bg-transparent text-white hover:bg-white/10 hover:text-white',
+        danger: 'bg-red-500 text-white hover:bg-red-600 focus:ring-red-500',
+        link: 'text-blue-400 hover:text-blue-600 focus:ring-blue-500',
     };
+
+    const sizes = {
+        small: 'px-4 py-1.5 text-sm',
+        medium: 'px-6 py-2.5 text-base',
+        large: 'px-8 py-3.5 text-lg',
+    };
+
     return (
         <LinkA
-            href={href} 
-            className={variants[variant]}
+            href={href}
+            className={`${baseStyles} ${variants[variant]} ${sizes[size]}`}
         >
             {children}
         </LinkA>

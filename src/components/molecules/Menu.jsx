@@ -11,7 +11,7 @@ export default function Menu({ variant = 'default', links }) {
             <ul className={variants[variant]}>
                 {links.map((item, index) => (
                     <li key={index}>
-                        <Link href={item.href} variant="primary">{item.title}</Link>
+                        <Link href={item.href} variant="default">{item.title}</Link>
                     </li>
                 ))}
             </ul>

@@ -13,6 +13,7 @@ export default function Button({
         secondary: 'bg-transparent border-2 border-white/20 text-white hover:bg-white/10 focus:ring-white/50 backdrop-blur-sm',
         ghost: 'bg-transparent text-white hover:bg-white/10 hover:text-white',
         danger: 'bg-red-500 text-white hover:bg-red-600 focus:ring-red-500',
+        submit: 'bg-[#6B21A8] hover:bg-[#581c87] text-white py-3 rounded-xl font-semibold transition-all shadow-[0_0_20px_-5px_#6B21A8] border-none w-full'
     };
 
     const sizes = {

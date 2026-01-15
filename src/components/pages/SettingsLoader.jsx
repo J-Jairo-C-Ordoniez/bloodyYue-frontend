@@ -5,7 +5,7 @@ import LandingPage from './LandingPage';
 import Loader from '../molecules/Loader';
 import Error from '../molecules/Error';
 
-export const SettingsLoader = ({ id = 1 }) => {
+export default function SettingsLoader({ id = 1 }) {
     const { setting, isLoadingSetting, errorSetting } = useSettings(id);
 
     if (isLoadingSetting) {
@@ -17,4 +17,4 @@ export const SettingsLoader = ({ id = 1 }) => {
     }
 
     return <LandingPage data={setting.data} />;
-};
+}

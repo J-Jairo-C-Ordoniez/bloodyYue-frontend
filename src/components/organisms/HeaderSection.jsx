@@ -1,5 +1,5 @@
 import Typography from "../atoms/Typography";
-import Button from "../atoms/Button";
+import Link from "../atoms/Link";
 import Menu from "../molecules/Menu";
 
 export default function HeaderSection({ title }) {
@@ -20,8 +20,8 @@ export default function HeaderSection({ title }) {
                 <Menu links={menu} />
 
                 <div className="flex gap-4">
-                    <Button variant="secondary">Acceder</Button>
-                    <Button variant="primary">Registrarse</Button>
+                    <Link href="/users/login" variant="secondary">Acceder</Link>
+                    <Link href="/users/register" variant="primary">Registrarse</Link>
                 </div>
             </div>
         </header>

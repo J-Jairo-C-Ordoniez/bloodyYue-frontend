@@ -1,15 +1,12 @@
 import fetchClient from "../fetchClient";
 
-export default async function loginPost({ email, password }) {
-    const data = await fetchClient(`/auth/login`, {
+export default async function codeVerifyPost({ code, email }) {
+    const data = await fetchClient('/auth/verify', {
         auth: false,
         options: {
             method: 'POST',
-            body: JSON.stringify({
-                email,
-                password
-            })
-        }
+            body: JSON.stringify({ code, email }),
+        },
     });
 
     if (data.error) {

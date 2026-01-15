@@ -1,57 +1,63 @@
 "use client";
 
 import { useState } from 'react';
-import useAuthStore from "../../store/auth.store";
 import { useRouter } from 'next/navigation';
 import FeaturedWorkSidePanel from '../organisms/FeaturedWorkSidePanel';
-import FormLoginPanel from '../organisms/FormLoginPanel';
+import FormRegisterPanel from '../organisms/FormRegisterPanel';
 import validatorInput from '../../utils/validatorsInputs';
 import useAuth from '../../hooks/useAuth'
-import useLoginStore from '../../store/login.store';
 
-export default function Login({ data }) {
+export default function RegisterPage({ data }) {
     const router = useRouter();
-    const {auth} = useAuth('login');
-    const userAuth = useLoginStore.getState().userAuth;
+    const { auth } = useAuth('register');
     const [formData, setFormData] = useState({
-        email: userAuth?.email || '',
-        password: userAuth?.password || ''
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
+        terms: false
     });
     const [errors, setErrors] = useState(null);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
-        let error = validatorInput(name, value);
-
+        const { name, value, type, checked } = e.target;
+        let val = type === 'checkbox' ? checked : value;
+        let nam = name === 'confirmPassword' ? 'password' : name;
+        
+        let error = validatorInput(nam, val);
         setErrors(error);
 
         setFormData(prev => ({
             ...prev,
-            [name]: value
+            [name]: val
         }));
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (formData.password !== formData.confirmPassword) {
+            setErrors("Las contraseñas no coinciden");
+            return;
+        }
+
+        if (!formData.terms) {
+            setErrors("Debes aceptar los términos y políticas de privacidad");
+            return;
+        }
+
         const res = await auth(formData);
         if (res?.error) {
             return setErrors(res.message);
         }
 
-        useAuthStore.getState().setAuth({
-            token: res.data.accessToken,
-            user: res.data.user
-        });
-
-        useLoginStore.getState().setLoginData(formData.email, formData.password);
-
-        router.replace('/profile');
+        router.replace('/users/login');
     };
 
     return (
         <main className="flex h-screen w-full bg-foreground dark:bg-background">
             <FeaturedWorkSidePanel post={data} />
-            <FormLoginPanel
+            <FormRegisterPanel
                 formData={formData}
                 handleChange={handleChange}
                 handleSubmit={handleSubmit}

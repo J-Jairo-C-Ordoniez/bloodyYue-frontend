@@ -16,6 +16,7 @@ export default function Link({ variant = 'backdrop', href, children, size = 'med
         small: 'px-4 py-1.5 text-sm',
         medium: 'px-6 py-2.5 text-base',
         large: 'px-8 py-3.5 text-lg',
+        default: 'px-1 text-sm',
     };
 
     return (

@@ -1,7 +1,9 @@
+'use client';
+
+import LoaderProfile from "../../components/pages/LoaderProfile";
+
 export default function ProfilePage() {
     return (
-        <div>
-            <h1>Profile</h1>
-        </div>
+        <LoaderProfile />
     );
 }

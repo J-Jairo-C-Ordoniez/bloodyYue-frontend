@@ -38,11 +38,7 @@ export default function Login({ data }) {
             return setErrors(res.message);
         }
 
-        useAuthStore.getState().setAuth({
-            token: res.data.accessToken,
-            user: res.data.user
-        });
-
+        useAuthStore.getState().setAuth(res.data.accessToken, res.data.user);
         useLoginStore.getState().setLoginData(formData.email, formData.password);
 
         router.replace('/profile');

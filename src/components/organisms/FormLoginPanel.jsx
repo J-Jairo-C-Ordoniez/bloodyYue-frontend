@@ -6,7 +6,7 @@ import SocialButton from "../atoms/SocialButton";
 export default function FormLoginPanel({ formData, handleChange, handleSubmit, errors }) {
     return (
         <section className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 lg:p-24 overflow-y-auto">
-            <div className="container w-full max-w-md space-y-8">
+            <div className="container w-full h-full max-w-md space-y-8">
                 <article className="space-y-2">
                     <Typography variant="h2">
                         Bienvenido de vuelta
@@ -57,15 +57,6 @@ export default function FormLoginPanel({ formData, handleChange, handleSubmit, e
                     />
                 </article>
 
-
-                {errors && (
-                    <article className="space-y-1">
-                        <Typography variant="subtitle">
-                            {errors}
-                        </Typography>
-                    </article>
-                )}
-
                 <p className="text-center text-sm text-gray-500">
                     Eres nuevo en BloodyYue?{' '}
                     <Link
@@ -76,6 +67,14 @@ export default function FormLoginPanel({ formData, handleChange, handleSubmit, e
                         Registrate
                     </Link>
                 </p>
+
+                {errors && (
+                    <article className="space-y-1">
+                        <Typography variant="error">
+                            {errors}
+                        </Typography>
+                    </article>
+                )}
             </div>
         </section>
     );

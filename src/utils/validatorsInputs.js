@@ -1,18 +1,24 @@
 const validatorsInputs = {
-    isEmail(email) {
+    email(email) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        return emailRegex.test(email);
+        let result = emailRegex.test(email);
+        return !result ? 'El correo electrónico debe ser válido' : '';
     },
 
-    isPassword(password) {
+    password(password) {
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-        return passwordRegex.test(password);
+        let result = passwordRegex.test(password);
+        return !result ? 'La contraseña debe contener al menos 8 caracteres' : '';
     },
 
-    isString(str) {
+    string(str) {
         const stringRegex = /^[a-zA-ZÀ-ÿ\s.,;:!?()""'']{5,}$/;
-        return stringRegex.test(str.trim().toLowerCase());
+        let result = stringRegex.test(str.trim().toLowerCase());
+        return !result ? 'La cadena de texto debe contener al menos 5 caracteres' : '';
     }
 }
 
-export default validatorsInputs;
+export default function validatorInput(name, value) {
+    const field = validatorsInputs[name];
+    return field(value);
+}

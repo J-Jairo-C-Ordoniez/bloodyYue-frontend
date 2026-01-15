@@ -12,7 +12,8 @@ export default function Typography({
         subtitle: 'text-md md:text-lg font-medium opacity-90 text-black dark:text-gray-400',
         body: 'text-base leading-relaxed opacity-80 text-gray-500 dark:text-gray-300',
         small: 'text-sm opacity-70 text-black dark:text-white',
-        caption: 'text-xl md:text-3xl text-xs uppercase tracking-widest font-semibold'
+        caption: 'text-xl md:text-3xl text-xs uppercase tracking-widest font-semibold',
+        error: 'text-md md:text-lg font-medium opacity-90 text-red-500 dark:text-red-400',
     };
 
     const Component =

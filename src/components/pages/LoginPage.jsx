@@ -4,10 +4,12 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import FeaturedWorkSidePanel from '../organisms/FeaturedWorkSidePanel';
 import FormLoginPanel from '../organisms/FormLoginPanel';
-import auth from "../../api/auth/index"
+import validatorInput from '../../utils/validatorsInputs';
+import useAuth from '../../hooks/useAuth'
 
 export default function Login({ data }) {
     const router = useRouter();
+    const {auth} = useAuth('login');
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -16,6 +18,10 @@ export default function Login({ data }) {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+        let error = validatorInput(name, value);
+
+        setErrors(error);
+
         setFormData(prev => ({
             ...prev,
             [name]: value
@@ -24,9 +30,9 @@ export default function Login({ data }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const res = await auth.loginPost(formData);
+        const res = await auth(formData);
         if (res.error) {
-            setErrors(res.message);
+            return setErrors(res.message);
         }
 
         router.replace('/profile/dashboard');

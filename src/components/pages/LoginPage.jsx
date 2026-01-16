@@ -41,7 +41,7 @@ export default function Login({ data }) {
         useAuthStore.getState().setAuth(res.data.accessToken, res.data.user);
         useLoginStore.getState().setLoginData(formData.email, formData.password);
 
-        /* router.replace('/profile'); */
+        router.replace('/profile');
     };
 
     return (

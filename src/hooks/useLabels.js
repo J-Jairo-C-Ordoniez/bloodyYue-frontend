@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import labels from '../api/labels/index';
+import useErrorTokenStore from '../store/errorToken.store';
 
 export default function useLabels(body = null, variant = 'labelsGet') {
   const [label, setLabel] = useState(null);
@@ -22,6 +23,10 @@ export default function useLabels(body = null, variant = 'labelsGet') {
         }
     })()
   }, [variant]);
+
+  if (label?.error === 401) {
+    return useErrorTokenStore.getState().setErrorToken(true);
+  }
 
   return {
     label,

@@ -3,13 +3,15 @@ import registerPost from "./register.post";
 import codeGet from "./code.get";
 import codeVerifyPost from "./codeVerify.post";
 import resetPasswordPost from "./resetPassword.post";
+import newToken from "./newToken";
 
 const auth = {
     loginPost,
     registerPost,
     codeGet,
     codeVerifyPost,
-    resetPasswordPost
+    resetPasswordPost,
+    newToken
 };
 
 export default auth;

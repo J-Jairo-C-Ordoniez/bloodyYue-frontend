@@ -1,10 +1,13 @@
 import fetchClient from "../fetchClient";
 
-export default async function labelsGet() {
-    const data = await fetchClient('/labels', {
-        auth: true
+export default async function newToken() {
+    const data = await fetchClient('/auth/refreshToken', {
+        auth: false,
+        options: {
+            method: 'POST',
+        }
     });
-
+    
     if (data.error) {
         return {
             error: true,
@@ -16,5 +19,5 @@ export default async function labelsGet() {
     return {
         error: false,
         data: data.body,
-    }
+    };
 }

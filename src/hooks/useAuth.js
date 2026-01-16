@@ -6,7 +6,8 @@ export default function useAuth(variant = 'login') {
     register: auth.registerPost,
     codeGet: auth.codeGet,
     codeVerify: auth.codeVerifyPost,
-    resetPassword: auth.resetPasswordPost
+    resetPassword: auth.resetPasswordPost,
+    newToken: auth.newToken
   }
 
   return { auth: variants[variant] }

@@ -6,6 +6,7 @@ export default function Label({ children, color = "#000000", variant = "default"
         if (variant === 'status') return `bg-green-100 text-green-700 border border-green-200 rounded-full px-4 py-1.5 font-medium uppercase text-xs tracking-wider`;
         if (variant === 'ghost') return `bg-[${color}20] text-[${color}] border-[${color}80] border rounded-full`;
         if (variant === 'solid') return `bg-slate-900 text-white rounded-lg border-slate-800 border`;
+        if (variant === 'trending') return `bg-[${color}20] text-[${color}] border-[${color}80] border rounded-lg`;
         return `bg-[${color}20] text-[${color}] border-[${color}80] border rounded-full`;
     };
 

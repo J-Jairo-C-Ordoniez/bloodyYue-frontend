@@ -1,7 +1,7 @@
 import LinkA from 'next/link';
 
-export default function Link({ variant = 'backdrop', href, children, size = 'medium' }) {
-    const baseStyles = 'inline-flex items-center justify-center font-medium transition-all duration-300 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+export default function Link({ variant = 'backdrop', href, children, size = 'medium'}) {
+    const baseStyles = 'inline-flex items-center font-medium transition-all duration-300 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
 
     const variants = {
         default: 'text-gray-500 hover:text-white focus:ring-white',

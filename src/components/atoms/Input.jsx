@@ -24,6 +24,12 @@ export default function Input({
                 </label>
             )}
             <div className="relative group">
+                {icon && (
+                    <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                        <Icon name={icon} size={18} color="#6B7280" />
+                    </div>
+                )}
+
                 <input
                     type={inputType}
                     id={id}
@@ -36,7 +42,7 @@ export default function Input({
                         w-full px-4 py-3 bg-[#1A1A1D] border border-white/10 rounded-lg 
                         text-white placeholder-gray-500 outline-none transition-all duration-300
                         focus:border-[#6B21A8] focus:ring-1 focus:ring-[#6B21A8]
-                        ${icon ? 'pl-4' : ''}
+                        ${icon ? 'pl-10' : ''}
                         ${isPassword ? 'pr-12' : ''}
                     `}
                 />

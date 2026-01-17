@@ -22,6 +22,7 @@ export default function Button({
     };
 
     const sizes = {
+        xsmall: 'ml-4 p-1 text-xs',
         small: 'px-4 py-1.5 text-sm',
         medium: 'px-6 py-2.5 text-base',
         large: 'px-8 py-3.5 text-lg',

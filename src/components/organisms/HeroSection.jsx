@@ -57,8 +57,10 @@ export default function HeroSection({ subtitle, abaut }) {
                 <div className="relative w-full aspect-4/5 max-w-[500px] mx-auto lg:ml-auto">
                     <div className="rotate-4 w-full h-full rounded-3xl overflow-hidden shadow-2xl shadow-indigo-500/20 transform transition-all duration-500 hover:shadow-indigo-500/40">
                         {isLoadingPost && <LoaderCard />}
-                        {errorPost || post?.error && <ErrorCard />}
-                        {post?.data && <PostRandom post={post.data} width={500} height={700} />}
+                        {(errorPost || post?.error) && (
+                            <ErrorCard message={errorPost || post?.message || 'Error al cargar el post destacado'} />
+                        )}
+                        {!isLoadingPost && !errorPost && !post?.error && post?.data && <PostRandom post={post.data} width={500} height={700} />}
                     </div>
                 </div>
             </div>

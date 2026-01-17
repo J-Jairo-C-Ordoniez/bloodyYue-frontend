@@ -8,6 +8,7 @@ export default function ProfileSidebarLeft({ activeTab, onTabChange }) {
 
     const navItems = [
         { id: 'home', icon: 'Home', label: 'Inicio' },
+        { id: 'forYou', icon: 'Sparkles', label: 'Para ti' },
         { id: 'commissions', icon: 'Image', label: 'Comisones' },
         { id: 'explore', icon: 'Crown', label: 'Explorar' },
         { id: 'notifications', icon: 'Bell', label: 'Notificaciones' },
@@ -26,8 +27,18 @@ export default function ProfileSidebarLeft({ activeTab, onTabChange }) {
                     Tendencias
                 </Typography>
 
-                {isLoadingLabel && <p>Loading...</p>}
-                {errorLabel || label?.error && <p className='text-red-500'>Error loading labels</p>}
+                {isLoadingLabel && (
+                    <div className="space-y-2 px-2">
+                        <LoaderCard variant="text" lines={1} />
+                        <LoaderCard variant="text" lines={1} />
+                        <LoaderCard variant="text" lines={1} />
+                    </div>
+                )}
+                {(errorLabel || label?.error) && (
+                    <div className="px-2">
+                        <ErrorCard message={errorLabel || 'Error al cargar las etiquetas'} />
+                    </div>
+                )}
 
                 <div className="flex flex-wrap gap-2 px-2">
                     {label?.data && label.data.map((tag) => (

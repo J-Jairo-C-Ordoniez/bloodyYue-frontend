@@ -21,10 +21,10 @@ export default function LandingPage({ data }) {
     } = data;
 
     return (
-
-        <div id={settingId} className="bg-foreground dark:bg-background min-h-screen">
+        <>
             <HeaderSection title={title} />
-            <main>
+
+            <main data-id={settingId} className="bg-[#0B0B0E] min-h-screen">
                 <HeroSection
                     subtitle={subtitle}
                     abaut={abaut}
@@ -44,6 +44,6 @@ export default function LandingPage({ data }) {
             </main>
 
             <Footer email={email} redes={redes} />
-        </div>
+        </>
     );
 };

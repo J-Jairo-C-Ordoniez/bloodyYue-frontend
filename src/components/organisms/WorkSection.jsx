@@ -2,15 +2,13 @@ import SectionHeader from '../molecules/SectionHeader';
 import usePosts from '../../hooks/usePosts';
 import WorkCard from '../molecules/WorkCard';
 import LoaderCard from '../molecules/LoaderCard';
-import Error from '../molecules/Error';
+import ErrorCard from '../molecules/ErrorCard';
 
 export default function WorkSection() {
     const { post, isLoadingPost, errorPost } = usePosts({ id: 0 }, 'list');
 
-    console.log(post);
-
     return (
-        <section className="py-20 px-4 bg-foreground dark:bg-background">
+        <section className="py-20 px-4 bg-[#0B0B0E]">
             <div className="max-w-7xl mx-auto">
                 <SectionHeader
                     title="Mí Trabajo"
@@ -20,10 +18,21 @@ export default function WorkSection() {
                 />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                    {isLoadingPost && <LoaderCard />}
-                    {errorPost || post?.error && <Error message={post.message} typeError={post.typeError} />}
+                    {isLoadingPost && (
+                        <>
+                            <LoaderCard variant="card" />
+                            <LoaderCard variant="card" />
+                            <LoaderCard variant="card" />
+                        </>
+                    )}
+                    
+                    {(errorPost || post?.error) && (
+                        <div className="col-span-full">
+                            <ErrorCard message={errorPost || post?.message || 'Error al cargar los trabajos'} />
+                        </div>
+                    )}
 
-                    {post?.data?.map((item) => (
+                    {!isLoadingPost && !errorPost && !post?.error && post?.data?.map((item) => (
                         <WorkCard
                             key={item.postId}
                             postId={item.postId}

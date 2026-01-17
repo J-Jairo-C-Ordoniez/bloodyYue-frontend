@@ -35,6 +35,6 @@ export default function Home() {
     }, [user]);
 
     return (
-        loading ? <Loader /> : <HomePage />
+        loading ? <Loader /> : <HomePage user={user} />
     );
 }

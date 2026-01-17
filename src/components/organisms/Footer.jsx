@@ -4,7 +4,7 @@ import Icon from '../atoms/Icon';
 
 export default function Footer({ email, redes }) {
     return (
-        <footer className="py-16 px-4 bg-black/50">
+        <footer className="py-16 px-4 bg-[#111]">
             <div className="container max-w-7xl mx-auto">
                 <article className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
                     <div className="flex flex-col gap-6">

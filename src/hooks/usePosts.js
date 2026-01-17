@@ -1,10 +1,16 @@
 import { useEffect, useState } from 'react';
 import posts from '../api/posts/index';
 
+/**
+ * Custom hook para manejar operaciones de posts
+ * @param {Object|null} body - Parámetros para la petición de posts
+ * @param {string} variant - Variante de operación ('random', 'list')
+ * @returns {Object} Estado de posts con data, loading y error
+ */
 export default function usePosts(body = null, variant = 'random') {
   const [post, setPost] = useState(null);
   const [isLoadingPost, setIsLoadingPost] = useState(true);
-  const [errorPost, setErrorPost] = useState(false);
+  const [errorPost, setErrorPost] = useState(null);
 
   const variants = {
     random: posts.getPostRandom,
@@ -12,17 +18,32 @@ export default function usePosts(body = null, variant = 'random') {
   }
 
   useEffect(() => {
+    let isMounted = true;
+
     (async () => {
-        try {
-            const data = await variants[variant](body ?? body)
-            setPost(data)
-        } catch (err) {
-            setErrorPost(true)
-        } finally {
-            setIsLoadingPost(false)
+      try {
+        setIsLoadingPost(true);
+        setErrorPost(null);
+        const data = await variants[variant](body ?? body);
+
+        if (isMounted) {
+          setPost(data);
         }
+      } catch (err) {
+        if (isMounted) {
+          setErrorPost(err?.message || 'Error al cargar los posts');
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoadingPost(false);
+        }
+      }
     })()
-  }, [variant]);
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   return {
     post,

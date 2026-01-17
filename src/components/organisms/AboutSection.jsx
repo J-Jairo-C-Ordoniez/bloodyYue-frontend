@@ -26,7 +26,7 @@ export default function AboutSection({ abaut, work, content }) {
     ]
 
     return (
-        <section className="py-20 px-4 bg-foreground dark:bg-background">
+        <section className="py-20 px-4 bg-[#0B0B0E]">
             <div className="container max-w-4xl mx-auto">
                 <SectionHeader
                     title="Sobre mí"
@@ -44,7 +44,7 @@ export default function AboutSection({ abaut, work, content }) {
                     </Typography>
                 </article>
 
-                <div className='mt-10 flex justify-center items-center gap-4'>
+                <div className='mt-20 flex justify-center items-center gap-4'>
                     {labels.map((label) => (
                         <Label
                             key={label.id}

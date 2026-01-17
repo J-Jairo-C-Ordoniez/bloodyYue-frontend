@@ -6,7 +6,7 @@ import ProfileSidebarLeft from '../organisms/ProfileSidebarLeft';
 import ProfileSidebarRight from '../organisms/ProfileSidebarRight';
 import ProfileFeed from '../organisms/ProfileFeed';
 
-export default function HomePage({ setError }) {
+export default function HomePage({ setError, user }) {
     const [activeTab, setActiveTab] = useState('home');
 
     const handleTabChange = (tab) => {
@@ -15,7 +15,7 @@ export default function HomePage({ setError }) {
 
     return (
         <div className="bg-foreground dark:bg-background min-h-screen">
-            <ProfileHeader />
+            <ProfileHeader user={user} />
             <div className="container mx-auto px-4 py-8 flex justify-between gap-8">
                 <ProfileSidebarLeft
                     activeTab={activeTab}
@@ -27,7 +27,7 @@ export default function HomePage({ setError }) {
                     <ProfileFeed />
                 </main>
 
-                <ProfileSidebarRight />
+                <ProfileSidebarRight user={user.userId} />
             </div>
         </div>
     );

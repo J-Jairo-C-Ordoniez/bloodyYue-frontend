@@ -11,7 +11,7 @@ export default function HeaderSection({ title }) {
     ];
 
     return (
-        <header className="flex justify-center items-center bg-foreground dark:bg-background min-h-[10vh]">
+        <header className="flex justify-center items-center bg-[#0B0B0E] min-h-[10vh]">
             <div className="flex justify-between items-center container mx-auto px-4">
                 <div className="flex justify-between items-center py-4">
                     <Typography variant="h1">{title}</Typography>

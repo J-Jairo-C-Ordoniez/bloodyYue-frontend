@@ -1,6 +1,6 @@
 import fetchClient from "../fetchClient";
 
-export default async function postReactions({ id }) {
+export default async function postReactionsGet({ id }) {
     const data = await fetchClient(`/posts/${id}/reactions`, {
         auth: false,
     });

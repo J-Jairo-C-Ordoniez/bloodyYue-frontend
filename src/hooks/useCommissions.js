@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import commissions from '../api/commissions/index';
+import useErrorTokenStore from '../store/errorToken.store';
 
 /**
  * Custom hook para manejar operaciones de comisiones
@@ -27,7 +28,12 @@ export default function useCommissions(body = null, variant = 'list') {
         const data = await variants[variant](body);
 
         if (isMounted) {
-          setCommission(data);
+          if (data?.error === 401) {
+            useErrorTokenStore.getState().setErrorToken(true);
+            setErrorCommission('Sesión expirada. Por favor, inicia sesión nuevamente.');
+          } else {
+            setCommission(data);
+          }
         }
       } catch (err) {
         if (isMounted) {

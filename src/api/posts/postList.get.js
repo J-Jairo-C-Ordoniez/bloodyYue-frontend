@@ -1,6 +1,6 @@
 import fetchClient from '../fetchClient';
 
-export default async function getPostList({ id }) {
+export default async function postListGet({ id }) {
     const data = await fetchClient(`/posts/list/${id}`, {
         auth: false,
     });

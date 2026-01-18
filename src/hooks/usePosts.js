@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import posts from '../api/posts/index';
+import useErrorTokenStore from '../store/errorToken.store';
 
 /**
  * Custom hook para manejar operaciones de posts
@@ -27,8 +28,14 @@ export default function usePosts(body = null, variant = 'random') {
         const data = await variants[variant](body ?? body);
 
         if (isMounted) {
-          setPost(data);
+          if (data?.error === 401) {
+            useErrorTokenStore.getState().setErrorToken(true);
+            setErrorPost('Sesión expirada. Por favor, inicia sesión nuevamente.');
+          } else {
+            setPost(data);
+          }
         }
+
       } catch (err) {
         if (isMounted) {
           setErrorPost(err?.message || 'Error al cargar los posts');

@@ -4,13 +4,13 @@ import Button from '../atoms/Button';
 import Icon from '../atoms/Icon';
 import CartItemSmall from '../molecules/CartItemSmall';
 import ActivityItem from '../molecules/ActivityItem';
+import LoaderCard from '../molecules/LoaderCard';
+import ErrorCard from '../molecules/ErrorCard';
 import MessageItem from '../molecules/MessageItem';
 import useCart from '../../hooks/useCart';
 
 export default function ProfileSidebarRight() {
     const { cartItems, isLoadingCartItems, errorCartItems } = useCart();
-
-    console.log(cartItems);
 
     return (
         <aside className="w-80 shrink-0 sticky top-24 self-start space-y-6 hidden xl:block">
@@ -38,8 +38,10 @@ export default function ProfileSidebarRight() {
                             <LoaderCard variant="list" />
                         </div>
                     )}
-                    {errorCartItems && (
-                        <ErrorCard message={errorCartItems} />
+                    {errorCartItems || cartItems?.error && (
+                        <div className="flex flex-col items-center justify-center">
+                            <ErrorCard message={errorCartItems || 'No hay items en el carrito'} />
+                        </div>
                     )}
                     {!isLoadingCartItems && !errorCartItems && cartItems?.data && cartItems?.data?.length > 0 && cartItems?.data?.map((cartItem) => (
                         <CartItemSmall

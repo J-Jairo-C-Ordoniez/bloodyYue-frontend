@@ -5,7 +5,7 @@ import VerifyAccountPanel from '../organisms/VerifyAccountPanel';
 
 export default function VerifyAccountPage({ data }) {
     return (
-        <main className="flex h-screen w-full bg-foreground dark:bg-background">
+        <main className="flex h-screen w-full bg-[#0B0B0E]">
             <FeaturedWorkSidePanel post={data} />
             <VerifyAccountPanel />
         </main>

@@ -27,7 +27,6 @@ export default function useLabels(body = null, variant = 'labelsGet') {
         const data = await variants[variant](body);
 
         if (isMounted) {
-          // Verificar errores de autenticación
           if (data?.error === 401) {
             useErrorTokenStore.getState().setErrorToken(true);
             setErrorLabel('Sesión expirada. Por favor, inicia sesión nuevamente.');
@@ -35,6 +34,7 @@ export default function useLabels(body = null, variant = 'labelsGet') {
             setLabel(data);
           }
         }
+        
       } catch (err) {
         if (isMounted) {
           setErrorLabel(err?.message || 'Error al cargar las etiquetas');

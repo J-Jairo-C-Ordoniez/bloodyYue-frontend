@@ -4,6 +4,9 @@ import codeGet from "./code.get";
 import codeVerifyPost from "./codeVerify.post";
 import resetPasswordPost from "./resetPassword.post";
 import newToken from "./newToken";
+import logoutPost from "./logout.post";
+import changeRolePost from "./changeRole.post";
+import changeStatusPost from "./changeStatus.patch";
 
 const auth = {
     loginPost,
@@ -11,7 +14,10 @@ const auth = {
     codeGet,
     codeVerifyPost,
     resetPasswordPost,
-    newToken
+    newToken,
+    logoutPost,
+    changeRolePost,
+    changeStatusPost
 };
 
 export default auth;

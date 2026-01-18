@@ -1,17 +1,19 @@
 import NavItem from '../molecules/NavItem';
 import Typography from '../atoms/Typography';
 import useLabels from '../../hooks/useLabels';
+import LoaderCard from '../molecules/LoaderCard';
+import ErrorCard from '../molecules/ErrorCard';
 import Label from '../atoms/Label';
+import Button from '../atoms/Button';
 
 export default function ProfileSidebarLeft({ activeTab, onTabChange }) {
     const { label, isLoadingLabel, errorLabel } = useLabels();
 
     const navItems = [
         { id: 'home', icon: 'Home', label: 'Inicio' },
-        { id: 'forYou', icon: 'Sparkles', label: 'Para ti' },
         { id: 'commissions', icon: 'Image', label: 'Comisones' },
         { id: 'explore', icon: 'Crown', label: 'Explorar' },
-        { id: 'notifications', icon: 'Bell', label: 'Notificaciones' },
+        { id: 'cart', icon: 'ShoppingCart', label: 'Carrito' },
     ];
 
     return (
@@ -42,9 +44,18 @@ export default function ProfileSidebarLeft({ activeTab, onTabChange }) {
 
                 <div className="flex flex-wrap gap-2 px-2">
                     {label?.data && label.data.map((tag) => (
-                        <Label key={tag.labelId} color={tag.color} variant="trending">
-                            {tag.name}
-                        </Label>
+                        <Button
+                            key={tag.labelId}
+                            variant="noneDetails"
+                            size="none"
+                            color={tag.color}
+                            id={tag.labelId}
+                            onClick={() => onTabChange(tag.labelId)}
+                        >
+                            <Label color={tag.color} variant="trending">
+                                {tag.name}
+                            </Label>
+                        </Button>
                     ))}
                 </div>
             </div>

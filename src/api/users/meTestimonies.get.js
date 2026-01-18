@@ -1,8 +1,8 @@
 import fetchClient from "../fetchClient";
 
-export default async function commissionGet({ commissionId }) {
-    const data = await fetchClient(`/commissions/${commissionId}`, {
-        auth: true,
+export default async function meTestimoniesGet() {
+    const data = await fetchClient('/users/me/testimonies', {
+        auth: true
     });
 
     if (data.error) {

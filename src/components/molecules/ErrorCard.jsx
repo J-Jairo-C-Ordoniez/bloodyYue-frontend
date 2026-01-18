@@ -12,7 +12,7 @@ export default function ErrorCard({
     variant = 'destructive'
 }) {
     return (
-        <Alert variant={variant} className="h-full flex items-center justify-center bg-amber-500 w-fit text-white animate-pulse">
+        <Alert variant={variant} className="h-full flex items-center justify-center bg-amber-500 w-fit text-white">
             <Icon name="CircleAlert" size={30} />
             <AlertDescription className="text-sm">
                 {message}

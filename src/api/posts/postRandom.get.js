@@ -1,6 +1,6 @@
 import fetchClient from '../fetchClient';
 
-export default async function getPostRandom() {
+export default async function postRandomGet() {
     const data = await fetchClient(`/posts/random`, {
         auth: false,
     });

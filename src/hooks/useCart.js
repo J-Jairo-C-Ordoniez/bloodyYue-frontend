@@ -7,13 +7,18 @@ import cart from '../api/cart/index';
  * @param {string} variant - Variante de operación ('itemsGet')
  * @returns {Object} Estado del carrito con items, loading y error
  */
+
 export default function useCart(body = null, variant = 'itemsGet') {
   const [cartItems, setCartItems] = useState(null);
   const [isLoadingCartItems, setIsLoadingCartItems] = useState(true);
   const [errorCartItems, setErrorCartItems] = useState(null);
 
   const variants = {
+    itemsPost: cart.cartItemsPost,
     itemsGet: cart.cartItemsGet,
+    itemsByIdGet: cart.cartItemsByIdGet,
+    itemPut: cart.cartItemPut,
+    itemDiscardedPatch: cart.cartItemDiscardedPatch
   }
 
   useEffect(() => {

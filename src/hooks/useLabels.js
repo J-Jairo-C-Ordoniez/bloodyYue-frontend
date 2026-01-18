@@ -15,6 +15,10 @@ export default function useLabels(body = null, variant = 'labelsGet') {
 
   const variants = {
     labelsGet: labels.labelsGet,
+    labelsGetId: labels.labelsGetId,
+    labelsPost: labels.labelsPost,
+    labelsPut: labels.labelsPut,
+    labelsDelete: labels.labelsDelete,
   }
 
   useEffect(() => {

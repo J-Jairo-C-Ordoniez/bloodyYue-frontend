@@ -14,8 +14,18 @@ export default function usePosts(body = null, variant = 'random') {
   const [errorPost, setErrorPost] = useState(null);
 
   const variants = {
-    random: posts.getPostRandom,
-    list: posts.getPostList,
+    post: posts.postPost,
+    list: posts.postListGet,
+    getId: posts.postGetIdGet,
+    filterLabel: posts.postFilterLabelGet,
+    filterTitle: posts.postFilterTitleGet,
+    delete: posts.postDelete,
+    random: posts.postRandomGet,
+    put: posts.postPut,
+    labelsPut: posts.postLabelsPut,
+    reactionsPost: posts.postReactionsPost,
+    reactionsGet: posts.postReactionsGet,
+    reactionsDelete: posts.postReactionsDelete,
   }
 
   useEffect(() => {

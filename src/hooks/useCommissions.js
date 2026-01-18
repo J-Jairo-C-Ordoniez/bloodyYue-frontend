@@ -14,8 +14,14 @@ export default function useCommissions(body = null, variant = 'list') {
   const [errorCommission, setErrorCommission] = useState(null);
 
   const variants = {
+    post: commissions.commissionPost,
     list: commissions.commissionListGet,
-    getById: commissions.commissionGet,
+    getById: commissions.commissionByIdGet,
+    filterLabel: commissions.commissionFilterLabelGet,
+    filterTitle: commissions.commissionFilterTitleGet,
+    filterPrice: commissions.commissionFilterPriceGet,
+    put: commissions.commissionPut,
+    labelsPut: commissions.commissionLabelsPut,
   }
 
   useEffect(() => {

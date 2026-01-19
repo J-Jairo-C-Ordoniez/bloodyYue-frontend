@@ -8,11 +8,16 @@ import Button from '../atoms/Button';
 import Image from '../atoms/Image';
 import NotificationDropdown from '../molecules/NotificationDropdown';
 import CartDropdown from '../molecules/CartDropdown';
+import useNotifications from '../../hooks/useNotifications';
+import useSocket from '../../hooks/useSocket';
 
 export default function ProfileHeader({ user }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [isNotificationOpen, setIsNotificationOpen] = useState(false);
     const [isCartOpen, setIsCartOpen] = useState(false);
+
+    useSocket(); // Initialize socket connection
+    const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
 
     const toggleNotifications = () => {
         setIsNotificationOpen(!isNotificationOpen);
@@ -56,11 +61,19 @@ export default function ProfileHeader({ user }) {
                             title="Notificaciones"
                             className={isNotificationOpen ? 'bg-zinc-100 dark:bg-zinc-800' : ''}
                         >
-                            <Icon name="Bell" size={22} />
+                            <div className="relative">
+                                <Icon name="Bell" size={22} />
+                                {unreadCount > 0 && (
+                                    <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[#0B0B0E]" />
+                                )}
+                            </div>
                         </Button>
                         <NotificationDropdown
                             isOpen={isNotificationOpen}
                             onClose={() => setIsNotificationOpen(false)}
+                            notifications={notifications}
+                            onRead={markAsRead}
+                            onReadAll={markAllAsRead}
                         />
                     </div>
 

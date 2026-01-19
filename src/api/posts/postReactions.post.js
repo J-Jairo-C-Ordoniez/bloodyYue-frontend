@@ -20,7 +20,7 @@ export default async function postReactionsPost({ postId }) {
         }
     });
 
-    console.log(data)
+    console.log(data, 'hola')
 
     if (data.error) {
         return {

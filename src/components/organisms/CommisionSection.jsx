@@ -25,6 +25,7 @@ export default function CommisionSection() {
                     {!isLoadingCommission && !errorCommission && commission?.data && commission?.data.map((item) => (
                         <CommissionCard
                             key={item.commissionId}
+                            commissionId={item.commissionId}
                             title={item.title}
                             price={item.price}
                             content={item.content}

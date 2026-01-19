@@ -8,18 +8,19 @@ import useErrorTokenStore from '../store/errorToken.store';
  * @param {string} variant - Variante de operación ('getReactions')
  * @returns {Object} Estado de reacciones con data, loading y error
  */
+
 export default function useReactions(body = null, variant = 'getReactions') {
   const [reactions, setReactions] = useState(null);
   const [isLoadingReactions, setIsLoadingReactions] = useState(true);
   const [errorReactions, setErrorReactions] = useState(null);
 
   const variants = {
-    getReactions: posts.getPostReactions,
+    getReactions: posts.postReactionsGet,
     postReactions: posts.postReactionsPost,
   }
 
   useEffect(() => {
-    if (variant === 'postReactions') {
+    if (variant === '') {
       setIsLoadingReactions(false);
       setReactions(variants[variant]);
       return;

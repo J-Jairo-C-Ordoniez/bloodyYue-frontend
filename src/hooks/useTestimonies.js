@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import testimonies from '../api/testimonies/index';
+import users from '../api/users/index';
 import useErrorTokenStore from '../store/errorToken.store';
 
 /**
@@ -14,7 +14,7 @@ export default function useTestimonies(body = null, variant = 'testimoniesGet') 
   const [errorTestimony, setErrorTestimony] = useState(null);
 
   const variants = {
-    testimoniesGet: testimonies.testimoniesGet,
+    testimoniesGet: users.testimoniesGet,
   }
 
   useEffect(() => {

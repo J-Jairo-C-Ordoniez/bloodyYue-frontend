@@ -40,7 +40,7 @@ export default function LandingPage({ data }) {
 
                 <CommissionSection />
 
-                <TestimonialsSection />
+               {/*  <TestimonialsSection /> */}
             </main>
 
             <Footer email={email} redes={redes} />

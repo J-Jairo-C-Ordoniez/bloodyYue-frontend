@@ -7,12 +7,14 @@ import ProfileSidebarRight from '../organisms/ProfileSidebarRight';
 import ProfileFeed from '../organisms/ProfileFeed';
 import CommissionSection from '../organisms/CommisionSection';
 import WorkSection from '../organisms/WorkSection';
+import CartSection from '../organisms/CartSection';
+import ExploreSection from '../organisms/ExploreSection';
 import Typography from '../atoms/Typography';
 import ActivityItem from '../molecules/ActivityItem';
 
-export default function HomePage({ setError, user }) {
+export default function HomePage({ setError, user, initialTab = 'home' }) {
     const [viewMode, setViewMode] = useState('grid');
-    const [activeTab, setActiveTab] = useState('home');
+    const [activeTab, setActiveTab] = useState(initialTab);
 
     const handleTabChange = (tab) => {
         setActiveTab(tab);
@@ -22,11 +24,15 @@ export default function HomePage({ setError, user }) {
         switch (activeTab) {
             case 'home':
                 return <ProfileFeed viewMode={viewMode} setViewMode={setViewMode} />;
+
             case 'commissions':
                 return <CommissionSection viewMode={viewMode} setViewMode={setViewMode} />;
 
             case 'explore':
-                return <WorkSection />;
+                return <ExploreSection />;
+
+            case 'cart':
+                return <CartSection />;
 
             case 'notifications':
                 return (
@@ -50,6 +56,7 @@ export default function HomePage({ setError, user }) {
     return (
         <div className="bg-[#0B0B0E] min-h-screen">
             <ProfileHeader user={user} />
+
             <div className="container mx-auto px-4 py-8 flex items-start justify-between gap-8">
                 <ProfileSidebarLeft
                     activeTab={activeTab}
@@ -61,7 +68,9 @@ export default function HomePage({ setError, user }) {
                     {renderMainContent()}
                 </main>
 
-                <ProfileSidebarRight user={user.userId} />
+                <ProfileSidebarRight
+                    user={user.userId}
+                />
             </div>
         </div>
     );

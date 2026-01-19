@@ -8,9 +8,11 @@ import LoaderCard from '../molecules/LoaderCard';
 import ErrorCard from '../molecules/ErrorCard';
 import MessageItem from '../molecules/MessageItem';
 import useCart from '../../hooks/useCart';
+import useChats from '../../hooks/useChats';
 
 export default function ProfileSidebarRight() {
     const { cartItems, isLoadingCartItems, errorCartItems } = useCart();
+    const { chats, isLoadingChats, errorChats } = useChats();
 
     return (
         <aside className="w-80 shrink-0 sticky top-24 self-start space-y-6 hidden xl:block">
@@ -96,7 +98,7 @@ export default function ProfileSidebarRight() {
                 </div>
             </section>
 
-            {/* <section>
+            <section>
                 <div className="flex items-center justify-between px-1 mb-4">
                     <Typography variant="h6" className="text-sm font-bold text-zinc-900 dark:text-zinc-100">Messages</Typography>
                     <button className="text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-100">
@@ -105,22 +107,27 @@ export default function ProfileSidebarRight() {
                 </div>
 
                 <div className="bg-white dark:bg-zinc-900 rounded-2xl p-2 border border-zinc-200 dark:border-zinc-800 shadow-sm space-y-1">
-                    <MessageItem
-                        user="Commission Client"
-                        avatar="https://res.cloudinary.com/del3gtz5i/image/upload/v1768341080/64435445-a1f2-48bf-9973-b031bba0c7ff_cvlhut.webp"
-                        message="Is the sketch ready?"
-                        time="10m"
-                        isOnline={true}
-                        unread={true}
-                    />
-                    <MessageItem
-                        user="Sarah J."
-                        avatar="https://res.cloudinary.com/del3gtz5i/image/upload/v1768341080/64435445-a1f2-48bf-9973-b031bba0c7ff_cvlhut.webp"
-                        message="Love the new prints!"
-                        time="1h"
-                    />
+                    {isLoadingChats ? (
+                        <div className="p-4 text-center text-sm text-zinc-500">Cargando chats...</div>
+                    ) : errorChats ? (
+                        <div className="p-4 text-center text-sm text-red-500">Error: {errorChats}</div>
+                    ) : chats?.length === 0 ? (
+                        <div className="p-4 text-center text-sm text-zinc-500">No tienes mensajes.</div>
+                    ) : (
+                        chats?.map(chat => (
+                            <MessageItem
+                                key={chat.chatId}
+                                user={chat.participantName || "User"}
+                                avatar={chat.participantAvatar || "https://res.cloudinary.com/del3gtz5i/image/upload/v1768341080/64435445-a1f2-48bf-9973-b031bba0c7ff_cvlhut.webp"}
+                                message={chat.lastMessage || "Start a conversation"}
+                                time={new Date(chat.createdAt || Date.now()).toLocaleDateString()}
+                                isOnline={false}
+                                unread={false}
+                            />
+                        ))
+                    )}
                 </div>
-            </section> */}
+            </section>
 
         </aside>
     );

@@ -4,6 +4,7 @@ import Loader from '../molecules/Loader';
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import useAuthStore from "../../store/auth.store";
+import roles from '../../api/roles/index';
 
 export default function LoaderProfile() {
     const router = useRouter();
@@ -14,7 +15,18 @@ export default function LoaderProfile() {
             router.replace("/");
         }
 
-        router.replace("/profile/home");
+        (async () => {
+            const role = await roles.rolesGetId({ rolId: user.rolId });
+            if (role.error) {
+                return router.replace("/");
+            }
+
+            if (role.data.permits.length > 0) {
+                return router.replace("/profile/dashboard");
+            }
+
+            return router.replace("/profile/home");
+        })();
     }, [user]);
 
     return <Loader />;

@@ -21,11 +21,11 @@ export default function LoaderProfile() {
                 return router.replace("/");
             }
 
-            if (role.data.permits.length > 0) {
-                return router.replace("/profile/dashboard");
-            }
-
+            /* if (!role.data.permits) {
+                
+            } */
             return router.replace("/profile/home");
+            return router.replace("/profile/dashboard");
         })();
     }, [user]);
 

@@ -7,32 +7,42 @@ import Typography from '../atoms/Typography';
 import Button from '../atoms/Button';
 import Image from '../atoms/Image';
 import NotificationDropdown from '../molecules/NotificationDropdown';
-import CartDropdown from '../molecules/CartDropdown';
 import useNotifications from '../../hooks/useNotifications';
 import useSocket from '../../hooks/useSocket';
 
 export default function ProfileHeader({ user }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-    const [isCartOpen, setIsCartOpen] = useState(false);
+    const [notifications, setNotifications] = useState([]);
+    const { notifications: getNotifications } = useNotifications();
+    const { notifications: readNotification } = useNotifications('notificationReadPut');
+    const { notifications: readAllNotifications } = useNotifications('notificationReadAllPut');
 
-    useSocket(); // Initialize socket connection
-    const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotifications();
+    useSocket();
 
-    const toggleNotifications = () => {
+    const toggleNotifications = async () => {
         setIsNotificationOpen(!isNotificationOpen);
-        setIsCartOpen(false);
+        const res = await getNotifications();
+        if(res.error) return setNotifications([]);
+        setNotifications(res.data);
     };
 
-    const toggleCart = () => {
-        setIsCartOpen(!isCartOpen);
-        setIsNotificationOpen(false);
+    const onRead = async (notificationId) => {
+        const res = await readNotification({ notificationId });
+        if(res.error) return;
+        toggleNotifications();
+    };
+
+    const onReadAll = async () => {
+        const res = await readAllNotifications();
+        if(res.error) return;
+        toggleNotifications();
     };
 
     return (
         <header className="sticky top-0 z-50 border-b bg-[#0B0B0E] border-white/5">
             <div className="container mx-auto px-6 py-3.5 flex justify-between items-center gap-8">
-                <Typography variant="h1">BloodyYue</Typography>
+                <Typography variant="h1" className="text-white">BloodyYue</Typography>
 
                 <article className="flex-1 max-w-md">
                     <Input
@@ -61,19 +71,14 @@ export default function ProfileHeader({ user }) {
                             title="Notificaciones"
                             className={isNotificationOpen ? 'bg-zinc-100 dark:bg-zinc-800' : ''}
                         >
-                            <div className="relative">
-                                <Icon name="Bell" size={22} />
-                                {unreadCount > 0 && (
-                                    <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border-2 border-[#0B0B0E]" />
-                                )}
-                            </div>
+                            <Icon name="Bell" size={22} />
                         </Button>
                         <NotificationDropdown
                             isOpen={isNotificationOpen}
                             onClose={() => setIsNotificationOpen(false)}
                             notifications={notifications}
-                            onRead={markAsRead}
-                            onReadAll={markAllAsRead}
+                            onRead={onRead}
+                            onReadAll={onReadAll}
                         />
                     </div>
 

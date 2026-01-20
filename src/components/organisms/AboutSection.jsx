@@ -35,11 +35,11 @@ export default function AboutSection({ abaut, work, content }) {
                 />
 
                 <article>
-                    <Typography variant="paragraph" className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed text-center mb-8">
+                    <Typography variant="paragraph" className="text-lg text-slate-400 leading-relaxed text-center mb-8">
                         {abaut}
                     </Typography>
 
-                    <Typography variant="paragraph" className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed text-center">
+                    <Typography variant="paragraph" className="text-lg text-slate-400 leading-relaxed text-center">
                         {work}
                     </Typography>
                 </article>

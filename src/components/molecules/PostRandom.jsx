@@ -26,7 +26,7 @@ export default function PostRandom({ post, width, height }) {
 
             <footer className="absolute bottom-0 left-0 w-full p-8 z-20 transform transition-transform duration-500">
                 <div className="flex flex-col gap-2">
-                    <Typography variant="h3">
+                    <Typography variant="h3" className="text-white">
                         {post.title}
                     </Typography>
 

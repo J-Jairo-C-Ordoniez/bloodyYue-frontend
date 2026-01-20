@@ -9,8 +9,10 @@ export default function Dialog({ isOpen, onClose, title, children, className = '
     useEffect(() => {
         const dialog = dialogRef.current;
         if (isOpen) {
+            console.log(isOpen, 'dialog open')
             dialog.showModal();
         } else {
+            console.log(isOpen, 'dialog close')
             dialog.close();
         }
     }, [isOpen]);
@@ -28,7 +30,7 @@ export default function Dialog({ isOpen, onClose, title, children, className = '
     return (
         <dialog
             ref={dialogRef}
-            className={`backdrop:bg-black/50 overflow-hidden bg-[#121212] m-5 backdrop:backdrop-blur-sm rounded-2xl p-0 flex justify-center max-w-2xl shadow-2xl ${className}`}
+            className={`backdrop:bg-black/50 overflow-hidden bg-[#121212] m-5 backdrop:backdrop-blur-sm rounded-2xl p-0 max-w-2xl shadow-2xl ${isOpen ? 'flex justify-center' : 'hidden'} ${className}`}
             onClose={handleClose}
             onKeyDown={handleKeyDown}
             onClick={(e) => {
@@ -36,8 +38,8 @@ export default function Dialog({ isOpen, onClose, title, children, className = '
             }}
         >
             <div className="relative flex flex-col h-fit">
-                <header className="flex items-center justify-between p-4 border-b border-zinc-100 dark:border-zinc-800 shrink-0">
-                    <Typography variant="subtitle" className="font-bold pr-8">
+                <header className="flex items-center justify-between p-4 border-b border-zinc-800 dark:border-zinc-800 shrink-0">
+                    <Typography variant="subtitle" className="font-bold pr-8 text-zinc-200">
                         {title}
                     </Typography>
                     <Button

@@ -8,10 +8,10 @@ export default function FormLoginPanel({ formData, handleChange, handleSubmit, e
         <section className="w-full lg:w-1/2 flex items-center justify-center p-6 sm:p-12 lg:p-24 overflow-y-auto">
             <div className="container w-full h-full max-w-md space-y-8">
                 <article className="space-y-2">
-                    <Typography variant="h2">
+                    <Typography variant="h2" className="text-white">
                         Bienvenido de vuelta
                     </Typography>
-                    <Typography variant="subtitle">
+                    <Typography variant="subtitle" className="text-zinc-400">
                         Accede a tu galería exclusiva de BloodyYue y descargas.
                     </Typography>
                 </article>

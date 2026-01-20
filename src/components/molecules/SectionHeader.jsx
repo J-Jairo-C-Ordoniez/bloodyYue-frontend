@@ -27,7 +27,7 @@ export default function SectionHeader({ title, subtitle, content = null, classNa
                 {title}
             </Typography>
 
-            <Typography variant="subtitle" className="max-w-2xl text-gray-600">
+            <Typography variant="subtitle" className="max-w-2xl text-gray-400">
                 {subtitle}
             </Typography>
         </header>

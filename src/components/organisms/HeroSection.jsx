@@ -1,6 +1,6 @@
 import Typography from '../atoms/Typography';
-import Button from '../atoms/Button';
-import Icon from '../atoms/Icon';
+import Link from '../atoms/Link';
+import Icon from '../atoms/Icon';   
 import Label from '../atoms/Label';
 import usePosts from '../../hooks/usePosts';
 import LoaderCard from '../molecules/LoaderCard';
@@ -10,7 +10,7 @@ import ErrorCard from '../molecules/ErrorCard';
 export default function HeroSection({ subtitle, abaut }) {
     const { post, isLoadingPost, errorPost } = usePosts();
     return (
-        <section className="relative min-h-[90vh] overflow-hidden py-10 px-4 flex justify-center items-center bg-[#f8f9fc] dark:bg-[#0B0B0F]">
+        <section className="relative min-h-[90vh] overflow-hidden py-10 px-4 flex justify-center items-center bg-[#0B0B0F]">
             <div className="container grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <article className="flex flex-col gap-8">
                     <div className="relative z-10 max-w-2xl flex flex-col gap-6 animate-fade-in-up">
@@ -19,37 +19,45 @@ export default function HeroSection({ subtitle, abaut }) {
                             Comisones Abiertas
                         </Label>
 
-                        <Typography variant="h1" className="text-6xl md:text-7xl font-bold tracking-tight leading-tight text-slate-900 dark:text-white">
+                        <Typography variant="h1" className="text-4xl md:text-6xl font-bold tracking-tight leading-tight text-gray-300">
                             {subtitle}
                         </Typography>
 
-                        <Typography variant="paragraph" className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-lg">
+                        <Typography variant="paragraph" className="text-lg text-gray-400 max-w-lg">
                             {abaut}
                         </Typography>
 
                         <div className="flex gap-4 mt-6">
-                            <Button variant="primary" size="large" className="rounded-full px-8 py-4 text-lg shadow-lg shadow-indigo-500/30">
+                            <Link 
+                                variant="primary" 
+                                href="#commissions"
+                                className="rounded-full px-8 py-4 text-lg shadow-lg shadow-indigo-500/30"
+                            >
                                 Solicitar Comisión
-                            </Button>
-                            <Button variant="secondary" size="large" className="rounded-full px-8 py-4 text-lg border-2">
+                            </Link>
+                            <Link 
+                                variant="secondary" 
+                                href="#gallery"
+                                className="rounded-full px-8 py-4 text-lg border-2"
+                            >
                                 Ver Galería
-                            </Button>
+                            </Link>
                         </div>
                     </div>
 
 
-                    <div className="flex items-center gap-12 mt-8 pt-8 border-t border-slate-200 dark:border-slate-800">
+                    <div className="flex items-center gap-12 mt-8 pt-8 border-t border-slate-800">
                         <div className="flex flex-col">
-                            <span className="text-2xl font-bold text-slate-900 dark:text-white">27.4k</span>
-                            <span className="text-sm text-slate-500 font-medium">Followers</span>
+                            <span className="text-2xl font-bold text-white">27.4k</span>
+                            <span className="text-sm text-slate-400 font-medium">Followers</span>
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-2xl font-bold text-slate-900 dark:text-white">466</span>
-                            <span className="text-sm text-slate-500 font-medium">Artworks</span>
+                            <span className="text-2xl font-bold text-white">466</span>
+                            <span className="text-sm text-slate-400 font-medium">Artworks</span>
                         </div>
                         <div className="flex flex-col">
-                            <span className="text-2xl font-bold text-slate-900 dark:text-white">4.9/5</span>
-                            <span className="text-sm text-slate-500 font-medium">Rating</span>
+                            <span className="text-2xl font-bold text-white">4.9/5</span>
+                            <span className="text-sm text-slate-400 font-medium">Rating</span>
                         </div>
                     </div>
                 </article>

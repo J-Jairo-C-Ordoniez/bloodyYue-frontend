@@ -13,16 +13,16 @@ export default function FeaturedWorkSidePanel({ post }) {
             </div>
 
             <article className="relative z-20 text-white">
-                <Typography variant="small" className="tracking-[0.2em] mb-2 uppercase">
+                <Typography variant="small" className="tracking-[0.2em] mb-2 uppercase text-white font-bold">
                     {post.title}
                 </Typography>
-                <Typography variant="subtitle" className="uppercase text-gray-400">
+                <Typography variant="subtitle" className="uppercase text-zinc-100 font-bold">
                     {post.typePost}
                 </Typography>
             </article>
 
             <div className="absolute top-8 left-8 z-20 flex items-center gap-3">
-                <Typography variant="h1">BloodyYue</Typography>
+                <Typography variant="h1" className="text-white">BloodyYue</Typography>
             </div>
         </section>
     );

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import WorkDetailsDialog from './WorkDetailsDialog';
 import AuthRequiredDialog from './AuthRequiredDialog';
-import Label from '../atoms/Label';
 import useReactions from '../../hooks/useReactions';
 import useAuthStore from '../../store/auth.store';
 import Button from '../atoms/Button';
@@ -51,8 +50,8 @@ export default function WorkCard({ postId, title, description, content, typePost
 
     return (
         <>
-            <article id={postId} className="group relative bg-zinc-900 rounded-3xl overflow-hidden shadow-[0_10px_30px_-15px_rgba(0,0,0,0.3)] dark:shadow-[0_10px_30px_-15px_rgba(0,0,0,0.6)] hover:shadow-2xl transition-all duration-300 border border-zinc-800">
-                <header className="px-4 py-3 flex items-center justify-between bg-zinc-800/30">
+            <article id={postId} className="group relative rounded-3xl overflow-hidden transition-all duration-300">
+                <header className="px-4 py-3 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <div className="w-10 h-10 rounded-full bg-zinc-800 text-zinc-400 flex items-center justify-center">
                             <Icon name="User" size={24} />
@@ -65,9 +64,13 @@ export default function WorkCard({ postId, title, description, content, typePost
                     </div>
                 </header>
 
-                <div className="relative aspect-square w-full bg-zinc-800 overflow-hidden cursor-pointer" onClick={handleOpenDetails}>
-                    {typePost === 'short' ? (
-                        <div className="w-full h-full">
+                <div className="flex justify-center items-center">
+                    <Button
+                        variant="noneDetails"
+                        size="none"
+                        onClick={handleOpenDetails}
+                    >
+                        {typePost === 'short' ? (
                             <Video
                                 src={content}
                                 alt={title}
@@ -75,17 +78,15 @@ export default function WorkCard({ postId, title, description, content, typePost
                                 width={500}
                                 height={500}
                             />
-                        </div>
-                    ) : (
-                        <div className="w-full h-full">
+                        ) : (
                             <Image
                                 src={content}
                                 alt={title}
                                 width={500}
                                 height={500}
                             />
-                        </div>
-                    )}
+                        )}
+                    </Button>
                 </div>
 
                 <footer className="px-4 pt-3 pb-4">
@@ -94,7 +95,7 @@ export default function WorkCard({ postId, title, description, content, typePost
                             onClick={handleLike}
                             className={`flex items-center cursor-pointer gap-1.5 group/like transition-colors ${isLiked ? 'text-red-500' : 'text-zinc-500 hover:text-red-500'}`}
                         >
-                            <div className={`p-2 rounded-full transition-colors ${isLiked ? 'bg-red-50 dark:bg-red-900/20' : 'group-hover/like:bg-red-50 dark:group-hover/like:bg-red-900/20'}`}>
+                            <div className={`p-2 rounded-full transition-colors ${isLiked ? 'bg-red-900/20' : 'group-hover/like:bg-red-900/20'}`}>
                                 <Icon name="Heart" size={22} fill={isLiked ? "currentColor" : "none"} />
                             </div>
                             <Typography variant="small" className="font-semibold text-zinc-100">

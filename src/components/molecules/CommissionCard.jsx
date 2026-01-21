@@ -4,7 +4,6 @@ import Typography from '../atoms/Typography';
 import Image from '../atoms/Image';
 import Icon from '../atoms/Icon';
 import Button from '../atoms/Button';
-import Label from '../atoms/Label';
 import useAuthStore from '../../store/auth.store';
 import CommissionDetailsDialog from './CommissionDetailsDialog';
 import CommissionOrderFormDialog from './CommissionOrderFormDialog';
@@ -13,9 +12,9 @@ import AuthRequiredDialog from './AuthRequiredDialog';
 export default function CommissionCard({ commissionId, title, price, content, status, description, terms }) {
     const [isLoading, setIsLoading] = useState(false);
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+    const [isAuthOpen, setIsAuthOpen] = useState(false);
     const [isOrderOpen, setIsOrderOpen] = useState(false);
     const user = useAuthStore.getState().user;
-    const [isAuthOpen, setIsAuthOpen] = useState(false);
 
     const handleOpenDetails = () => setIsDetailsOpen(true);
     const handleCloseDetails = () => setIsDetailsOpen(false);
@@ -28,6 +27,7 @@ export default function CommissionCard({ commissionId, title, price, content, st
             setIsAuthOpen(true);
             return;
         }
+
         handleOpenOrder();
     };
 
@@ -43,7 +43,7 @@ export default function CommissionCard({ commissionId, title, price, content, st
             } else {
                 alert("Agregado al carrito exitosamente");
                 handleCloseOrder();
-                handleCloseDetails(); // Close details if open, though order usually comes from card directly or details
+                handleCloseDetails();
             }
         } catch (error) {
             console.error(error);
@@ -55,8 +55,8 @@ export default function CommissionCard({ commissionId, title, price, content, st
 
     return (
         <>
-            <article className="group relative bg-zinc-900 rounded-3xl overflow-hidden shadow-[0_10px_30px_-15px_rgba(0,0,0,0.3)] dark:shadow-[0_10px_30px_-15px_rgba(0,0,0,0.6)] hover:shadow-2xl transition-all duration-300 border border-zinc-800 flex flex-col">
-                <header className="px-4 py-3 flex items-center justify-between bg-zinc-800/30">
+            <article className="group relative rounded-3xl overflow-hidden flex flex-col">
+                <header className="px-4 py-3 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                         <div className="w-10 h-10 rounded-full bg-zinc-800 text-zinc-400 flex items-center justify-center">
                             <Icon name="Briefcase" size={24} />
@@ -78,26 +78,23 @@ export default function CommissionCard({ commissionId, title, price, content, st
                     </div>
                 </header>
 
-                <div
-                    className="relative w-full aspect-square bg-zinc-800/30 overflow-hidden flex items-center justify-center p-6 cursor-pointer"
-                    onClick={handleOpenDetails}
-                >
-                    <div className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-zinc-800 shadow-lg flex items-center justify-center text-zinc-400 group-hover:text-purple-500 group-hover:scale-110 transition-all duration-300">
-                        <Icon name="Maximize2" size={20} />
-                    </div>
+                <div className="flex justify-center items-center">
+                    <Button
+                        variant="noneDetails"
+                        size="none"
+                        onClick={handleOpenDetails}
+                    >
 
-                    <div className="w-full h-full transition-transform duration-700 group-hover:scale-110">
                         <Image
                             src={content}
                             alt={title}
-                            width={400}
-                            height={400}
-                            className="object-contain"
+                            width={500}
+                            height={500}
                         />
-                    </div>
+                    </Button>
                 </div>
 
-                <footer className="p-5 space-y-4 bg-zinc-800/30">
+                <footer className="p-5 space-y-4">
                     <div className="flex flex-col">
                         <Typography variant="subtitle" className="text-sm">
                             <span className="font-bold text-zinc-200 mr-2">{title}</span>
@@ -124,18 +121,14 @@ export default function CommissionCard({ commissionId, title, price, content, st
             </article>
 
             <CommissionDetailsDialog
+                commissionId={commissionId}
                 isOpen={isDetailsOpen}
                 onClose={handleCloseDetails}
-                title={title}
-                content={content}
-                price={price}
-                description={description}
-                terms={terms}
                 onAddToCart={() => {
-                    handleCloseDetails(); // Close details to focus on order
+                    handleCloseDetails();
                     handleAddToCartClick();
                 }}
-                isLoading={isLoading && isDetailsOpen} // Only show loading here if triggered from here, but logic moved to form dialog mainly.
+                isLoading={isLoading && isDetailsOpen}
             />
 
             <CommissionOrderFormDialog

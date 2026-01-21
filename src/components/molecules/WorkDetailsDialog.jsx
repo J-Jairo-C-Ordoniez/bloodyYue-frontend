@@ -9,11 +9,11 @@ import ErrorCard from '../molecules/ErrorCard';
 import Typography from '../atoms/Typography';
 
 export default function WorkDetailsDialog({ isOpen, onClose, postId, likes, isLiked, onLike }) {
-    const { post, isLoadingPost, errorPost, } = usePost({ id: postId }, 'getId');
+    const { post, isLoadingPost, errorPost, } = usePost({ id: postId }, 'getById');
 
     return (
         <Dialog isOpen={isOpen} onClose={onClose} className="bg-zinc-900 m-auto! max-h-[90vh] flex flex-col">
-            <div className="space-y-6">
+            <div className="flex flex-col space-y-6">
                 {isLoadingPost && (
                     <LoaderCard variant="card" />
                 )}
@@ -60,7 +60,7 @@ export default function WorkDetailsDialog({ isOpen, onClose, postId, likes, isLi
                         <div className="space-y-4">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-2">
-                                    <p className="text-xs text-zinc-500">{new Date(post?.data.createdAt).toLocaleDateString()}</p>
+                                    <Typography variant="small" className="text-zinc-500">{new Date(post?.data.createdAt).toLocaleDateString()}</Typography>
                                 </div>
                             </div>
 

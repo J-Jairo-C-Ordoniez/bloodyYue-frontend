@@ -10,17 +10,17 @@ import MessageItem from '../molecules/MessageItem';
 import useCart from '../../hooks/useCart';
 import useChats from '../../hooks/useChats';
 
-export default function ProfileSidebarRight() {
+export default function ProfileSidebarRight({ setActiveTab }) {
     const { cartItems, isLoadingCartItems, errorCartItems } = useCart();
     const { chats, isLoadingChats, errorChats } = useChats();
 
     return (
         <aside className="w-80 shrink-0 sticky top-24 self-start space-y-6 hidden xl:block">
-            <section className="bg-white dark:bg-zinc-900 rounded-2xl p-4 border border-zinc-200 dark:border-zinc-800 shadow-sm">
-                <header className="flex items-center justify-between mb-4 pb-4 border-b border-zinc-200 dark:border-zinc-800">
+            <section className="bg-zinc-900 rounded-2xl p-4 border border-zinc-800 shadow-sm">
+                <header className="flex items-center justify-between mb-4 pb-4 border-b border-zinc-800">
                     <Typography
                         variant="small"
-                        className="uppercase w-fit"
+                        className="uppercase w-fit text-white"
                     >
                         Items en el carrito
                     </Typography>
@@ -58,16 +58,20 @@ export default function ProfileSidebarRight() {
                 </article>
 
 
-                <div className="flex items-center justify-between mb-4 pt-4 border-t border-zinc-100 dark:border-zinc-800">
-                    <span className="text-sm text-zinc-500">Total</span>
-                    <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
-                        {cartItems?.data &&
+                <div className="flex items-center justify-between mb-4 pt-4 border-t border-zinc-800">
+                    <Typography variant="body" className="text-sm text-zinc-500">Total</Typography>
+                    <Typography variant="body" className="text-sm font-bold text-zinc-100">
+                        ${cartItems?.data &&
                             cartItems?.data?.length > 0 &&
                             cartItems?.data?.reduce((total, cartItem) => total + cartItem.priceAtMoment * cartItem.quantity, 0).toFixed(2)}
-                    </span>
+                    </Typography>
                 </div>
 
-                <Button variant="primary" className="w-full bg-white text-black hover:bg-zinc-200 border-none">
+                <Button
+                    variant="primary"
+                    className="w-full bg-white text-black hover:bg-zinc-200 border-none"
+                    onClick={() => setActiveTab('cart')}
+                >
                     Ver Todo
                 </Button>
             </section>

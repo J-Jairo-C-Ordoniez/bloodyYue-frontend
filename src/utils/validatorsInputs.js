@@ -25,6 +25,24 @@ const validatorsInputs = {
         const otpRegex = /^[0-9]{6}$/;
         let result = otpRegex.test(otp);
         return !result ? 'El código debe contener 6 dígitos' : '';
+    },
+
+    number(number) {
+        const numberRegex = /^[0-9]{1,5}$/;
+        let result = numberRegex.test(number);
+        return !result ? 'El número debe contener entre 1 y 5 dígitos' : '';
+    },
+
+    price(price) {
+        const priceRegex = /^\d{1,8}(\.\d{1,2})?$/;
+        let result = priceRegex.test(price);
+        return !result ? 'El precio debe ser un número válido' : '';
+    },
+
+    text(text) {
+        const textRegex = /^[a-zA-ZÀ-ÿ\s.,;:!?()""'']{1,500}$/;
+        let result = textRegex.test(text.trim().toLowerCase());
+        return !result ? 'El texto debe contener entre 1 y 500 caracteres' : '';
     }
 }
 

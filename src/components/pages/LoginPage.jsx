@@ -13,11 +13,11 @@ export default function Login({ data }) {
     const router = useRouter();
     const {auth} = useAuth('login');
     const userAuth = useLoginStore.getState().userAuth;
+    const [errors, setErrors] = useState(null);
     const [formData, setFormData] = useState({
         email: userAuth?.email || '',
         password: userAuth?.password || ''
     });
-    const [errors, setErrors] = useState(null);
 
     const handleChange = (e) => {
         const { name, value } = e.target;

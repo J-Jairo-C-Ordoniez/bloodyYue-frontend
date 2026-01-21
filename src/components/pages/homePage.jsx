@@ -70,6 +70,7 @@ export default function HomePage({ setError, user, initialTab = 'home' }) {
 
                 <ProfileSidebarRight
                     user={user.userId}
+                    setActiveTab={setActiveTab}
                 />
             </div>
         </div>

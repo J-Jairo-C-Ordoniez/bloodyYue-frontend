@@ -10,7 +10,8 @@ export default function Input({
     name,
     value,
     onChange,
-    className = ''
+    className = '',
+    disabled = false
 }) {
     const [showPassword, setShowPassword] = useState(false);
     const isPassword = type === 'password';
@@ -38,6 +39,7 @@ export default function Input({
                     onChange={onChange}
                     placeholder={placeholder}
                     required
+                    disabled={disabled}
                     className={`
                         w-full px-4 py-3 bg-[#1A1A1D] border border-white/10 rounded-lg 
                         text-white placeholder-gray-500 outline-none transition-all duration-300

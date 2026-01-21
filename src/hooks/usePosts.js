@@ -16,7 +16,7 @@ export default function usePosts(body = null, variant = 'random') {
   const variants = {
     post: posts.postPost,
     list: posts.postListGet,
-    getId: posts.postGetIdGet,
+    getById: posts.postGetIdGet,
     filterLabel: posts.postFilterLabelGet,
     filterTitle: posts.postFilterTitleGet,
     delete: posts.postDelete,

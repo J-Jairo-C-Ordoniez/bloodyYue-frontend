@@ -30,10 +30,14 @@ export default function useTestimonies(body = null, variant = 'testimoniesGet') 
           if (data?.error === 401) {
             useErrorTokenStore.getState().setErrorToken(true);
             setErrorTestimony('Sesión expirada. Por favor, inicia sesión nuevamente.');
-          } else {
-            setTestimony(data);
           }
         }
+
+        if (data?.error) {
+          return setErrorTestimony(data?.message);
+        }
+
+        setTestimony(data);
 
       } catch (err) {
         if (isMounted) {

@@ -25,7 +25,7 @@ export default function ProfileSidebarLeft({ activeTab, onTabChange }) {
             </nav>
 
             <div>
-                <Typography variant="small" className="px-4 mb-4 uppercase tracking-wider">
+                <Typography variant="small" className="px-4 mb-4 uppercase tracking-wider text-zinc-300">
                     Tendencias
                 </Typography>
 

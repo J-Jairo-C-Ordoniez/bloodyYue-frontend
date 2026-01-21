@@ -5,12 +5,11 @@ import ProfileHeader from '../organisms/ProfileHeader';
 import ProfileSidebarLeft from '../organisms/ProfileSidebarLeft';
 import ProfileSidebarRight from '../organisms/ProfileSidebarRight';
 import ProfileFeed from '../organisms/ProfileFeed';
-import CommissionSection from '../organisms/CommisionSection';
-import WorkSection from '../organisms/WorkSection';
 import CartSection from '../organisms/CartSection';
 import ExploreSection from '../organisms/ExploreSection';
 import Typography from '../atoms/Typography';
 import ActivityItem from '../molecules/ActivityItem';
+import CommissionApp from '../organisms/CommissionApp';
 
 export default function HomePage({ setError, user, initialTab = 'home' }) {
     const [viewMode, setViewMode] = useState('grid');
@@ -26,10 +25,10 @@ export default function HomePage({ setError, user, initialTab = 'home' }) {
                 return <ProfileFeed viewMode={viewMode} setViewMode={setViewMode} />;
 
             case 'commissions':
-                return <CommissionSection viewMode={viewMode} setViewMode={setViewMode} />;
+                return <CommissionApp viewMode={viewMode} setViewMode={setViewMode} />;
 
             case 'explore':
-                return <ExploreSection />;
+                return <ExploreSection setActiveTab={setActiveTab} />;
 
             case 'cart':
                 return <CartSection />;
@@ -68,10 +67,12 @@ export default function HomePage({ setError, user, initialTab = 'home' }) {
                     {renderMainContent()}
                 </main>
 
-                <ProfileSidebarRight
-                    user={user.userId}
-                    setActiveTab={setActiveTab}
-                />
+                {activeTab !== 'cart' && (
+                    <ProfileSidebarRight
+                        user={user.userId}
+                        setActiveTab={setActiveTab}
+                    />
+                )}
             </div>
         </div>
     );

@@ -9,7 +9,7 @@ import CommissionDetailsDialog from './CommissionDetailsDialog';
 import CommissionOrderFormDialog from './CommissionOrderFormDialog';
 import AuthRequiredDialog from './AuthRequiredDialog';
 
-export default function CommissionCard({ commissionId, title, price, content, status, description, terms }) {
+export default function CommissionCard({ commissionId, title, price, content, status }) {
     const [isLoading, setIsLoading] = useState(false);
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
     const [isAuthOpen, setIsAuthOpen] = useState(false);

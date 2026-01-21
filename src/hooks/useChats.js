@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import chatApi from '../api/chat/index';
+import chat from '../api/chat/index';
 import { socket } from '../utils/socket';
 import useErrorTokenStore from '../store/errorToken.store';
 
@@ -12,16 +12,18 @@ export default function useChats() {
         try {
             setIsLoadingChats(true);
             setErrorChats(null);
-            const data = await chatApi.chatGet();
+            const data = await chat.chatGet();
 
             if (data?.error === 401) {
                 useErrorTokenStore.getState().setErrorToken(true);
                 setErrorChats('Sesión expirada.');
-            } else if (Array.isArray(data)) {
-                setChats(data);
-            } else {
-                setChats([]);
             }
+
+            if (data?.error) {
+                setErrorChats(data?.message);
+            }
+
+            setChats(data?.data);
         } catch (err) {
             setErrorChats(err?.message || 'Error al cargar chats');
         } finally {

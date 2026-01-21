@@ -6,7 +6,7 @@ export default function TestimonyCard({ testimonyId, message }) {
         <article id={testimonyId} className="relative group h-full">
             <div className="container relative h-full p-10 rounded-2xl border border-white/5">
                 <div className="flex flex-col justify-between gap-4">
-                    <Typography variant="body" className="text-gray-400 italic font-light leading-relaxed text-sm md:text-base">
+                    <Typography variant="subtitle" className="text-gray-400 italic font-light leading-relaxed text-sm md:text-base">
                         "{message}"
                     </Typography>
                 </div>

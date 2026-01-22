@@ -11,6 +11,7 @@ export default async function fetchClient(endpoint, { auth = true, headers, opti
     method: options?.method || 'GET',
     credentials: 'include',
     headers: {
+      'Content-Type': 'application/json',
       ...(auth && token ? { Authorization: `Bearer ${token}` } : {}),
       ...headers,
     },

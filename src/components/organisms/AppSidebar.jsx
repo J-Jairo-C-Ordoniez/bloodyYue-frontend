@@ -19,7 +19,7 @@ import {
   IconUsers,
 } from "@tabler/icons-react"
 
-import { NavDocuments } from "@/components/molecules/NavDocuments"
+import { NavClouds } from "@/components/molecules/NavClouds"
 import { NavMain } from "@/components/molecules/NavMain"
 import { NavSecondary } from "@/components/molecules/NavSecondary"
 import { NavUser } from "@/components/molecules/NavUser"
@@ -35,91 +35,71 @@ import {
 
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    name: "Admin User",
+    email: "admin@bloodyyue.com",
+    avatar: "/avatars/admin.jpg",
   },
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
+      url: "metrics",
       icon: IconDashboard,
     },
     {
-      title: "Lifecycle",
-      url: "#",
+      title: "Settings",
+      url: "settings",
+      icon: IconSettings,
+    },
+    {
+      title: "User Management",
+      url: "users",
+      icon: IconUsers,
+    },
+    {
+      title: "Roles & Permits",
+      url: "roles",
       icon: IconListDetails,
     },
     {
-      title: "Analytics",
-      url: "#",
-      icon: IconChartBar,
-    },
-    {
-      title: "Projects",
-      url: "#",
-      icon: IconFolder,
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: IconUsers,
+      title: "Labels",
+      url: "labels",
+      icon: IconDatabase,
     },
   ],
   navClouds: [
     {
-      title: "Capture",
+      title: "Content",
       icon: IconCamera,
       isActive: true,
-      url: "#",
+      url: "content",
       items: [
         {
-          title: "Active Proposals",
-          url: "#",
+          title: "Commissions",
+          url: "commissions",
         },
         {
-          title: "Archived",
-          url: "#",
+          title: "Posts",
+          url: "posts",
         },
       ],
     },
     {
-      title: "Proposal",
-      icon: IconFileDescription,
-      url: "#",
+      title: "Sales & Chat",
+      icon: IconReport,
+      url: "sales",
       items: [
         {
-          title: "Active Proposals",
-          url: "#",
+          title: "Sales History",
+          url: "sales-history",
         },
         {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Prompts",
-      icon: IconFileAi,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
+          title: "Active Chats",
+          url: "chats",
         },
       ],
     },
   ],
   navSecondary: [
-    {
-      title: "Settings",
-      url: "#",
-      icon: IconSettings,
-    },
     {
       title: "Get Help",
       url: "#",
@@ -131,26 +111,10 @@ const data = {
       icon: IconSearch,
     },
   ],
-  documents: [
-    {
-      name: "Data Library",
-      url: "#",
-      icon: IconDatabase,
-    },
-    {
-      name: "Reports",
-      url: "#",
-      icon: IconReport,
-    },
-    {
-      name: "Word Assistant",
-      url: "#",
-      icon: IconFileWord,
-    },
-  ],
 }
 
 export function AppSidebar({
+  onSelect,
   ...props
 }) {
   return (
@@ -158,9 +122,9 @@ export function AppSidebar({
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:!p-1.5">
+            <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:p-1.5!">
               <a href="#">
-                <IconInnerShadowTop className="!size-5" />
+                <IconInnerShadowTop className="size-5!" />
                 <span className="text-base font-semibold">Acme Inc.</span>
               </a>
             </SidebarMenuButton>
@@ -168,8 +132,8 @@ export function AppSidebar({
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
-        <NavDocuments items={data.documents} />
+        <NavMain items={data.navMain} onSelect={onSelect} />
+        <NavClouds items={data.navClouds} onSelect={onSelect} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>

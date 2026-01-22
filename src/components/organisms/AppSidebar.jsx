@@ -1,24 +1,6 @@
 "use client"
 
-import * as React from "react"
-import {
-  IconCamera,
-  IconChartBar,
-  IconDashboard,
-  IconDatabase,
-  IconFileAi,
-  IconFileDescription,
-  IconFileWord,
-  IconFolder,
-  IconHelp,
-  IconInnerShadowTop,
-  IconListDetails,
-  IconReport,
-  IconSearch,
-  IconSettings,
-  IconUsers,
-} from "@tabler/icons-react"
-
+import Link from "../atoms/Link"
 import { NavClouds } from "@/components/molecules/NavClouds"
 import { NavMain } from "@/components/molecules/NavMain"
 import { NavSecondary } from "@/components/molecules/NavSecondary"
@@ -31,7 +13,20 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "../ui/sidebar"
+
+import {
+  IconCamera,
+  IconDashboard,
+  IconDatabase,
+  IconHelp,
+  IconInnerShadowTop,
+  IconListDetails,
+  IconReport,
+  IconSearch,
+  IconSettings,
+  IconUsers,
+} from "@tabler/icons-react"
 
 const data = {
   user: {
@@ -113,20 +108,16 @@ const data = {
   ],
 }
 
-export function AppSidebar({
-  onSelect,
-  ...props
-}) {
+export default function AppSidebar({ onSelect }) {
   return (
-    <Sidebar collapsible="offcanvas" {...props}>
+    <Sidebar collapsible="offcanvas">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton asChild className="data-[slot=sidebar-menu-button]:p-1.5!">
-              <a href="#">
-                <IconInnerShadowTop className="size-5!" />
-                <span className="text-base font-semibold">Acme Inc.</span>
-              </a>
+              <Link href="/profile/dashboard">
+                <span className="text-base font-semibold">BloodyYue</span>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

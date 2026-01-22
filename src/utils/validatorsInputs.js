@@ -40,9 +40,15 @@ const validatorsInputs = {
     },
 
     text(text) {
-        const textRegex = /^[a-zA-ZÀ-ÿ\s.,;:!?()""'']{1,500}$/;
+        const textRegex = /^[a-zA-ZÀ-ÿ\s.,;:!?()""'']{1,50}$/;
         let result = textRegex.test(text.trim().toLowerCase());
-        return !result ? 'El texto debe contener entre 1 y 500 caracteres' : '';
+        return !result ? 'El texto debe contener entre 1 y 50 caracteres' : '';
+    },
+
+    link(value) {
+        const linkRegex = /^https?:\/\//;
+        let result = linkRegex.test(value);
+        return !result ? 'El enlace debe ser válido' : '';
     }
 }
 

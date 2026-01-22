@@ -1,22 +1,22 @@
 'use client';
 
-import { AppSidebar } from "@/components/organisms/AppSidebar"
-import { SiteHeader } from "@/components/organisms/SiteHeader"
-import { SectionCards } from "@/components/organisms/SectionCards"
-import { ChartAreaInteractive } from "@/components/organisms/ChartAreaInteractive"
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
-import { useState } from "react"
-import { SettingsSection } from "@/components/organisms/SettingsSection"
-import { UsersSection } from "@/components/organisms/UsersSection"
-import { RolesSection } from "@/components/organisms/RolesSection"
-import { LabelsSection } from "@/components/organisms/LabelsSection"
-import { CommissionsManager } from "@/components/organisms/CommissionsManager"
-import { PostsManager } from "@/components/organisms/PostsManager"
-import { SalesSection } from "@/components/organisms/SalesSection"
-import { RecentSalesSummary } from "@/components/organisms/RecentSalesSummary"
+import AppSidebar from "../organisms/AppSidebar";
+import SettingsSection from "../organisms/SettingsSection";
+import { SiteHeader } from "../organisms/SiteHeader";
+import { SectionCards } from "../organisms/SectionCards";
+import { ChartAreaInteractive } from "../organisms/ChartAreaInteractive";
+import { SidebarInset, SidebarProvider } from "../ui/sidebar";
+import { useState } from "react";
+import { UsersSection } from "../organisms/UsersSection";
+import { RolesSection } from "../organisms/RolesSection";
+import { LabelsSection } from "../organisms/LabelsSection";
+import { CommissionsManager } from "../organisms/CommissionsManager";
+import { PostsManager } from "../organisms/PostsManager";
+import { SalesSection } from "../organisms/SalesSection";
+import { RecentSalesSummary } from "../organisms/RecentSalesSummary";
 
 export default function DashboardPage() {
-    const [activeSection, setActiveSection] = useState('metrics');
+    const [activeSection, setActiveSection] = useState('settings');
 
     const renderSection = () => {
         switch (activeSection) {
@@ -72,7 +72,7 @@ export default function DashboardPage() {
             <AppSidebar onSelect={setActiveSection} />
             <SidebarInset>
                 <SiteHeader />
-                <main className="flex flex-1 flex-col overflow-y-auto">
+                <main className="flex flex-1 flex-col overflow-y-auto bg-[#0B0B0E]">
                     {renderSection()}
                 </main>
             </SidebarInset>

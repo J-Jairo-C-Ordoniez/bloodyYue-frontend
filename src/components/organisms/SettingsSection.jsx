@@ -1,144 +1,183 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import settings from "../../api/settings/index"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+import settingsApi from "../../api/settings/index"
+import useSettings from "../../hooks/useSettings"
+import validatorInput from "../../utils/validatorsInputs"
+import Typography from "../atoms/Typography"
+import Input from "../atoms/Input"
+import Button from "../atoms/Button"
+import { Label } from "../ui/label"
+import { Textarea } from "../ui/textarea"
 import { toast } from "sonner"
-import LoaderCard from "@/components/molecules/LoaderCard"
+import LoaderCard from "../molecules/LoaderCard"
 
-export function SettingsSection() {
-    const [settings, setSettings] = useState(null)
-    const [loading, setLoading] = useState(true)
+export default function SettingsSection() {
+    const { setting, isLoadingSetting, errorSetting } = useSettings(1)
+    const [formData, setFormData] = useState({
+        title: setting?.data?.title || "",
+        subtitle: setting?.data?.subtitle || "",
+        contentHero: setting?.data?.contentHero || "",
+        email: setting?.data?.email || "",
+        abaut: setting?.data?.abaut || "",
+        work: setting?.data?.work || "",
+        usagePolicies: setting?.data?.usagePolicies || ""
+    })
     const [saving, setSaving] = useState(false)
+    const [errors, setErrors] = useState(null)
 
     useEffect(() => {
-        const fetchSettings = async () => {
-            const response = await settings.getSettings(1) // Assuming ID 1 for global settings
-            if (!response.error) {
-                setSettings(response.data)
-            } else {
-                toast.error("Failed to load settings: " + response.message)
-            }
-            setLoading(false)
-        }
-        fetchSettings()
-    }, [])
+        if (!setting || errorSetting || isLoadingSetting) return
+        setFormData({
+            title: setting?.data?.title || "",
+            subtitle: setting?.data?.subtitle || "",
+            contentHero: setting?.data?.contentHero || "",
+            email: setting?.data?.email || "",
+            abaut: setting?.data?.abaut || "",
+            work: setting?.data?.work || "",
+            usagePolicies: setting?.data?.usagePolicies || ""
+        })
+    }, [setting])
 
     const handleChange = (e) => {
         const { name, value } = e.target
-        setSettings(prev => ({ ...prev, [name]: value }))
+        let nam = name === 'title' ? 'text'
+            : name === 'subtitle' ? 'text'
+                : name === 'contentHero' ? 'link'
+                    : name === 'email' ? 'email'
+                        : name === 'abaut' ? 'text'
+                            : name === 'work' ? 'text'
+                                : name === 'usagePolicies' ? 'text'
+                                    : name
+        let error = validatorInput(nam, value)
+        setErrors(error)
+
+        setFormData(prev => ({ ...prev, [name]: value }))
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         setSaving(true)
-        const response = await settings.settingsPut({ id: 1, data: settings })
-        if (!response.error) {
-            toast.success("Settings updated successfully")
-        } else {
-            toast.error("Failed to update settings: " + response.message)
+        const res = await settingsApi.settingsPut({ id: setting?.data?.settingId, data: formData })
+        if (!res.error) {
+            setErrors('Error al actualizar los ajustes')
         }
+
         setSaving(false)
     }
 
-    if (loading) return <LoaderCard title="Loading Settings..." />
-
-    if (!settings) return <div className="p-4 text-white">No settings found.</div>
+    const inputs = [
+        {
+            id: 'title',
+            name: 'title',
+            label: 'Titulo',
+            type: 'text',
+            placeholder: 'Titulo',
+            value: formData.title,
+            onChange: handleChange,
+        },
+        {
+            id: 'email',
+            name: 'email',
+            label: 'Correo',
+            type: 'email',
+            placeholder: 'Correo',
+            value: formData.email,
+            onChange: handleChange
+        },
+        {
+            id: 'subtitle',
+            name: 'subtitle',
+            label: 'Subtitulo',
+            type: 'text',
+            placeholder: 'Subtitulo',
+            value: formData.subtitle,
+            onChange: handleChange,
+            colSpan: 'col-span-2'
+        },
+        {
+            id: 'contentHero',
+            name: 'contentHero',
+            label: 'Contenido Hero',
+            type: 'text',
+            placeholder: 'Contenido Hero',
+            value: formData.contentHero,
+            onChange: handleChange,
+            colSpan: 'col-span-2'
+        },
+        
+        {
+            id: 'abaut',
+            name: 'abaut',
+            label: 'Habla sobre tí',
+            type: 'text',
+            placeholder: 'Habla sobre tí',
+            value: formData.abaut,
+            onChange: handleChange,
+            colSpan: 'col-span-2'
+        },
+        {
+            id: 'work',
+            name: 'work',
+            label: 'Trabajo',
+            type: 'text',
+            placeholder: 'Trabajo',
+            value: formData.work,
+            onChange: handleChange,
+            colSpan: 'col-span-2'
+        },
+        {
+            id: 'usagePolicies',
+            name: 'usagePolicies',
+            label: 'Política de uso',
+            type: 'text',
+            placeholder: 'Política de uso',
+            value: formData.usagePolicies,
+            onChange: handleChange,
+            colSpan: 'col-span-2'
+        }
+    ]
 
     return (
-        <div className="p-4 bg-background rounded-lg shadow-md max-w-4xl mx-auto my-6 border border-border">
-            <h2 className="text-2xl font-bold mb-6 text-foreground">Global Site Settings</h2>
-            <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                        <Label htmlFor="title">Site Title</Label>
-                        <Input
-                            id="title"
-                            name="title"
-                            value={settings.title || ""}
-                            onChange={handleChange}
-                            placeholder="Main Title"
-                        />
+        <section className="p-4 w-[50%] mx-auto my-6">
+            {isLoadingSetting && <LoaderCard title="Loading Settings..." />}
+            {errorSetting && <h2 className="text-2xl font-bold mb-6 text-foreground">Global error Settings</h2>}
+            {setting && !isLoadingSetting && !errorSetting && (
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="grid grid-cols-2 gap-4">
+                        {inputs.map((input) => (
+                            <div key={input.id} className={input?.colSpan}>
+                                <Input
+                                    id={input.id}
+                                    name={input.name}
+                                    label={input.label}
+                                    type={input.type}
+                                    placeholder={input.placeholder}
+                                    value={input.value}
+                                    onChange={input.onChange}
+                                />
+                            </div>
+                        ))}
                     </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="subtitle">Site Subtitle</Label>
-                        <Input
-                            id="subtitle"
-                            name="subtitle"
-                            value={settings.subtitle || ""}
-                            onChange={handleChange}
-                            placeholder="Subtitle / Tagline"
-                        />
-                    </div>
-                </div>
 
-                <div className="space-y-2">
-                    <Label htmlFor="contentHero">Hero Content</Label>
-                    <Input
-                        id="contentHero"
-                        name="contentHero"
-                        value={settings.contentHero || ""}
-                        onChange={handleChange}
-                        placeholder="Hero Section Text"
-                    />
-                </div>
 
-                <div className="space-y-2">
-                    <Label htmlFor="email">Contact Email</Label>
-                    <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        value={settings.email || ""}
-                        onChange={handleChange}
-                        placeholder="admin@example.com"
-                    />
-                </div>
-
-                <div className="space-y-2">
-                    <Label htmlFor="abaut">About Section</Label>
-                    <Textarea
-                        id="abaut"
-                        name="abaut"
-                        value={settings.abaut || ""}
-                        onChange={handleChange}
-                        placeholder="Describe the site..."
-                        rows={5}
-                    />
-                </div>
-
-                <div className="space-y-2">
-                    <Label htmlFor="work">Work Section Description</Label>
-                    <Textarea
-                        id="work"
-                        name="work"
-                        value={settings.work || ""}
-                        onChange={handleChange}
-                        placeholder="Description of work/services..."
-                        rows={3}
-                    />
-                </div>
-
-                <div className="space-y-2">
-                    <Label htmlFor="usagePolicies">Usage Policies</Label>
-                    <Input
-                        id="usagePolicies"
-                        name="usagePolicies"
-                        value={settings.usagePolicies || ""}
-                        onChange={handleChange}
-                        placeholder="Policy description or link"
-                    />
-                </div>
-
-                <div className="flex justify-end pt-4">
-                    <Button type="submit" disabled={saving}>
-                        {saving ? "Saving Changes..." : "Save Settings"}
+                    <Button
+                        type="submit"
+                        variant="submit"
+                        size="large"
+                    >
+                        Guardar
                     </Button>
-                </div>
-            </form>
-        </div>
+                </form>
+            )}
+
+            {errors && (
+                <article className="space-y-1">
+                    <Typography variant="error">
+                        {errors}
+                    </Typography>
+                </article>
+            )}
+        </section>
     )
 }

@@ -21,37 +21,36 @@ export default function useCart(body = null, variant = 'itemsGet') {
     itemDiscardedPatch: cart.cartItemDiscardedPatch
   }
 
-  useEffect(() => {
+  const fetchCart = async () => {
     let isMounted = true;
+    try {
+      setIsLoadingCartItems(true);
+      setErrorCartItems(null);
+      const data = await variants[variant](body);
 
-    (async () => {
-      try {
-        setIsLoadingCartItems(true);
-        setErrorCartItems(null);
-        const data = await variants[variant](body);
-
-        if (isMounted) {
-          setCartItems(data);
-        }
-      } catch (err) {
-        if (isMounted) {
-          setErrorCartItems(err?.message || 'Error al cargar los items del carrito');
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoadingCartItems(false);
-        }
+      if (isMounted) {
+        setCartItems(data);
       }
-    })()
+    } catch (err) {
+      if (isMounted) {
+        setErrorCartItems(err?.message || 'Error al cargar los items del carrito');
+      }
+    } finally {
+      if (isMounted) {
+        setIsLoadingCartItems(false);
+      }
+    }
+    return () => { isMounted = false };
+  };
 
-    return () => {
-      isMounted = false;
-    };
+  useEffect(() => {
+    fetchCart();
   }, []);
 
   return {
     cartItems,
     isLoadingCartItems,
     errorCartItems,
+    refetch: fetchCart
   };
 }

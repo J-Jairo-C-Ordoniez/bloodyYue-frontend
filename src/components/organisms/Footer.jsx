@@ -1,6 +1,7 @@
 import SocialBar from '../molecules/SocialBar';
 import Typography from '../atoms/Typography';
 import Icon from '../atoms/Icon';
+import Link from '../atoms/Link';
 
 export default function Footer({ email, redes }) {
     return (
@@ -9,33 +10,28 @@ export default function Footer({ email, redes }) {
                 <article className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
                     <div className="flex flex-col gap-6">
                         <div className="flex flex-col gap-4">
-                            <Typography variant="h3" className="font-bold text-gray-900">
-                                Bloody<span className="text-red-500">Yue</span>
-                            </Typography>
-                            <Typography variant="body" className="text-gray-600 max-w-sm">
+                            <Link href="/" className="group">
+                                <Typography variant="h3" className="text-xl font-bold text-white tracking-tighter group-hover:text-zinc-300 transition-colors">
+                                    Bloody<span className="text-zinc-500 font-light">Yue</span>
+                                </Typography>
+                            </Link>
+                            <Typography variant="body" className="text-gray-200 max-w-sm">
                                 Creando arte digital con pasión. <br />
                                 Gracias por apoyar mi trabajo.
                             </Typography>
                         </div>
-
-                        {/* <div className="flex gap-4">
-                            <SocialBar redes={redes} className="text-gray-600" itemClassName="bg-gray-100 hover:bg-gray-200 text-gray-700" />
-                        </div> */}
                     </div>
 
                     <div className="flex flex-col gap-6 md:pl-12">
-                        <Typography variant="h5" className="font-bold text-gray-300">
-                            Menú
-                        </Typography>
                         <nav className="flex flex-col gap-3">
                             {['Home', 'Portfolio', 'Commissions', 'Terms of Service'].map((item) => (
-                                <a
+                                <Link
                                     key={item}
+                                    variant='default'
                                     href="#"
-                                    className="text-gray-500 hover:text-gray-200 transition-colors"
                                 >
                                     {item}
-                                </a>
+                                </Link>
                             ))}
                         </nav>
                     </div>
@@ -56,7 +52,7 @@ export default function Footer({ email, redes }) {
                     </div>
                 </article>
 
-                <div className="pt-8 border-t border-gray-300 flex flex-col md:flex-row justify-between items-center gap-4">
+                <div className="pt-8 border-t border-gray-600 flex flex-col md:flex-row justify-between items-center gap-4">
                     <Typography variant="small" className="text-gray-400">
                         © {new Date().getFullYear()} Bloody Yue. All rights reserved.
                     </Typography>

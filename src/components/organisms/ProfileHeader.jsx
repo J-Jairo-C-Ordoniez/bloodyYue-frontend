@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Icon from '../atoms/Icon';
 import Input from '../atoms/Input';
 import Button from '../atoms/Button';
+import Typography from '../atoms/Typography';
 import Image from '../atoms/Image';
 import NotificationDropdown from '../molecules/NotificationDropdown';
 import useNotifications from '../../hooks/useNotifications';
@@ -12,6 +13,7 @@ import useAuth from '../../hooks/useAuth';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import ProfileDropdown from '../molecules/ProfileDropdown';
+import useAuthStore from '../../store/auth.store';
 
 export default function ProfileHeader({ user }) {
     const [searchQuery, setSearchQuery] = useState('');
@@ -54,28 +56,25 @@ export default function ProfileHeader({ user }) {
                     </h1>
                 </Link>
 
-                <div className="flex-1 max-w-sm hidden md:block group focus-within:max-w-md transition-all duration-500">
-                    <div className="relative">
-                        <Input
-                            type="text"
-                            placeholder="Search..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            icon="Search"
-                            className="bg-zinc-900/50 border-transparent focus:bg-zinc-900 focus:border-zinc-800 transition-all rounded-xl pl-10"
-                        />
-                    </div>
+                <div className="flex-1 max-w-sm">
+                    <Input
+                        type="text"
+                        placeholder="Search..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        icon="Search"
+                    />
                 </div>
 
-                <div className="flex items-center gap-2">
-                    <Button variant="ghost" size='icon' className="rounded-full hover:bg-white/5 text-zinc-400 hover:text-white">
+                <section className="flex items-center gap-2">
+                    <Button variant="ghost" size='small' className="rounded-full hover:bg-white/5 text-zinc-400 hover:text-white">
                         <Icon name="HelpCircle" size={20} />
                     </Button>
 
                     <div className="relative">
                         <Button
                             variant="ghost"
-                            size='icon'
+                            size='small'
                             onClick={toggleNotifications}
                             className={`rounded-full hover:bg-white/5 text-zinc-400 hover:text-white ${isNotificationOpen ? 'bg-white/10 text-white' : ''}`}
                         >
@@ -105,10 +104,10 @@ export default function ProfileHeader({ user }) {
                                     <Icon name="User" size={16} className="text-zinc-500" />
                                 )}
                             </div>
-                            <span className="text-sm font-medium text-zinc-300 group-hover:text-white hidden sm:block">
-                                {user?.username || 'Profile'}
-                            </span>
-                            <Icon name="ChevronDown" size={14} className={`text-zinc-500 group-hover:text-white transition-transform duration-300 ${isProfileOpen ? 'rotate-180' : ''}`} />
+                            <Typography variant="body" className="text-zinc-300">
+                                {user?.name || 'Profile'}
+                            </Typography>
+                            <Icon name="ChevronDown" size={14} />
                         </Button>
                         <ProfileDropdown
                             isOpen={isProfileOpen}
@@ -116,11 +115,12 @@ export default function ProfileHeader({ user }) {
                             user={user}
                             onLogout={async () => {
                                 await logout();
-                                router.push('/users/login');
+                                useAuthStore.getState().clearAuth();
+                                router.push('/');
                             }}
                         />
                     </div>
-                </div>
+                </section>
             </div>
         </header>
     );

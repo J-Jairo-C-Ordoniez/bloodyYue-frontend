@@ -3,9 +3,10 @@ import Typography from '../atoms/Typography';
 import useCommissions from '../../hooks/useCommissions';
 import LoaderCard from '../molecules/LoaderCard';
 import ErrorCard from '../molecules/ErrorCard';
-import Label from '../atoms/Label';
+import Button from '../atoms/Button';
+import Icon from '../atoms/Icon';
 
-export default function CartItemSmall({ id, commissionId, quantity, status, priceAtMoment }) {
+export default function CartItemSmall({ id, commissionId, quantity, priceAtMoment, onDiscard }) {
     const { commission, isLoadingCommission, errorCommission } = useCommissions({ id: commissionId }, 'getById');
 
     return (
@@ -15,7 +16,7 @@ export default function CartItemSmall({ id, commissionId, quantity, status, pric
                 <ErrorCard message={errorCommission || commission?.message || 'Error al cargar la comisión'} />
             )}
             {commission?.data && (
-                <section data-id={id} className="flex items-center justify-between gap-3">
+                <section data-id={id} className="w-full flex items-center justify-between gap-3">
                     <article className="flex items-center gap-3">
                         <div className="h-10 w-10 relative rounded-lg overflow-hidden shrink-0 border border-zinc-800">
                             <Image
@@ -37,9 +38,17 @@ export default function CartItemSmall({ id, commissionId, quantity, status, pric
                     </article>
 
                     <div className="flex items-center gap-2">
-                        <Label variant="ghost" color="#007700">
-                            {status}
-                        </Label>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="text-zinc-500 hover:text-red-400 hover:bg-red-400/10"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onDiscard(id);
+                            }}
+                        >
+                            <Icon name="Trash" size={18} />
+                        </Button>
                     </div>
                 </section>
             )}

@@ -21,10 +21,10 @@ export default function LoaderProfile() {
                 return router.replace("/");
             }
 
-            /* if (!role.data.permits) {
-                
-            } */
-            return router.replace("/profile/home");
+            if (!role.data.permits) {
+                return router.replace("/profile/home");
+            }
+
             return router.replace("/profile/dashboard");
         })();
     }, [user]);

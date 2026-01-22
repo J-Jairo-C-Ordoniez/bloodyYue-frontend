@@ -7,7 +7,7 @@ export default function Button({
     type = 'button',
     isActive = false
 }) {
-    const baseStyles = 'cursor-pointer inline-flex items-center justify-center gap-2 font-medium transition-all duration-300 rounded-full outline-none';
+    const baseStyles = 'cursor-pointer flex items-center justify-center gap-2 font-medium transition-all duration-300 rounded-full outline-none';
 
     const variants = {
         primary: 'bg-white text-black hover:bg-gray-200 focus:ring-white',

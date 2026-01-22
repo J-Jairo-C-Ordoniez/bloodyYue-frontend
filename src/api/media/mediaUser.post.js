@@ -1,14 +1,16 @@
-import fetchApi from "../fetchApi";
+import fetchClient from "../fetchClient";
 
 const mediaUserPost = async ({ file, context }) => {
-    const data = await fetchApi(`/media/images/user`, {
+    console.log(file, context, 'holaaaa');
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('context', context);
+
+    const data = await fetchClient(`/media/images/user`, {
         auth: true,
         options: {
             method: 'POST',
-            body: JSON.stringify({
-                file,
-                context
-            }),
+            body: formData,
         }
     });
 

@@ -110,7 +110,7 @@ const data = {
 
 export default function AppSidebar({ onSelect }) {
   return (
-    <Sidebar collapsible="offcanvas">
+    <Sidebar collapsible="offcanvas" className="bg-[#0B0B0E] border-r-0">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>

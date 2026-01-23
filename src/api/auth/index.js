@@ -6,7 +6,7 @@ import resetPasswordPost from "./resetPassword.post";
 import newToken from "./newToken";
 import logoutPost from "./logout.post";
 import changeRolePost from "./changeRole.post";
-import changeStatusPost from "./changeStatus.patch";
+import changeStatusPatch from "./changeStatus.patch";
 
 const auth = {
     loginPost,
@@ -17,7 +17,7 @@ const auth = {
     newToken,
     logoutPost,
     changeRolePost,
-    changeStatusPost
+    changeStatusPatch
 };
 
 export default auth;

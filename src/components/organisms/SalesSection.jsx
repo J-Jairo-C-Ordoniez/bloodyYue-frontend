@@ -34,7 +34,7 @@ export function SalesSection() {
 
     const fetchSales = async () => {
         setLoading(true)
-        const response = await salesApi.salesGetList()
+        const response = await salesApi.salesGetLisGet({id: 0})
         if (!response.error) {
             setSales(response.data)
         } else {

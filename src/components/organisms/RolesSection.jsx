@@ -62,9 +62,8 @@ export function RolesSection() {
 
     const openPermitsDialog = async (role) => {
         setSelectedRole(role)
-        const response = await rolesApi.rolesGetId(role.rolId)
+        const response = await rolesApi.rolesGetId({ rolId: role.rolId })
         if (!response.error) {
-            // Assuming response.data contains the permits for that role
             setRolePermits(response.data.permits || [])
         }
     }

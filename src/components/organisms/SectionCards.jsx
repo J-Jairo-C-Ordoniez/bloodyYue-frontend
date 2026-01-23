@@ -25,7 +25,7 @@ export function SectionCards() {
   useEffect(() => {
     const fetchMetrics = async () => {
       const [salesRes, usersRes] = await Promise.all([
-        salesApi.salesGetList(),
+        salesApi.salesGetLisGet({id: 0}),
         usersApi.usersGet()
       ])
 

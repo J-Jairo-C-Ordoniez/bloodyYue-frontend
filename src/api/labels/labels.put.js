@@ -1,11 +1,11 @@
 import fetchClient from "../fetchClient";
 
-export default async function labelsPut({ id, data}) {
+export default async function labelsPut({ id, data }) {
     const dataResponse = await fetchClient(`/labels/${id}`, {
         auth: true,
         options: {
             method: 'PUT',
-            body: JSON.stringify(data),
+            body: JSON.stringify({ name: data.name, color: data.color }),
         }
     });
 

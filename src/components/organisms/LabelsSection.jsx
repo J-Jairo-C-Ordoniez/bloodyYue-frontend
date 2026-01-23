@@ -51,7 +51,7 @@ export function LabelsSection() {
         if (isEditing) {
             response = await labelsApi.labelsPut({ id: currentLabel.labelId, data: currentLabel })
         } else {
-            response = await labelsApi.labelsPost({ data: currentLabel })
+            response = await labelsApi.labelsPost({ name: currentLabel.name, color: currentLabel.color })
         }
 
         if (!response.error) {
@@ -70,8 +70,7 @@ export function LabelsSection() {
     }
 
     const handleDelete = async (id) => {
-        if (!confirm("Are you sure you want to delete this label?")) return
-        const response = await labelsApi.labelsDelete(id)
+        const response = await labelsApi.labelsDelete({ id })
         if (!response.error) {
             toast.success("Label deleted")
             fetchLabels()

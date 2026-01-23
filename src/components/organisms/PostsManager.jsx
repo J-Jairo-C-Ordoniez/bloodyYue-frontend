@@ -54,7 +54,7 @@ export function PostsManager() {
     const fetchData = async () => {
         setLoading(true)
         const [postsRes, labelsRes] = await Promise.all([
-            postsApi.postListGet(),
+            postsApi.postListGet({id: 0}),
             labelsApi.labelsGet()
         ])
         if (!postsRes.error) setPosts(postsRes.data)

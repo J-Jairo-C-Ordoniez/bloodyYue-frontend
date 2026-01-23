@@ -49,7 +49,7 @@ export function CommissionsManager() {
     const fetchData = async () => {
         setLoading(true)
         const [commRes, labelsRes] = await Promise.all([
-            commissionsApi.commissionListGet(),
+            commissionsApi.commissionListGet({id: 0}),
             labelsApi.labelsGet()
         ])
         if (!commRes.error) setCommissions(commRes.data)

@@ -42,7 +42,7 @@ export function ChartAreaInteractive() {
 
   React.useEffect(() => {
     const fetchChartData = async () => {
-      const response = await salesApi.salesGetList()
+      const response = await salesApi.salesGetLisGet({id: 0})
       if (!response.error) {
         // Group sales by date
         const grouped = response.data.reduce((acc, sale) => {

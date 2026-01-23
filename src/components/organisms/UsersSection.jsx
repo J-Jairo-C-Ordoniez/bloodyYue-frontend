@@ -1,7 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import usersApi from "@/api/users"
+import usersApi from "../../api/users"
+import authApi from "../../api/auth"
 import {
     Table,
     TableBody,
@@ -9,17 +10,17 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table"
+} from "../ui/table"
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/select"
-import { Badge } from "@/components/ui/badge"
+} from "../ui/select"
+import { Badge } from "../ui/badge"
 import { toast } from "sonner"
-import LoaderCard from "@/components/molecules/LoaderCard"
+import LoaderCard from "../molecules/LoaderCard"
 
 export function UsersSection() {
     const [users, setUsers] = useState([])
@@ -40,7 +41,7 @@ export function UsersSection() {
     }
 
     const handleStatusChange = async (userId, newStatus) => {
-        const response = await usersApi.usersStatusPatch({ userId, status: newStatus })
+        const response = await authApi.changeStatusPatch({ userId, status: newStatus })
         if (!response.error) {
             toast.success("User status updated")
             setUsers(prev => prev.map(u => u.userId === userId ? { ...u, status: newStatus } : u))

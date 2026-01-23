@@ -2,7 +2,7 @@
 
 import AppSidebar from "../organisms/AppSidebar";
 import SettingsSection from "../organisms/SettingsSection";
-import { SiteHeader } from "../organisms/SiteHeader";
+import SiteHeader from "../organisms/SiteHeader";
 import { SectionCards } from "../organisms/SectionCards";
 import { ChartAreaInteractive } from "../organisms/ChartAreaInteractive";
 import { SidebarInset, SidebarProvider } from "../ui/sidebar";
@@ -16,7 +16,7 @@ import { SalesSection } from "../organisms/SalesSection";
 import { RecentSalesSummary } from "../organisms/RecentSalesSummary";
 
 export default function DashboardPage() {
-    const [activeSection, setActiveSection] = useState('settings');
+    const [activeSection, setActiveSection] = useState('metrics');
 
     const renderSection = () => {
         switch (activeSection) {
@@ -68,9 +68,9 @@ export default function DashboardPage() {
     };
 
     return (
-        <SidebarProvider>
+        <SidebarProvider className="bg-[#0B0B0E]">
             <AppSidebar onSelect={setActiveSection} />
-            <SidebarInset>
+            <SidebarInset className="bg-[#0B0B0E]">
                 <SiteHeader />
                 <main className="flex flex-1 flex-col overflow-y-auto bg-[#0B0B0E]">
                     {renderSection()}

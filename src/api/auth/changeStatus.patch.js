@@ -1,6 +1,6 @@
 import fetchClient from "../fetchClient";
 
-export default async function changeStatusPost({ userId, status }) {
+export default async function changeStatusPatch({ userId, status }) {
     const data = await fetchClient(`/auth/changeStatus`, {
         auth: true,
         options: {

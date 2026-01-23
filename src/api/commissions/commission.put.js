@@ -5,7 +5,13 @@ export default async function commissionPut({ id, data }) {
         auth: true,
         options: {
             method: "PUT",
-            body: JSON.stringify(data),
+            body: JSON.stringify({
+                title: data.title,
+                description: data.description,
+                price: data.price,
+                terms: data.terms,
+                labels: data.labels
+            }),
         },
     });
 

@@ -26,7 +26,7 @@ export function RecentSalesSummary() {
 
     useEffect(() => {
         const fetchSales = async () => {
-            const response = await salesApi.salesGetList()
+            const response = await salesApi.salesGetLisGet({id: 0})
             if (!response.error) {
                 // Just take the latest 5
                 setSales(response.data.slice(0, 5))

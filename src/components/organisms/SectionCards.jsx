@@ -1,20 +1,13 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import salesApi from "@/api/sales"
-import usersApi from "@/api/users"
 import { IconTrendingUp, IconUsers, IconCurrencyDollar, IconShoppingCart } from "@tabler/icons-react"
-import { Badge } from "@/components/ui/badge"
-import {
-  Card,
-  CardAction,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardAction, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card"
+import { Badge } from "../ui/badge"
+import salesApi from "../../api/sales/index"
+import usersApi from "../../api/users/index"
 
-export function SectionCards() {
+export default function SectionCards() {
   const [metrics, setMetrics] = useState({
     totalRevenue: 0,
     newCustomers: 0,
@@ -35,7 +28,7 @@ export function SectionCards() {
 
         setMetrics({
           totalRevenue: totalRevenue.toFixed(2),
-          newCustomers: usersRes.data.length, // Simplified
+          newCustomers: usersRes.data.length,
           activeAccounts: activeAccounts,
           totalSales: salesRes.data.length
         })
@@ -45,11 +38,10 @@ export function SectionCards() {
   }, [])
 
   return (
-    <div
-      className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-linear-to-t *:data-[slot=card]:shadow-xs lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
+    <div className="p-6 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4">
       <Card className="@container/card">
         <CardHeader>
-          <CardDescription>Total Revenue</CardDescription>
+          <CardDescription>Ganancias totales</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
             ${metrics.totalRevenue}
           </CardTitle>
@@ -58,13 +50,13 @@ export function SectionCards() {
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="text-muted-foreground">Cumulative earnings</div>
+          <span className="text-muted-foreground">Ganancias acumuladas</span>
         </CardFooter>
       </Card>
 
       <Card className="@container/card">
         <CardHeader>
-          <CardDescription>Total Users</CardDescription>
+          <CardDescription>Usuarios totales</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
             {metrics.newCustomers}
           </CardTitle>
@@ -72,14 +64,11 @@ export function SectionCards() {
             <IconUsers className="text-primary" />
           </CardAction>
         </CardHeader>
-        <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="text-muted-foreground">Registered on platform</div>
-        </CardFooter>
       </Card>
 
       <Card className="@container/card">
         <CardHeader>
-          <CardDescription>Active Accounts</CardDescription>
+          <CardDescription>Usuarios activos</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
             {metrics.activeAccounts}
           </CardTitle>
@@ -91,13 +80,13 @@ export function SectionCards() {
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="text-muted-foreground">Users with active status</div>
+          <span className="text-muted-foreground">Usuarios con estado activo</span>
         </CardFooter>
       </Card>
 
       <Card className="@container/card">
         <CardHeader>
-          <CardDescription>Total Sales</CardDescription>
+          <CardDescription>Total de ventas</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
             {metrics.totalSales}
           </CardTitle>
@@ -106,7 +95,7 @@ export function SectionCards() {
           </CardAction>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
-          <div className="text-muted-foreground">Successful transactions</div>
+          <span className="text-muted-foreground">Transacciones exitosas</span>
         </CardFooter>
       </Card>
     </div>

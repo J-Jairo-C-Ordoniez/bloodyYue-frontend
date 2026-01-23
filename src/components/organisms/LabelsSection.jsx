@@ -24,7 +24,7 @@ import { toast } from "sonner"
 import LoaderCard from "@/components/molecules/LoaderCard"
 import { IconPlus, IconTrash, IconPencil } from "@tabler/icons-react"
 
-export function LabelsSection() {
+export default function LabelsSection() {
     const [labels, setLabels] = useState([])
     const [loading, setLoading] = useState(true)
     const [isEditing, setIsEditing] = useState(false)

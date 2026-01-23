@@ -1,26 +1,13 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import salesApi from "@/api/sales"
-import { Badge } from "@/components/ui/badge"
-import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
-} from "@/components/ui/card"
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
 import { format } from "date-fns"
+import salesApi from "../../api/sales"
+import Label from "../atoms/Label"
 
-export function RecentSalesSummary() {
+export default function RecentSalesSummary() {
     const [sales, setSales] = useState([])
     const [loading, setLoading] = useState(true)
 
@@ -28,9 +15,9 @@ export function RecentSalesSummary() {
         const fetchSales = async () => {
             const response = await salesApi.salesGetLisGet({id: 0})
             if (!response.error) {
-                // Just take the latest 5
-                setSales(response.data.slice(0, 5))
+                setSales(response.data)
             }
+
             setLoading(false)
         }
         fetchSales()
@@ -39,32 +26,33 @@ export function RecentSalesSummary() {
     return (
         <Card className="h-full">
             <CardHeader>
-                <CardTitle>Recent Sales</CardTitle>
+                <CardTitle>Ventas Recientes</CardTitle>
                 <CardDescription>
-                    Latest transactions on the platform
+                    Transacciones recientes en la plataforma
                 </CardDescription>
             </CardHeader>
             <CardContent>
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>User</TableHead>
-                            <TableHead className="text-right">Amount</TableHead>
-                            <TableHead className="text-right">Date</TableHead>
+                            <TableHead>Usuario</TableHead>
+                            <TableHead className="text-right">Monto</TableHead>
+                            <TableHead className="text-right">Fecha</TableHead>
+                            <TableHead className="text-right">Estado</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {loading ? (
                             <TableRow>
-                                <TableCell colSpan={3} className="text-center py-4">Loading...</TableCell>
+                                <TableCell colSpan={4} className="text-center py-4">Cargando...</TableCell>
                             </TableRow>
                         ) : sales.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={3} className="text-center py-4">No sales found</TableCell>
+                                <TableCell colSpan={4} className="text-center py-4">No se encontraron ventas</TableCell>
                             </TableRow>
                         ) : (
                             sales.map((sale) => (
-                                <TableRow key={sale.idSale}>
+                                <TableRow key={sale.saleId}>
                                     <TableCell>
                                         <div className="font-medium text-xs truncate max-w-[100px]">{sale.user?.name || 'Anonymous'}</div>
                                     </TableCell>
@@ -73,6 +61,9 @@ export function RecentSalesSummary() {
                                     </TableCell>
                                     <TableCell className="text-right text-xs text-muted-foreground">
                                         {format(new Date(sale.createdAt), 'MMM dd')}
+                                    </TableCell>
+                                    <TableCell className="text-right text-xs text-muted-foreground">
+                                        <Label variant="default">{sale.status}</Label>
                                     </TableCell>
                                 </TableRow>
                             ))

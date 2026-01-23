@@ -1,32 +1,13 @@
 "use client"
 
-import * as React from "react"
+import {useState, useEffect, useMemo} from "react"
+import { useIsMobile } from "../../hooks/use-mobile"
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
+import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
-import salesApi from "@/api/sales"
-
-import { useIsMobile } from "@/hooks/use-mobile"
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "@/components/ui/toggle-group"
-
-export const description = "Recent Sales Area Chart"
+import salesApi from "../../api/sales"
 
 const chartConfig = {
   sales: {
@@ -35,16 +16,15 @@ const chartConfig = {
   }
 }
 
-export function ChartAreaInteractive() {
+export default function ChartAreaInteractive() {
   const isMobile = useIsMobile()
-  const [timeRange, setTimeRange] = React.useState("30d")
-  const [chartData, setChartData] = React.useState([])
+  const [timeRange, setTimeRange] = useState("30d")
+  const [chartData, setChartData] = useState([])
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchChartData = async () => {
       const response = await salesApi.salesGetLisGet({id: 0})
       if (!response.error) {
-        // Group sales by date
         const grouped = response.data.reduce((acc, sale) => {
           const date = new Date(sale.createdAt).toISOString().split('T')[0]
           acc[date] = (acc[date] || 0) + parseFloat(sale.total)
@@ -62,13 +42,13 @@ export function ChartAreaInteractive() {
     fetchChartData()
   }, [])
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isMobile) {
       setTimeRange("7d")
     }
   }, [isMobile])
 
-  const filteredData = React.useMemo(() => {
+  const filteredData = useMemo(() => {
     const now = new Date()
     let daysToSubtract = 30
     if (timeRange === "90d") daysToSubtract = 90
@@ -83,9 +63,9 @@ export function ChartAreaInteractive() {
   return (
     <Card className="@container/card">
       <CardHeader>
-        <CardTitle>Sales Over Time</CardTitle>
+        <CardTitle>Ventas a lo largo del tiempo</CardTitle>
         <CardDescription>
-          Daily revenue visualization
+          Visualización de ingresos diarios
         </CardDescription>
         <CardAction>
           <ToggleGroup
@@ -94,22 +74,10 @@ export function ChartAreaInteractive() {
             onValueChange={setTimeRange}
             variant="outline"
             className="hidden *:data-[slot=toggle-group-item]:px-4 @[767px]/card:flex">
-            <ToggleGroupItem value="90d">Last 3 months</ToggleGroupItem>
-            <ToggleGroupItem value="30d">Last 30 days</ToggleGroupItem>
-            <ToggleGroupItem value="7d">Last 7 days</ToggleGroupItem>
+            <ToggleGroupItem value="90d">Últimos 3 meses</ToggleGroupItem>
+            <ToggleGroupItem value="30d">Últimos 30 días</ToggleGroupItem>
+            <ToggleGroupItem value="7d">Últimos 7 días</ToggleGroupItem>
           </ToggleGroup>
-          <Select value={timeRange} onValueChange={setTimeRange}>
-            <SelectTrigger
-              className="flex w-40 **:data-[slot=select-value]:block **:data-[slot=select-value]:truncate @[767px]/card:hidden"
-              size="sm">
-              <SelectValue placeholder="Select Range" />
-            </SelectTrigger>
-            <SelectContent className="rounded-xl">
-              <SelectItem value="90d">Last 3 months</SelectItem>
-              <SelectItem value="30d">Last 30 days</SelectItem>
-              <SelectItem value="7d">Last 7 days</SelectItem>
-            </SelectContent>
-          </Select>
         </CardAction>
       </CardHeader>
       <CardContent className="px-2 pt-4 sm:px-6 sm:pt-6">

@@ -3,17 +3,17 @@
 import AppSidebar from "../organisms/AppSidebar";
 import SettingsSection from "../organisms/SettingsSection";
 import SiteHeader from "../organisms/SiteHeader";
-import { SectionCards } from "../organisms/SectionCards";
-import { ChartAreaInteractive } from "../organisms/ChartAreaInteractive";
+import SectionCards from "../organisms/SectionCards";
+import ChartAreaInteractive from "../organisms/ChartAreaInteractive";
+import RecentSalesSummary from "../organisms/RecentSalesSummary";
 import { SidebarInset, SidebarProvider } from "../ui/sidebar";
 import { useState } from "react";
 import { UsersSection } from "../organisms/UsersSection";
 import { RolesSection } from "../organisms/RolesSection";
-import { LabelsSection } from "../organisms/LabelsSection";
+import LabelsSection from "../organisms/LabelsSection";
 import { CommissionsManager } from "../organisms/CommissionsManager";
 import { PostsManager } from "../organisms/PostsManager";
 import { SalesSection } from "../organisms/SalesSection";
-import { RecentSalesSummary } from "../organisms/RecentSalesSummary";
 
 export default function DashboardPage() {
     const [activeSection, setActiveSection] = useState('metrics');
@@ -22,17 +22,13 @@ export default function DashboardPage() {
         switch (activeSection) {
             case 'metrics':
                 return (
-                    <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+                    <main className="flex flex-1 flex-col gap-4 overflow-y-auto overflow-x-hidden scrollbar">
                         <SectionCards />
-                        <div className="grid grid-cols-1 gap-4 @5xl/main:grid-cols-3 lg:px-2">
-                            <div className="flex flex-col gap-4 @5xl/main:col-span-2">
-                                <ChartAreaInteractive />
-                            </div>
-                            <div className="flex flex-col gap-4">
-                                <RecentSalesSummary />
-                            </div>
+                        <div className="px-6 pb-12 space-y-4">
+                            <ChartAreaInteractive />
+                            <RecentSalesSummary />
                         </div>
-                    </div>
+                    </main>
                 );
             case 'settings':
                 return <SettingsSection />;

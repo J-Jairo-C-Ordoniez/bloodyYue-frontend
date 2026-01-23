@@ -73,7 +73,7 @@ export default function Form({ handleSubmit, formData, handleChange, variant = '
                 name: 'terms',
                 type: 'checkbox',
                 label: (
-                    <Typography variant="small">
+                    <Typography variant="small" className="text-zinc-400">
                         Acepto los
                         <Link href="/terms" variant="link" size="default" className="text-purple-400 hover:text-purple-300">
                             Terminos y Condiciones

@@ -13,14 +13,14 @@ export default function Home() {
     const router = useRouter();
     const { auth } = useAuth('newToken');
     const [loading, setLoading] = useState(user && token ? false : true);
-    
+
     useErrorTokenStore.getState().setErrorToken(user && token ? false : true);
 
     useEffect(() => {
         const errorToken = useErrorTokenStore.getState().errorToken;
 
         (async () => {
-            if (!errorToken) return
+            if (!errorToken || !loading) return
 
             const res = await auth();
             if (res?.error) {
@@ -32,7 +32,7 @@ export default function Home() {
             useErrorTokenStore.getState().setErrorToken(false)
             setLoading(false);
         })()
-    }, [user]);
+    }, []);
 
     return (
         loading ? <Loader /> : <HomePage user={user} />

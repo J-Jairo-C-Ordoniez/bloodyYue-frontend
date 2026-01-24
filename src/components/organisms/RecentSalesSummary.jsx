@@ -35,8 +35,9 @@ export default function RecentSalesSummary() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Usuario</TableHead>
+                            <TableHead className="w-[100px]">ID</TableHead>
                             <TableHead className="text-right">Monto</TableHead>
+                            <TableHead className="text-right">Metodo de pago</TableHead>
                             <TableHead className="text-right">Fecha</TableHead>
                             <TableHead className="text-right">Estado</TableHead>
                         </TableRow>
@@ -53,17 +54,20 @@ export default function RecentSalesSummary() {
                         ) : (
                             sales.map((sale) => (
                                 <TableRow key={sale.saleId}>
-                                    <TableCell>
-                                        <div className="font-medium text-xs truncate max-w-[100px]">{sale.user?.name || 'Anonymous'}</div>
+                                    <TableCell className="w-[100px]">
+                                        <span className="font-medium text-xs truncate max-w-[100px]">{sale.saleId}</span>
                                     </TableCell>
                                     <TableCell className="text-right text-xs">
                                         ${parseFloat(sale.total).toFixed(2)}
                                     </TableCell>
+                                    <TableCell className="text-right text-xs">
+                                        {sale.paymentMethod}
+                                    </TableCell>
                                     <TableCell className="text-right text-xs text-muted-foreground">
                                         {format(new Date(sale.createdAt), 'MMM dd')}
                                     </TableCell>
-                                    <TableCell className="text-right text-xs text-muted-foreground">
-                                        <Label variant="default">{sale.status}</Label>
+                                    <TableCell className="flex justify-end items-center">
+                                        <Label variant="default" color="#009900">{sale.status}</Label>
                                     </TableCell>
                                 </TableRow>
                             ))

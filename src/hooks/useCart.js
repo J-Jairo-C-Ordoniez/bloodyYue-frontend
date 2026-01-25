@@ -43,6 +43,15 @@ export default function useCart(body = null, variant = 'itemsGet') {
     return () => { isMounted = false };
   };
 
+  const discardItem = async (id) => {
+    try {
+      const data = await variants.itemDiscardedPatch({ id });
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   useEffect(() => {
     fetchCart();
   }, []);
@@ -51,6 +60,7 @@ export default function useCart(body = null, variant = 'itemsGet') {
     cartItems,
     isLoadingCartItems,
     errorCartItems,
-    refetch: fetchCart
+    refetch: fetchCart,
+    discardItem
   };
 }

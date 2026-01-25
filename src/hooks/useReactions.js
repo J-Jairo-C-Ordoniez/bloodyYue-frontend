@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import posts from '../api/posts/index';
-import useErrorTokenStore from '../store/errorToken.store';
 
 /**
  * Custom hook para manejar operaciones de reacciones de posts
@@ -35,12 +34,7 @@ export default function useReactions(body = null, variant = 'getReactions') {
         const data = await variants[variant](body ?? body);
 
         if (isMounted) {
-          if (data?.error === 401) {
-            useErrorTokenStore.getState().setErrorToken(true);
-            setErrorReactions('Sesión expirada. Por favor, inicia sesión nuevamente.');
-          } else {
-            setReactions(data);
-          }
+          setReactions(data);
         }
       } catch (err) {
         if (isMounted) {

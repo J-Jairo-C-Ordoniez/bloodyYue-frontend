@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import users from '../api/users/index';
-import useErrorTokenStore from '../store/errorToken.store';
 
 /**
  * Custom hook para manejar operaciones de testimonios
@@ -27,17 +26,16 @@ export default function useTestimonies(body = null, variant = 'testimoniesGet') 
         const data = await variants[variant](body);
 
         if (isMounted) {
-          if (data?.error === 401) {
-            useErrorTokenStore.getState().setErrorToken(true);
-            setErrorTestimony('Sesión expirada. Por favor, inicia sesión nuevamente.');
-          }
+          setTestimony(data);
         }
 
         if (data?.error) {
           return setErrorTestimony(data?.message);
         }
 
-        setTestimony(data);
+        if (isMounted) {
+          setTestimony(data);
+        }
 
       } catch (err) {
         if (isMounted) {

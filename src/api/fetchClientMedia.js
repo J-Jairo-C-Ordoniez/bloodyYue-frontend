@@ -1,9 +1,10 @@
+'use client';
+
 import useAuthStore from "../store/auth.store";
-import useErrorTokenStore from "../store/errorToken.store";
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://localhost:5000/api';
 
-export default async function fetchClient(endpoint, { auth = true, headers, options } = {}) {
+export default async function fetchClientMedia(endpoint, { auth = true, headers, options } = {}) {
   const token = useAuthStore.getState().token;
 
   const controller = new AbortController();
@@ -14,7 +15,6 @@ export default async function fetchClient(endpoint, { auth = true, headers, opti
       method: options?.method || 'GET',
       credentials: 'include',
       headers: {
-        'Content-Type': 'application/json',
         ...(auth && token ? { Authorization: `Bearer ${token}` } : {}),
         ...headers,
       },
@@ -23,28 +23,9 @@ export default async function fetchClient(endpoint, { auth = true, headers, opti
     });
 
     clearTimeout(timeoutId);
-
-    if (response.status === 401 && auth) {
-      useErrorTokenStore.getState().setErrorToken(true);
-      return {
-        error: true,
-        status: 401,
-        message: 'Sesión expirada',
-      };
-    }
-
-    if (!response.ok) {
-      return {
-        error: true,
-        status: response.status,
-        message: response.statusText
-      }
-    }
-
     return response.json();
   } catch (error) {
     clearTimeout(timeoutId);
-    console.error(`Fetch error for ${endpoint}:`, error);
     return {
       error: true,
       status: error.name === 'AbortError' ? 'TIMEOUT' : 'NETWORK_ERROR',

@@ -1,14 +1,15 @@
-import fetchClient from "../fetchClient";
+import fetchClientMedia from "../fetchClientMedia";
 
 export default async function mediaHeroPost({ file, context }) {
-    const data = await fetchClient(`/media/images/hero`, {
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('context', context)
+
+    const data = await fetchClientMedia(`/media/images/hero`, {
         auth: true,
         options: {
             method: 'POST',
-            body: JSON.stringify({
-                file,
-                context
-            }),
+            body: formData
         }
     });
 

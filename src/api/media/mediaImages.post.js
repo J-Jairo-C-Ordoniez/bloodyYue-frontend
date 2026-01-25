@@ -1,7 +1,7 @@
-import fetchApi from "../fetchApi";
+import fetchClient from "../fetchClient";
 
 export default async function mediaImagesPost({ file, context }) {
-    const data = await fetchApi(`/media/images/post`, {
+    const data = await fetchClient(`/media/images/post`, {
         auth: true,
         options: {
             method: 'POST',

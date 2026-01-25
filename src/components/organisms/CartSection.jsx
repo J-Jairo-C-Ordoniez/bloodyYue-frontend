@@ -11,14 +11,14 @@ import { toast } from 'sonner';
 import cart from '../../api/cart';
 
 export default function CartSection() {
-    const { cartItems, isLoadingCartItems, errorCartItems, refetch } = useCart();
+    const { cartItems, isLoadingCartItems, errorCartItems, refetch, discardItem } = useCart();
     const { createSale, updateSaleStatus } = useSales();
 
     const filteredItems = cartItems?.data?.filter(item => item.status === 'selected') || [];
 
     const handleDiscard = async (id) => {
         try {
-            const res = await cart.cartItemDiscardedPatch({ id });
+            const res = await discardItem(id);
             if (res.error) {
                 toast.error(res.message || 'Error al descartar el item');
             } else {

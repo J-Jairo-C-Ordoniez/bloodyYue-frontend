@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import settingsApi from "../../api/settings/index"
+import mediaApi from "../../api/media/index"
 import useSettings from "../../hooks/useSettings"
 import validatorInput from "../../utils/validatorsInputs"
 import Typography from "../atoms/Typography"
@@ -9,48 +10,47 @@ import Input from "../atoms/Input"
 import Button from "../atoms/Button"
 import { Label } from "../ui/label"
 import { Textarea } from "../ui/textarea"
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
 import { toast } from "sonner"
 import LoaderCard from "../molecules/LoaderCard"
+import Image from '../atoms/Image'
+import Icon from '../atoms/Icon'
 
 export default function SettingsSection() {
     const { setting, isLoadingSetting, errorSetting } = useSettings(1)
-    const [formData, setFormData] = useState({
-        title: setting?.data?.title || "",
-        subtitle: setting?.data?.subtitle || "",
-        contentHero: setting?.data?.contentHero || "",
-        email: setting?.data?.email || "",
-        abaut: setting?.data?.abaut || "",
-        work: setting?.data?.work || "",
-        usagePolicies: setting?.data?.usagePolicies || ""
-    })
-    const [saving, setSaving] = useState(false)
     const [errors, setErrors] = useState(null)
+    const [saving, setSaving] = useState(false)
+    const [formData, setFormData] = useState({
+        title: "",
+        subtitle: "",
+        contentHero: "",
+        email: "",
+        abaut: "",
+        work: "",
+        usagePolicies: ""
+    })
 
     useEffect(() => {
-        if (!setting || errorSetting || isLoadingSetting) return
+        if (!setting?.data) return
         setFormData({
-            title: setting?.data?.title || "",
-            subtitle: setting?.data?.subtitle || "",
-            contentHero: setting?.data?.contentHero || "",
-            email: setting?.data?.email || "",
-            abaut: setting?.data?.abaut || "",
-            work: setting?.data?.work || "",
-            usagePolicies: setting?.data?.usagePolicies || ""
+            title: setting.data.title || "",
+            subtitle: setting.data.subtitle || "",
+            contentHero: setting.data.contentHero || "",
+            email: setting.data.email || "",
+            abaut: setting.data.abaut || "",
+            work: setting.data.work || "",
+            usagePolicies: setting.data.usagePolicies || ""
         })
     }, [setting])
 
     const handleChange = (e) => {
         const { name, value } = e.target
-        let nam = name === 'title' ? 'text'
-            : name === 'subtitle' ? 'text'
-                : name === 'contentHero' ? 'link'
-                    : name === 'email' ? 'email'
-                        : name === 'abaut' ? 'text'
-                            : name === 'work' ? 'text'
-                                : name === 'usagePolicies' ? 'text'
-                                    : name
-        let error = validatorInput(nam, value)
-        setErrors(error)
+
+        let validationType = 'text'
+        if (name === 'email') validationType = 'email'
+
+        const error = validatorInput(validationType, value)
+        setErrors(prev => ({ ...prev, [name]: error }))
 
         setFormData(prev => ({ ...prev, [name]: value }))
     }
@@ -58,118 +58,181 @@ export default function SettingsSection() {
     const handleSubmit = async (e) => {
         e.preventDefault()
         setSaving(true)
-        const res = await settingsApi.settingsPut({ id: setting?.data?.settingId, data: formData })
-        if (!res.error) {
+
+        const res = await settingsApi.settingsPut({ id: setting?.data?.settingId || 1, data: formData })
+
+        if (res.error) {
             setErrors('Error al actualizar los ajustes')
+        } else {
+            setErrors('Ajustes actualizados correctamente')
         }
 
         setSaving(false)
     }
 
-    const inputs = [
-        {
-            id: 'title',
-            name: 'title',
-            label: 'Titulo',
-            type: 'text',
-            placeholder: 'Titulo',
-            value: formData.title,
-            onChange: handleChange,
-        },
-        {
-            id: 'email',
-            name: 'email',
-            label: 'Correo',
-            type: 'email',
-            placeholder: 'Correo',
-            value: formData.email,
-            onChange: handleChange
-        },
-        {
-            id: 'subtitle',
-            name: 'subtitle',
-            label: 'Subtitulo',
-            type: 'text',
-            placeholder: 'Subtitulo',
-            value: formData.subtitle,
-            onChange: handleChange,
-            colSpan: 'col-span-2'
-        },
-        {
-            id: 'contentHero',
-            name: 'contentHero',
-            label: 'Contenido Hero',
-            type: 'text',
-            placeholder: 'Contenido Hero',
-            value: formData.contentHero,
-            onChange: handleChange,
-            colSpan: 'col-span-2'
-        },
-        
-        {
-            id: 'abaut',
-            name: 'abaut',
-            label: 'Habla sobre tí',
-            type: 'text',
-            placeholder: 'Habla sobre tí',
-            value: formData.abaut,
-            onChange: handleChange,
-            colSpan: 'col-span-2'
-        },
-        {
-            id: 'work',
-            name: 'work',
-            label: 'Trabajo',
-            type: 'text',
-            placeholder: 'Trabajo',
-            value: formData.work,
-            onChange: handleChange,
-            colSpan: 'col-span-2'
-        },
-        {
-            id: 'usagePolicies',
-            name: 'usagePolicies',
-            label: 'Política de uso',
-            type: 'text',
-            placeholder: 'Política de uso',
-            value: formData.usagePolicies,
-            onChange: handleChange,
-            colSpan: 'col-span-2'
+    const handleFileChange = async (e, context) => {
+        const file = e.target.files?.[0]
+        if (!file) return
+
+        const loadingToast = toast.loading("Subiendo imagen...")
+
+        const res = await mediaApi.mediaHeroPost({ file: file, context: context })
+
+        if (!res.error) {
+            setFormData(prev => ({ ...prev, [context]: res.data }))
+            toast.success("Imagen actualizada", { id: loadingToast })
+        } else {
+            toast.error(res.message || "Error al subir imagen", { id: loadingToast })
         }
-    ]
+    }
 
     return (
-        <section className="p-4 w-[50%] mx-auto my-6">
-            {isLoadingSetting && <LoaderCard title="Loading Settings..." />}
-            {errorSetting && <h2 className="text-2xl font-bold mb-6 text-foreground">Global error Settings</h2>}
-            {setting && !isLoadingSetting && !errorSetting && (
-                <form onSubmit={handleSubmit} className="space-y-6">
-                    <div className="grid grid-cols-2 gap-4">
-                        {inputs.map((input) => (
-                            <div key={input.id} className={input?.colSpan}>
-                                <Input
-                                    id={input.id}
-                                    name={input.name}
-                                    label={input.label}
-                                    type={input.type}
-                                    placeholder={input.placeholder}
-                                    value={input.value}
-                                    onChange={input.onChange}
-                                />
+        <form onSubmit={handleSubmit} className="p-4 max-w-5xl mx-auto space-y-6">
+            {isLoadingSetting && <LoaderCard title="Guardando ajustes..." />}
+            {errorSetting && <span className="p-4 text-red-500">Error cargando ajustes</span>}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card className="bg-card/50 backdrop-blur-sm">
+                    <CardHeader>
+                        <CardTitle className="text-lg font-semibold tracking-wide">BRANDING</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="title">Título</Label>
+                            <Input
+                                id="title"
+                                name="title"
+                                value={formData.title}
+                                onChange={handleChange}
+                                placeholder="Título del sitio"
+                            />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="subtitle">Subtítulo</Label>
+                            <Input
+                                id="subtitle"
+                                name="subtitle"
+                                value={formData.subtitle}
+                                onChange={handleChange}
+                                placeholder="Subtítulo breve"
+                            />
+                        </div>
+                    </CardContent>
+                </Card>
+
+                <Card className="bg-card/50 backdrop-blur-sm h-full">
+                    <CardHeader>
+                        <CardTitle className="text-lg font-semibold tracking-wide">CONTACTO</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <div className="space-y-2">
+                            <Label htmlFor="email">Correo</Label>
+                            <Input
+                                id="email"
+                                name="email"
+                                type="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                placeholder="correo@ejemplo.com"
+                            />
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
+
+            <Card className="bg-card/50 backdrop-blur-sm">
+                <CardHeader>
+                    <CardTitle className="text-lg font-semibold tracking-wide">IMAGEN DE LA PLATAFORMA</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="relative w-full aspect-video md:aspect-auto bg-muted/30 rounded-lg overflow-hidden border-2 border-dashed border-muted-foreground/25 group transition-all hover:border-primary/50">
+                        {formData.contentHero ? (
+                            <Image
+                                src={formData.contentHero}
+                                alt="Hero Preview"
+                                width={1200}
+                                height={600}
+                                className="w-full h-full object-cover"
+                            />
+                        ) : (
+                            <div className="w-full h-full flex flex-col items-center justify-center text-muted-foreground">
+                                <Icon name="Image" size={48} className="mb-2 opacity-50" />
+                                <span className="text-sm">Ninguna imagen seleccionada</span>
                             </div>
-                        ))}
+                        )}
+
+                        <label className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer text-white">
+                            <Icon name="Upload" size={32} className="mb-2" />
+                            <span className="font-medium">Change Image</span>
+                            <input
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={(e) => handleFileChange(e, 'contentHero')}
+                            />
+                        </label>
                     </div>
+                </CardContent>
+            </Card>
 
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card className="bg-card/50 backdrop-blur-sm">
+                    <CardHeader>
+                        <CardTitle className="text-lg font-semibold tracking-wide">SOBRE MÍ</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <Textarea
+                            name="abaut"
+                            value={formData.abaut}
+                            onChange={handleChange}
+                            placeholder="Tell us about yourself..."
+                            className="min-h-[150px] resize-none bg-background/50"
+                        />
+                    </CardContent>
+                </Card>
 
-                    <Button
-                        type="submit"
-                        variant="submit"
-                        size="large"
-                    >
-                        Guardar
-                    </Button>
-                </form>
-            )}
+                <Card className="bg-card/50 backdrop-blur-sm">
+                    <CardHeader>
+                        <CardTitle className="text-lg font-semibold tracking-wide">MI TRABAJO</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <Textarea
+                            name="work"
+                            value={formData.work}
+                            onChange={handleChange}
+                            placeholder="Describe your work scope..."
+                            className="min-h-[150px] resize-none bg-background/50"
+                        />
+                    </CardContent>
+                </Card>
+            </div>
+
+            <Card className="bg-card/50 backdrop-blur-sm">
+                <CardHeader>
+                    <CardTitle className="text-lg font-semibold tracking-wide">POLICIES</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <Textarea
+                        name="usagePolicies"
+                        value={formData.usagePolicies}
+                        onChange={handleChange}
+                        placeholder="Define your usage policies..."
+                        className="min-h-[120px] bg-background/50"
+                    />
+                </CardContent>
+            </Card>
+
+            <div className="flex justify-end pt-4">
+                <Button
+                    type="submit"
+                    variant="submit"
+                    size="large"
+                    disabled={saving}
+                    className="w-full md:w-auto min-w-[200px]"
+                >
+                    {saving ? "Saving..." : "Save Changes"}
+                </Button>
+            </div>
 
             {errors && (
                 <article className="space-y-1">
@@ -178,6 +241,7 @@ export default function SettingsSection() {
                     </Typography>
                 </article>
             )}
-        </section>
+        </form>
     )
 }
+

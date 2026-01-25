@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import labels from '../api/labels/index';
-import useErrorTokenStore from '../store/errorToken.store';
 
 /**
  * Custom hook para manejar operaciones de labels/etiquetas
@@ -31,14 +30,9 @@ export default function useLabels(body = null, variant = 'labelsGet') {
         const data = await variants[variant](body);
 
         if (isMounted) {
-          if (data?.error === 401) {
-            useErrorTokenStore.getState().setErrorToken(true);
-            setErrorLabel('Sesión expirada. Por favor, inicia sesión nuevamente.');
-          } else {
-            setLabel(data);
-          }
+          setLabel(data);
         }
-        
+
       } catch (err) {
         if (isMounted) {
           setErrorLabel(err?.message || 'Error al cargar las etiquetas');

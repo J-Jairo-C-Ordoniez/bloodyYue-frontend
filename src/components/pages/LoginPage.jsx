@@ -39,6 +39,10 @@ export default function Login({ data }) {
             return setErrors(res.message);
         }
 
+        if (res?.data?.user?.status !== 'active') {
+            return setErrors('Su cuenta no esta activa');
+        }
+
         useAuthStore.getState().setAuth(res.data.accessToken, res.data.user);
         useLoginStore.getState().setLoginData(formData.email, formData.password);
 

@@ -9,15 +9,15 @@ import Typography from '../atoms/Typography';
 import Label from '../atoms/Label';
 import Image from '../atoms/Image';
 import Icon from '../atoms/Icon';
-import meProfilePut from '../../api/users/meProfile.put';
 import useAuthStore from '../../store/auth.store';
-import mediaUserPost from '../../api/media/mediaUser.post';
+import useUsers from '../../hooks/useUsers';
 
 export default function EditProfilePage({ user }) {
     const router = useRouter();
     const [loading, setLoading] = useState(false);
     const setAuth = useAuthStore((state) => state.setAuth);
     const token = useAuthStore((state) => state.token);
+    const { updateProfile, uploadMedia } = useUsers();
 
     const [formData, setFormData] = useState({
         name: user?.name || '',
@@ -30,14 +30,12 @@ export default function EditProfilePage({ user }) {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        console.log(file, context, 'holaaaa');
-
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = async () => {
             const base64File = reader.result;
             try {
-                const res = await mediaUserPost({ file: base64File, context });
+                const res = await uploadMedia({ file: base64File, context });
                 if (!res.error) {
                     setFormData(prev => ({ ...prev, [context]: res.data }));
                 } else {
@@ -58,19 +56,7 @@ export default function EditProfilePage({ user }) {
         e.preventDefault();
         setLoading(true);
         try {
-            const res = await meProfilePut({ data: formData, token }); // Assuming hook handles token but API helper might need it if not using interceptor correctly or if meProfilePut needs context. 
-            // Checking meProfile.put.js: uses fetchClient which handles auth: true. 
-            // But fetchClient usually needs token from store or arguments. 
-            // The file meProfile.put.js says:
-            /*
-            export default async function meProfilePut({ data }) {
-                const dataResponse = await fetchClient('/users/me', {
-                    auth: true,
-                    options: { method: 'PUT', body: JSON.stringify(data) }
-                });
-            */
-            // So calling it with { data: formData } should be enough if fetchClient reads from store/cookies. 
-            // However, looking at ProfileHeader, it implies tokens are managed via store.
+            const res = await updateProfile(formData);
 
             if (!res.error) {
                 // Update local store to reflect changes immediately

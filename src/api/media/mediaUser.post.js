@@ -1,8 +1,8 @@
 import fetchClient from "../fetchClient";
 
 const mediaUserPost = async ({ file, context }) => {
-    console.log(file, context, 'holaaaa');
     const formData = new FormData();
+    
     formData.append('file', file);
     formData.append('context', context);
 

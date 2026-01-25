@@ -67,7 +67,9 @@ export default function RecentSalesSummary() {
                                         {format(new Date(sale.createdAt), 'MMM dd')}
                                     </TableCell>
                                     <TableCell className="flex justify-end items-center">
-                                        <Label variant="default" color="#009900">{sale.status}</Label>
+                                        <Label variant="default" color={`${sale.status === 'paid' ? '#009900' : sale.status === 'cancelled' ? '#FF0000' :'#FFFF00'}`}>
+                                            {sale.status}
+                                        </Label>
                                     </TableCell>
                                 </TableRow>
                             ))

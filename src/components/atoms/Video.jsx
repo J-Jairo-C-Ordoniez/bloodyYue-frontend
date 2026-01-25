@@ -14,7 +14,7 @@ export default function Video({
             width={width}
             height={height}
             controls={controls}
-            className={className}
+            className={`object-cover h-full w-full ${className}`}
             {...props}
         />
     );

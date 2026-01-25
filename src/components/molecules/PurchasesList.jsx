@@ -41,8 +41,8 @@ export default function PurchasesList() {
             {salesData.map((sale) => (
                 <div key={sale.saleId} className="bg-zinc-900/50 border border-zinc-800 rounded-xl p-5 flex items-center justify-between hover:border-zinc-700 transition-colors">
                     <div className="flex items-center gap-4">
-                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${sale.status === 'paid' ? 'bg-green-500/10 text-green-500' : 'bg-yellow-500/10 text-yellow-500'
-                            }`}>
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center ${sale.status === 'paid' ? 'bg-green-500/10 text-green-500'
+                            : sale.status === 'cancelled' ? 'bg-red-500/10 text-red-500' : 'bg-yellow-500/10 text-yellow-500'}`}>
                             <Icon name={sale.status === 'paid' ? 'Check' : 'Clock'} size={20} />
                         </div>
                         <div>
@@ -57,8 +57,8 @@ export default function PurchasesList() {
 
                     <div className="text-right">
                         <p className="text-white font-bold text-lg">${sale.total}</p>
-                        <span className={`text-xs px-2 py-0.5 rounded-full uppercase tracking-wider font-bold ${sale.status === 'paid' ? 'bg-green-500/10 text-green-500' : 'bg-yellow-500/10 text-yellow-500'
-                            }`}>
+                        <span className={`text-xs px-2 py-0.5 rounded-full uppercase tracking-wider font-bold ${sale.status === 'paid' ? 'bg-green-500/10 text-green-500'
+                            : sale.status === 'cancelled' ? 'bg-red-500/10 text-red-500' : 'bg-yellow-500/10 text-yellow-500'}`}>
                             {sale.status}
                         </span>
                     </div>

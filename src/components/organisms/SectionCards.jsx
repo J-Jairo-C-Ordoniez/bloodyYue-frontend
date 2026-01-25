@@ -23,7 +23,7 @@ export default function SectionCards() {
       ])
 
       if (!salesRes.error && !usersRes.error) {
-        const totalRevenue = salesRes.data.reduce((acc, s) => acc + (parseFloat(s.total) || 0), 0)
+        const totalRevenue = salesRes.data.reduce((acc, s) => acc + (s.status === 'paid' ? (parseFloat(s.total)) : 0), 0)
         const activeAccounts = usersRes.data.filter(u => u.status === 'active').length
 
         setMetrics({

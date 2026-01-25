@@ -26,6 +26,8 @@ export default function ChartAreaInteractive() {
       const response = await salesApi.salesGetLisGet({id: 0})
       if (!response.error) {
         const grouped = response.data.reduce((acc, sale) => {
+          if (sale.status !== 'paid') return acc
+          
           const date = new Date(sale.createdAt).toISOString().split('T')[0]
           acc[date] = (acc[date] || 0) + parseFloat(sale.total)
           return acc

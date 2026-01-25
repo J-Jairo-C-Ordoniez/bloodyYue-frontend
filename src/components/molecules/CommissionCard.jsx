@@ -78,11 +78,12 @@ export default function CommissionCard({ commissionId, title, price, content, st
                     </div>
                 </header>
 
-                <div className="flex justify-center items-center">
+                <div className="aspect-square w-full bg-zinc-900 flex justify-center items-center overflow-hidden">
                     <Button
                         variant="noneDetails"
                         size="none"
                         onClick={handleOpenDetails}
+                        className="w-full h-full"
                     >
 
                         <Image

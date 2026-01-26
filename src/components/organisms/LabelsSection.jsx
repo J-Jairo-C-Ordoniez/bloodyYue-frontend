@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import labelsApi from "@/api/labels"
+import Typography from "../atoms/Typography"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -82,22 +83,22 @@ export default function LabelsSection() {
     if (loading) return <LoaderCard title="Loading Labels..." />
 
     return (
-        <div className="p-4 space-y-6">
+        <section className="p-4 space-y-6">
             <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-white">Label Management</h2>
+                <Typography variant="subtitle" className="mb-6 text-foreground">Gestión de Etiquetas</Typography>
                 <Dialog onOpenChange={(open) => { if (!open) { setIsEditing(false); setCurrentLabel({ name: "", color: "#000000" }); } }}>
                     <DialogTrigger asChild>
                         <Button className="gap-2">
-                            <IconPlus size={18} /> New Label
+                            <IconPlus size={18} /> Nueva Etiqueta
                         </Button>
                     </DialogTrigger>
                     <DialogContent>
                         <DialogHeader>
-                            <DialogTitle>{isEditing ? "Edit Label" : "Create New Label"}</DialogTitle>
+                            <DialogTitle>{isEditing ? "Editar Etiqueta" : "Crear Nueva Etiqueta"}</DialogTitle>
                         </DialogHeader>
                         <form onSubmit={handleSubmit} className="space-y-4 pt-4">
                             <div className="space-y-2">
-                                <Label htmlFor="labelName">Label Name</Label>
+                                <Label htmlFor="labelName">Nombre de la Etiqueta</Label>
                                 <Input
                                     id="labelName"
                                     value={currentLabel.name}
@@ -134,10 +135,10 @@ export default function LabelsSection() {
                 <Table>
                     <TableHeader className="bg-muted/50">
                         <TableRow>
-                            <TableHead>Preview</TableHead>
-                            <TableHead>Name</TableHead>
-                            <TableHead>Color Code</TableHead>
-                            <TableHead className="text-right">Actions</TableHead>
+                            <TableHead>Vista Previa</TableHead>
+                            <TableHead>Nombre</TableHead>
+                            <TableHead>Código de Color</TableHead>
+                            <TableHead className="text-right">Acciones</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -160,11 +161,11 @@ export default function LabelsSection() {
                                         </DialogTrigger>
                                         <DialogContent>
                                             <DialogHeader>
-                                                <DialogTitle>Edit Label</DialogTitle>
+                                                <DialogTitle>Editar Etiqueta</DialogTitle>
                                             </DialogHeader>
                                             <form onSubmit={handleSubmit} className="space-y-4 pt-4">
                                                 <div className="space-y-2">
-                                                    <Label htmlFor="editName">Label Name</Label>
+                                                    <Label htmlFor="editName">Nombre de la Etiqueta</Label>
                                                     <Input
                                                         id="editName"
                                                         value={currentLabel.name}
@@ -201,6 +202,6 @@ export default function LabelsSection() {
                     </TableBody>
                 </Table>
             </div>
-        </div>
+        </section>
     )
 }

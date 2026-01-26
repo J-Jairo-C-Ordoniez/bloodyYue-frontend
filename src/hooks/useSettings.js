@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import settings from '../api/settings/index';
+import media from '../api/media/index';
 
 /**
  * Custom hook para manejar operaciones de configuración
@@ -39,9 +40,19 @@ export default function useSettings(id) {
     };
   }, []);
 
+  const updateSettings = async (id, data) => {
+    return await settings.settingsPut({ id, data });
+  };
+
+  const uploadHero = async ({ file, context }) => {
+    return await media.mediaHeroPost({ file, context });
+  };
+
   return {
     setting,
     isLoadingSetting,
     errorSetting,
+    updateSettings,
+    uploadHero
   };
 }

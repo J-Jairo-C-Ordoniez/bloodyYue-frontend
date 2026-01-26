@@ -1,8 +1,4 @@
-"use client"
-
 import { useState, useEffect } from "react"
-import settingsApi from "../../api/settings/index"
-import mediaApi from "../../api/media/index"
 import useSettings from "../../hooks/useSettings"
 import validatorInput from "../../utils/validatorsInputs"
 import Typography from "../atoms/Typography"
@@ -11,13 +7,12 @@ import Button from "../atoms/Button"
 import { Label } from "../ui/label"
 import { Textarea } from "../ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
-import { toast } from "sonner"
 import LoaderCard from "../molecules/LoaderCard"
 import Image from '../atoms/Image'
 import Icon from '../atoms/Icon'
 
 export default function SettingsSection() {
-    const { setting, isLoadingSetting, errorSetting } = useSettings(1)
+    const { setting, isLoadingSetting, errorSetting, updateSettings, uploadHero } = useSettings(1)
     const [errors, setErrors] = useState(null)
     const [saving, setSaving] = useState(false)
     const [formData, setFormData] = useState({
@@ -59,7 +54,7 @@ export default function SettingsSection() {
         e.preventDefault()
         setSaving(true)
 
-        const res = await settingsApi.settingsPut({ id: setting?.data?.settingId || 1, data: formData })
+        const res = await updateSettings(setting?.data?.settingId || 1, formData)
 
         if (res.error) {
             setErrors('Error al actualizar los ajustes')
@@ -74,15 +69,12 @@ export default function SettingsSection() {
         const file = e.target.files?.[0]
         if (!file) return
 
-        const loadingToast = toast.loading("Subiendo imagen...")
-
-        const res = await mediaApi.mediaHeroPost({ file: file, context: context })
+        const res = await uploadHero({ file: file, context: context })
 
         if (!res.error) {
             setFormData(prev => ({ ...prev, [context]: res.data }))
-            toast.success("Imagen actualizada", { id: loadingToast })
         } else {
-            toast.error(res.message || "Error al subir imagen", { id: loadingToast })
+            setErrors(res.message || "Error al subir imagen")
         }
     }
 
@@ -209,7 +201,7 @@ export default function SettingsSection() {
 
             <Card className="bg-card/50 backdrop-blur-sm">
                 <CardHeader>
-                    <CardTitle className="text-lg font-semibold tracking-wide">POLICIES</CardTitle>
+                    <CardTitle className="text-lg font-semibold tracking-wide">POLÍTICAS</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <Textarea

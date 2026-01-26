@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import rolesApi from "@/api/roles"
+import Typography from "../atoms/Typography"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -94,40 +95,41 @@ export function RolesSection() {
     if (loading) return <LoaderCard title="Loading Roles & Permissions..." />
 
     return (
-        <div className="p-4 space-y-6">
+        <section className="p-4 space-y-6">
             <div className="flex justify-between items-center">
-                <h2 className="text-2xl font-bold text-white">Roles & Permissions</h2>
+                <Typography variant="subtitle" className="mb-6 text-foreground">Gestión de roles y permisos</Typography>
+
                 <Dialog>
                     <DialogTrigger asChild>
                         <Button className="gap-2">
-                            <IconPlus size={18} /> New Role
+                            <IconPlus size={18} /> Nuevo rol
                         </Button>
                     </DialogTrigger>
                     <DialogContent>
                         <DialogHeader>
-                            <DialogTitle>Create New Role</DialogTitle>
+                            <DialogTitle>Crear nuevo rol</DialogTitle>
                         </DialogHeader>
                         <form onSubmit={handleCreateRole} className="space-y-4 pt-4">
                             <div className="space-y-2">
-                                <Label htmlFor="roleName">Role Name</Label>
+                                <Label htmlFor="roleName">Nombre del rol</Label>
                                 <Input
                                     id="roleName"
                                     value={newRole.name}
                                     onChange={(e) => setNewRole({ ...newRole, name: e.target.value })}
-                                    placeholder="e.g., Moderator"
+                                    placeholder="e.g., Moderador"
                                     required
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="roleDesc">Description</Label>
+                                <Label htmlFor="roleDesc">Descripción</Label>
                                 <Input
                                     id="roleDesc"
                                     value={newRole.description}
                                     onChange={(e) => setNewRole({ ...newRole, description: e.target.value })}
-                                    placeholder="Brief description of the role"
+                                    placeholder="Descripción del rol"
                                 />
                             </div>
-                            <Button type="submit" className="w-full">Create Role</Button>
+                            <Button type="submit" className="w-full">Crear rol</Button>
                         </form>
                     </DialogContent>
                 </Dialog>
@@ -137,10 +139,10 @@ export function RolesSection() {
                 <Table>
                     <TableHeader className="bg-muted/50">
                         <TableRow>
-                            <TableHead>Role Name</TableHead>
-                            <TableHead>Description</TableHead>
-                            <TableHead>Permissions</TableHead>
-                            <TableHead className="text-right">Actions</TableHead>
+                            <TableHead>Nombre del rol</TableHead>
+                            <TableHead>Descripción</TableHead>
+                            <TableHead>Permisos</TableHead>
+                            <TableHead className="text-right">Acciones</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -151,19 +153,19 @@ export function RolesSection() {
                                 <TableCell>
                                     <div className="flex items-center gap-1 text-xs text-primary">
                                         <IconShieldCheck size={14} />
-                                        Manage permits
+                                        Gestionar permisos
                                     </div>
                                 </TableCell>
                                 <TableCell className="text-right">
                                     <Dialog>
                                         <DialogTrigger asChild>
                                             <Button variant="outline" size="sm" onClick={() => openPermitsDialog(role)}>
-                                                Configure Permits
+                                                Configure Permisos
                                             </Button>
                                         </DialogTrigger>
                                         <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
                                             <DialogHeader>
-                                                <DialogTitle>Permissions for: {selectedRole?.name}</DialogTitle>
+                                                <DialogTitle>Permisos para: {selectedRole?.name}</DialogTitle>
                                             </DialogHeader>
                                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
                                                 {permits.map((permit) => (
@@ -190,6 +192,6 @@ export function RolesSection() {
                     </TableBody>
                 </Table>
             </div>
-        </div>
+        </section>
     )
 }

@@ -20,7 +20,6 @@ import {
   IconDashboard,
   IconDatabase,
   IconHelp,
-  IconInnerShadowTop,
   IconListDetails,
   IconReport,
   IconSearch,
@@ -41,35 +40,35 @@ const data = {
       icon: IconDashboard,
     },
     {
-      title: "Settings",
+      title: "Brands",
       url: "settings",
       icon: IconSettings,
     },
     {
-      title: "User Management",
+      title: "Gestión de usuarios",
       url: "users",
       icon: IconUsers,
     },
     {
-      title: "Roles & Permits",
+      title: "Gestión de roles y permisos",
       url: "roles",
       icon: IconListDetails,
     },
     {
-      title: "Labels",
+      title: "Gestión de etiquetas",
       url: "labels",
       icon: IconDatabase,
     },
   ],
   navClouds: [
     {
-      title: "Content",
+      title: "Contenido",
       icon: IconCamera,
       isActive: true,
       url: "content",
       items: [
         {
-          title: "Commissions",
+          title: "Comisiones",
           url: "commissions",
         },
         {
@@ -79,16 +78,16 @@ const data = {
       ],
     },
     {
-      title: "Sales & Chat",
+      title: "Ventas y chat",
       icon: IconReport,
       url: "sales",
       items: [
         {
-          title: "Sales History",
+          title: "Historial de ventas",
           url: "sales-history",
         },
         {
-          title: "Active Chats",
+          title: "Chats activos",
           url: "chats",
         },
       ],
@@ -96,12 +95,12 @@ const data = {
   ],
   navSecondary: [
     {
-      title: "Get Help",
+      title: "Ayuda",
       url: "#",
       icon: IconHelp,
     },
     {
-      title: "Search",
+      title: "Buscar",
       url: "#",
       icon: IconSearch,
     },

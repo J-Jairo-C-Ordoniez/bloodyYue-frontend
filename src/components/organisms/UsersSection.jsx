@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import usersApi from "../../api/users/index"
 import authApi from "../../api/auth/index"
 import rolesApi from "../../api/roles/index"
+import Typography from "../atoms/Typography"
 
 import {
     Table,
@@ -20,7 +21,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "../ui/select"
-import { Badge } from "../ui/badge"
 import { toast } from "sonner"
 import LoaderCard from "../molecules/LoaderCard"
 
@@ -72,37 +72,23 @@ export function UsersSection() {
         }
     }
 
-    const getStatusBadge = (status) => {
-        switch (status) {
-            case 'active':
-                return <Badge className="bg-green-500/20 text-green-500 border-green-500/50">Active</Badge>
-            case 'inactive':
-                return <Badge variant="secondary">Inactive</Badge>
-            case 'banned':
-                return <Badge variant="destructive">Banned</Badge>
-            default:
-                return <Badge variant="outline">{status}</Badge>
-        }
-    }
-
     if (loading) return <LoaderCard title="Loading Users..." />
 
     return (
-        <div className="p-4 bg-background rounded-lg shadow-md border border-border">
-            <h2 className="text-2xl font-bold mb-6 text-foreground">User Management</h2>
+        <section className="p-6">
+            <Typography variant="subtitle" className="mb-6 text-foreground">Gestión de usuarios</Typography>
             <div className="rounded-md border border-border overflow-hidden">
                 <Table>
                     <TableHeader className="bg-muted/50">
                         <TableRow>
                             <TableHead>ID</TableHead>
-                            <TableHead>Name</TableHead>
-                            <TableHead>Email</TableHead>
-                            <TableHead>Role</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Actions</TableHead>
+                            <TableHead>Nombre</TableHead>
+                            <TableHead>Correo</TableHead>
+                            <TableHead>Rol</TableHead>
+                            <TableHead>Estado</TableHead>
                         </TableRow>
                     </TableHeader>
-                    <TableBody>
+                    <TableBody className="bg-background">
                         {users && users.map((user) => (
                             <TableRow key={user.userId}>
                                 <TableCell className="font-mono text-xs">{user.userId}</TableCell>
@@ -125,8 +111,6 @@ export function UsersSection() {
                                         </SelectContent>
                                     </Select>
                                 </TableCell>
-
-                                <TableCell>{getStatusBadge(user.status)}</TableCell>
                                 <TableCell>
                                     <Select
                                         defaultValue={user.status}
@@ -136,10 +120,9 @@ export function UsersSection() {
                                             <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="active">Active</SelectItem>
-                                            <SelectItem value="inactive">Inactive</SelectItem>
-                                            <SelectItem value="banned">Banned</SelectItem>
-                                            <SelectItem value="admin">ad</SelectItem>
+                                            <SelectItem value="active">Activo</SelectItem>
+                                            <SelectItem value="inactive">Inactivo</SelectItem>
+                                            <SelectItem value="banned">Baneado</SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </TableCell>
@@ -148,6 +131,6 @@ export function UsersSection() {
                     </TableBody>
                 </Table>
             </div>
-        </div>
+        </section>
     )
 }

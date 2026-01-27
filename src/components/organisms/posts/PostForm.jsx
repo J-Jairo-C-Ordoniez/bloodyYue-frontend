@@ -34,11 +34,11 @@ export default function PostForm({
         <form onSubmit={onSubmit} className="space-y-4 pt-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                    <Label htmlFor="post-title">Título</Label>
+                    <Label htmlFor="post-title" color="#A1A1AA">Título</Label>
                     <Input id="post-title" value={data.title || ''} onChange={(e) => onChange({ ...data, title: e.target.value })} required />
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="post-type">Tipo</Label>
+                    <Label htmlFor="post-type" color="#A1A1AA">Tipo</Label>
                     <Select value={data.typePost} onValueChange={(val) => onChange({ ...data, typePost: val })}>
                         <SelectTrigger id="post-type">
                             <SelectValue />
@@ -52,7 +52,7 @@ export default function PostForm({
             </div>
 
             <div className="space-y-2">
-                <Label>Contenido (Imagen/Video)</Label>
+                <Label color="#A1A1AA">Contenido (Imagen/Video)</Label>
                 <div className="relative w-full h-40 bg-muted/30 rounded-lg overflow-hidden border-2 border-dashed border-muted-foreground/25 group hover:border-primary/50 transition-all flex items-center justify-center">
                     {uploading ? (
                         <div className="text-sm text-muted-foreground animate-pulse">Subiendo...</div>
@@ -76,12 +76,12 @@ export default function PostForm({
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="post-description">Descripción</Label>
+                <Label htmlFor="post-description" color="#A1A1AA">Descripción</Label>
                 <Textarea id="post-description" value={data.description || ''} onChange={(e) => onChange({ ...data, description: e.target.value })} required />
             </div>
 
             <div className="space-y-2">
-                <Label>Etiquetas</Label>
+                <Label color="#A1A1AA">Etiquetas</Label>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2 p-3 border border-border rounded-md">
                     {labels.map(label => (
                         <div key={label.labelId} className="flex items-center space-x-2">
@@ -90,7 +90,7 @@ export default function PostForm({
                                 checked={(data.labels || []).includes(label.labelId)}
                                 onCheckedChange={() => toggleLabel(label.labelId)}
                             />
-                            <Label htmlFor={`post-label-${label.labelId}`} className="text-xs cursor-pointer flex items-center gap-1">
+                            <Label htmlFor={`post-label-${label.labelId}`} color="#A1A1AA" className="text-xs cursor-pointer flex items-center gap-1">
                                 <div className="w-2 h-2 rounded-full" style={{ backgroundColor: label.color }} />
                                 {label.name}
                             </Label>

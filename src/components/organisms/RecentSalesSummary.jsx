@@ -1,27 +1,15 @@
 "use client"
 
-import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/molecules/Card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/molecules/Table"
 import { format } from "date-fns"
-import salesApi from "../../api/sales"
+import useSales from "@/hooks/useSales"
 import Label from "../atoms/Label"
 
 export default function RecentSalesSummary() {
-    const [sales, setSales] = useState([])
-    const [loading, setLoading] = useState(true)
+    const { sales, loading } = useSales('salesGetLisGet', { id: 0 })
 
-    useEffect(() => {
-        const fetchSales = async () => {
-            const response = await salesApi.salesGetLisGet({ id: 0 })
-            if (!response.error) {
-                setSales(response.data)
-            }
-
-            setLoading(false)
-        }
-        fetchSales()
-    }, [])
+    const recentSales = sales ? sales.slice(0, 5) : []
 
     return (
         <Card className="h-full">
@@ -45,30 +33,30 @@ export default function RecentSalesSummary() {
                     <TableBody>
                         {loading ? (
                             <TableRow>
-                                <TableCell colSpan={4} className="text-center py-4">Cargando...</TableCell>
+                                <TableCell colSpan={5} className="text-center py-4 text-xs text-muted-foreground">Cargando...</TableCell>
                             </TableRow>
-                        ) : sales.length === 0 ? (
+                        ) : recentSales.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={4} className="text-center py-4">No se encontraron ventas</TableCell>
+                                <TableCell colSpan={5} className="text-center py-4 text-xs text-muted-foreground">No se encontraron ventas</TableCell>
                             </TableRow>
                         ) : (
-                            sales.map((sale) => (
+                            recentSales.map((sale) => (
                                 <TableRow key={sale.saleId}>
                                     <TableCell className="w-[100px]">
-                                        <span className="font-medium text-xs truncate max-w-[100px]">{sale.saleId}</span>
+                                        <span className="font-medium text-[10px] font-mono truncate max-w-[80px] block text-muted-foreground">{sale.saleId}</span>
                                     </TableCell>
-                                    <TableCell className="text-right text-xs">
+                                    <TableCell className="text-right text-xs font-semibold text-purple-400">
                                         ${parseFloat(sale.total).toFixed(2)}
                                     </TableCell>
-                                    <TableCell className="text-right text-xs">
+                                    <TableCell className="text-right text-[10px] text-muted-foreground">
                                         {sale.paymentMethod}
                                     </TableCell>
-                                    <TableCell className="text-right text-xs text-muted-foreground">
+                                    <TableCell className="text-right text-[10px] text-muted-foreground">
                                         {format(new Date(sale.createdAt), 'MMM dd')}
                                     </TableCell>
                                     <TableCell className="flex justify-end items-center">
-                                        <Label variant="default" color={`${sale.status === 'paid' ? '#009900' : sale.status === 'cancelled' ? '#FF0000' : '#FFFF00'}`}>
-                                            {sale.status}
+                                        <Label variant="default" color={`${sale.status === 'paid' ? '#00cc00' : sale.status === 'cancelled' ? '#ff3333' : '#ffcc00'}`}>
+                                            <span className="capitalize">{sale.status}</span>
                                         </Label>
                                     </TableCell>
                                 </TableRow>

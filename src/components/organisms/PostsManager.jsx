@@ -101,7 +101,6 @@ export function PostsManager() {
     }
 
     const handleDelete = async (id) => {
-        if (!confirm("Are you sure?")) return
         const result = await deletePost(id);
         if (result.success) {
             toast.success("Post deleted")

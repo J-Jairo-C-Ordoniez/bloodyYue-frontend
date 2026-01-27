@@ -11,7 +11,7 @@ import useLoginStore from '../../store/login.store';
 
 export default function Login({ data }) {
     const router = useRouter();
-    const {auth} = useAuth('login');
+    const { error, login } = useAuth('none');
     const userAuth = useLoginStore.getState().user;
     const [errors, setErrors] = useState(null);
     const [formData, setFormData] = useState({
@@ -33,11 +33,7 @@ export default function Login({ data }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const res = await auth({email: formData.email, password: formData.password});
-
-        if (res?.error) {
-            return setErrors(res.message);
-        }
+        const res = await login({ email: formData.email, password: formData.password });
 
         if (res?.data?.user?.status !== 'active') {
             return setErrors('Su cuenta no esta activa');
@@ -56,7 +52,7 @@ export default function Login({ data }) {
                 formData={formData}
                 handleChange={handleChange}
                 handleSubmit={handleSubmit}
-                errors={errors}
+                errors={errors || error}
             />
         </main>
     );

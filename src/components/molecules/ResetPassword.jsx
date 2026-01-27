@@ -8,8 +8,8 @@ import useCodeStore from "../../store/code.store";
 import useLoginStore from "../../store/login.store";
 
 export default function ResetPassword({ title, description }) {
-    const { auth } = useAuth('resetPassword');
-    const [errors, setErrors] = useState(null);
+    const { loading, error, resetPassword } = useAuth('none');
+    const [errors, setErrors] = useState(error);
     const [formData, setFormData] = useState({ password: '', confirmPassword: '' });
     const router = useRouter();
 
@@ -29,11 +29,7 @@ export default function ResetPassword({ title, description }) {
         }
 
         const email = useCodeStore.getState().email;
-        const res = await auth({ password: formData.password, email })
-        if (res.error) {
-            return setErrors(res.message)
-        }
-
+        await resetPassword({ password: formData.password, email })
         useLoginStore.getState().setLoginData({email, password: formData.password});
         router.push('/users/login');
     };
@@ -41,8 +37,8 @@ export default function ResetPassword({ title, description }) {
     return (
         <>
             <header className="space-y-2 text-center">
-                <Typography variant="h2">{title}</Typography>
-                <Typography variant="subtitle">
+                <Typography variant="h2" className="text-white">{title}</Typography>
+                <Typography variant="subtitle" className="text-zinc-400">
                     {description}
                 </Typography>
             </header>
@@ -58,7 +54,7 @@ export default function ResetPassword({ title, description }) {
             {errors && (
                 <article className="space-y-1">
                     <Typography variant="error">
-                        {errors}
+                        {errors || error}
                     </Typography>
                 </article>
             )}

@@ -11,8 +11,9 @@ import useErrorTokenStore from '../../../store/errorToken.store';
 export default function Dashboard() {
     const { user, token } = useAuthStore.getState();
     const router = useRouter();
-    const { auth } = useAuth('newToken');
+    const { error, refreshToken } = useAuth('none');
     const [loading, setLoading] = useState(user && token ? false : true);
+    const [errors, setErrors] = useState(false);
 
     useErrorTokenStore.getState().setErrorToken(user && token ? false : true);
 
@@ -20,11 +21,14 @@ export default function Dashboard() {
         const errorToken = useErrorTokenStore.getState().errorToken;
 
         (async () => {
-            if (!errorToken) return
+            if (!errorToken || !loading) return
 
-            const res = await auth();
-            if (res?.error) {
-                return router.replace('/');
+            const res = await refreshToken();
+
+            setErrors(user?.data?.status);
+
+            if (user && user?.data?.status !== 'active') {
+                return setErrors('Su cuenta no esta activa');
             }
 
             useAuthStore.getState().setAuth(res.data.accessToken, res.data.user);
@@ -32,9 +36,13 @@ export default function Dashboard() {
             useErrorTokenStore.getState().setErrorToken(false)
             setLoading(false);
         })()
-    }, [user]);
+    }, []);
+
+    if (error) {
+        return router.replace('/');
+    }
 
     return (
-        loading ? <Loader /> : <DashboardLoader user={user} />
+        loading ? <Loader /> : errors ? <Error message={errors} typeError="Error 401" /> : <DashboardLoader user={user} />
     );
 }

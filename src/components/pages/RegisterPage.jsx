@@ -11,7 +11,7 @@ import useCodeStore from '../../store/code.store';
 
 export default function RegisterPage({ data }) {
     const router = useRouter();
-    const { auth } = useAuth('register');
+    const { auth } = useAuth('registerPost');
     const [formData, setFormData] = useState({
         username: '',
         email: '',

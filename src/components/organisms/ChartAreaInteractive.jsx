@@ -7,7 +7,7 @@ import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/molecules/Select"
 import { ToggleGroup, ToggleGroupItem } from "@/components/molecules/ToggleGroup"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
-import salesApi from "../../api/sales"
+import useSales from "@/hooks/useSales"
 
 const chartConfig = {
   sales: {
@@ -19,30 +19,24 @@ const chartConfig = {
 export default function ChartAreaInteractive() {
   const isMobile = useIsMobile()
   const [timeRange, setTimeRange] = useState("30d")
-  const [chartData, setChartData] = useState([])
+  const { sales } = useSales('salesGetLisGet', { id: 0 })
 
-  useEffect(() => {
-    const fetchChartData = async () => {
-      const response = await salesApi.salesGetLisGet({ id: 0 })
-      if (!response.error) {
-        const grouped = response.data.reduce((acc, sale) => {
-          if (sale.status !== 'paid') return acc
+  const chartData = useMemo(() => {
+    if (!sales) return []
 
-          const date = new Date(sale.createdAt).toISOString().split('T')[0]
-          acc[date] = (acc[date] || 0) + parseFloat(sale.total)
-          return acc
-        }, {})
+    const grouped = sales.reduce((acc, sale) => {
+      if (sale.status !== 'paid') return acc
 
-        const data = Object.keys(grouped).map(date => ({
-          date,
-          amount: grouped[date]
-        })).sort((a, b) => new Date(a.date) - new Date(b.date))
+      const date = new Date(sale.createdAt).toISOString().split('T')[0]
+      acc[date] = (acc[date] || 0) + parseFloat(sale.total)
+      return acc
+    }, {})
 
-        setChartData(data)
-      }
-    }
-    fetchChartData()
-  }, [])
+    return Object.keys(grouped).map(date => ({
+      date,
+      amount: grouped[date]
+    })).sort((a, b) => new Date(a.date) - new Date(b.date))
+  }, [sales])
 
   useEffect(() => {
     if (isMobile) {

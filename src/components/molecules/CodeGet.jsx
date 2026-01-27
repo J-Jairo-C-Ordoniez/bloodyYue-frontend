@@ -6,8 +6,8 @@ import validatorInput from "../../utils/validatorsInputs";
 import useCodeStore from "../../store/code.store";
 
 export default function CodeGet({ title, description, type, setStep = null }) {
-    const { auth } = useAuth('codeGet');
-    const [errors, setErrors] = useState(null);
+    const { loading, error, codeGet } = useAuth('none');
+    const [errors, setErrors] = useState(error);
     const [formData, setFormData] = useState({ email: '' });
 
     const handleChange = (e) => {
@@ -21,21 +21,16 @@ export default function CodeGet({ title, description, type, setStep = null }) {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const res = await auth({ email: formData.email, type })
-        if (res.error) {
-            return setErrors(res.message)
-        }
-
+        await codeGet({ email: formData.email, type })
         useCodeStore.getState().setEmail(formData.email)
-
         setStep && setStep(2);
     };
 
     return (
         <>
             <header className="space-y-2 text-center">
-                <Typography variant="h2">{title}</Typography>
-                <Typography variant="body">
+                <Typography variant="h2" className="text-white">{title}</Typography>
+                <Typography variant="body" className="text-zinc-400">
                     {description}
                 </Typography>
             </header>
@@ -50,7 +45,7 @@ export default function CodeGet({ title, description, type, setStep = null }) {
             {errors && (
                 <article className="space-y-1">
                     <Typography variant="error">
-                        {errors}
+                        {errors || error}
                     </Typography>
                 </article>
             )}

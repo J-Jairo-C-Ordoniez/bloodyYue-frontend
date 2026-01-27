@@ -1,11 +1,11 @@
 import fetchClient from "../fetchClient";
 
-export default async function chatPost({ data }) {
+export default async function chatPost({ participantId }) {
     const response = await fetchClient(`/chat`, {
         auth: true,
         options: {
             method: "POST",
-            body: JSON.stringify(data)
+            body: JSON.stringify({ participantId })
         }
     });
 

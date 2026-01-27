@@ -147,6 +147,7 @@ export default function Form({ handleSubmit, formData, handleChange, variant = '
             </div>
 
             <Button
+                className="w-full py-3"
                 type="submit"
                 variant="submit"
                 size="large"

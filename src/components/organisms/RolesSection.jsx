@@ -111,7 +111,7 @@ export function RolesSection() {
                         </DialogHeader>
                         <form onSubmit={handleCreateRole} className="space-y-4 pt-4">
                             <div className="space-y-2">
-                                <Label htmlFor="roleName">Nombre del rol</Label>
+                                <Label htmlFor="roleName" color="#A1A1AA">Nombre del rol</Label>
                                 <Input
                                     id="roleName"
                                     value={newRole.name}
@@ -121,7 +121,7 @@ export function RolesSection() {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="roleDesc">Descripción</Label>
+                                <Label htmlFor="roleDesc" color="#A1A1AA">Descripción</Label>
                                 <Input
                                     id="roleDesc"
                                     value={newRole.description}
@@ -176,7 +176,7 @@ export function RolesSection() {
                                                             onCheckedChange={(checked) => togglePermit(permit.permitId, checked)}
                                                         />
                                                         <div className="space-y-0.5">
-                                                            <Label htmlFor={`permit-${permit.permitId}`} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer">
+                                                            <Label htmlFor={`permit-${permit.permitId}`} color="#A1A1AA" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer">
                                                                 {permit.name}
                                                             </Label>
                                                             <p className="text-[10px] text-muted-foreground">{permit.description}</p>

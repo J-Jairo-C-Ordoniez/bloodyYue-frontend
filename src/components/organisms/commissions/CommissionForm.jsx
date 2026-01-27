@@ -45,17 +45,17 @@ export default function CommissionForm({
         <form onSubmit={onSubmit} className="space-y-4 pt-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                    <Label htmlFor="title">Título</Label>
+                    <Label htmlFor="title" color="#A1A1AA">Título</Label>
                     <Input id="title" value={data.title} onChange={(e) => onChange({ ...data, title: e.target.value })} required />
                 </div>
                 <div className="space-y-2">
-                    <Label htmlFor="price">Precio</Label>
+                    <Label htmlFor="price" color="#A1A1AA">Precio</Label>
                     <Input id="price" type="number" step="0.01" value={data.price} onChange={(e) => onChange({ ...data, price: e.target.value })} required />
                 </div>
             </div>
 
             <div className="space-y-2">
-                <Label>Contenido (Imagen)</Label>
+                <Label color="#A1A1AA">Contenido (Imagen)</Label>
                 <div className="relative w-full h-40 bg-muted/30 rounded-lg overflow-hidden border-2 border-dashed border-muted-foreground/25 group hover:border-primary/50 transition-all flex items-center justify-center">
                     {uploading ? (
                         <div className="text-sm text-muted-foreground animate-pulse">Subiendo...</div>
@@ -75,7 +75,7 @@ export default function CommissionForm({
             </div>
 
             <div className="space-y-2">
-                <Label>Ejemplo de Post</Label>
+                <Label color="#A1A1AA">Ejemplo de Post</Label>
                 <div className="flex items-center gap-4 border p-3 rounded-md border-border">
                     {data.exampleId ? (
                         <div className="flex items-center gap-2 text-sm">
@@ -132,15 +132,15 @@ export default function CommissionForm({
             </div>
 
             <div className="space-y-2">
-                <Label htmlFor="description">Descripción</Label>
+                <Label htmlFor="description" color="#A1A1AA">Descripción</Label>
                 <Textarea id="description" value={data.description} onChange={(e) => onChange({ ...data, description: e.target.value })} required />
             </div>
             <div className="space-y-2">
-                <Label htmlFor="terms">Terminos</Label>
+                <Label htmlFor="terms" color="#A1A1AA">Terminos</Label>
                 <Textarea id="terms" value={data.terms} onChange={(e) => onChange({ ...data, terms: e.target.value })} rows={4} />
             </div>
             <div className="space-y-2">
-                <Label>Etiquetas</Label>
+                <Label color="#A1A1AA">Etiquetas</Label>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-2 p-3 border border-border rounded-md">
                     {labels.map(label => (
                         <div key={label.labelId} className="flex items-center space-x-2">
@@ -149,7 +149,7 @@ export default function CommissionForm({
                                 checked={(data.labels || []).includes(label.labelId)}
                                 onCheckedChange={() => toggleLabel(label.labelId)}
                             />
-                            <Label htmlFor={`label-${label.labelId}`} className="text-xs cursor-pointer flex items-center gap-1">
+                            <Label htmlFor={`label-${label.labelId}`} color="#A1A1AA" className="text-xs cursor-pointer flex items-center gap-1">
                                 <div className="w-2 h-2 rounded-full" style={{ backgroundColor: label.color }} />
                                 {label.name}
                             </Label>

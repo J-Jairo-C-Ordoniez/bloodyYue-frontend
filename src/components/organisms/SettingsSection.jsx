@@ -12,7 +12,7 @@ import Image from '../atoms/Image'
 import Icon from '../atoms/Icon'
 
 export default function SettingsSection() {
-    const { setting, isLoadingSetting, errorSetting, updateSettings, uploadHero } = useSettings(1)
+    const { settings, isLoadingSetting, errorSetting, updateSettings, uploadHero } = useSettings(1)
     const [errors, setErrors] = useState(null)
     const [saving, setSaving] = useState(false)
     const [formData, setFormData] = useState({
@@ -26,17 +26,17 @@ export default function SettingsSection() {
     })
 
     useEffect(() => {
-        if (!setting?.data) return
+        if (!settings) return
         setFormData({
-            title: setting.data.title || "",
-            subtitle: setting.data.subtitle || "",
-            contentHero: setting.data.contentHero || "",
-            email: setting.data.email || "",
-            abaut: setting.data.abaut || "",
-            work: setting.data.work || "",
-            usagePolicies: setting.data.usagePolicies || ""
+            title: settings.title || "",
+            subtitle: settings.subtitle || "",
+            contentHero: settings.contentHero || "",
+            email: settings.email || "",
+            abaut: settings.abaut || "",
+            work: settings.work || "",
+            usagePolicies: settings.usagePolicies || ""
         })
-    }, [setting])
+    }, [settings])
 
     const handleChange = (e) => {
         const { name, value } = e.target
@@ -54,7 +54,7 @@ export default function SettingsSection() {
         e.preventDefault()
         setSaving(true)
 
-        const res = await updateSettings(setting?.data?.settingId || 1, formData)
+        const res = await updateSettings(settings?.settingId || 1, formData)
 
         if (res.error) {
             setErrors('Error al actualizar los ajustes')
@@ -220,9 +220,9 @@ export default function SettingsSection() {
                     variant="submit"
                     size="large"
                     disabled={saving}
-                    className="w-full md:w-auto min-w-[200px]"
+                    className="w-full md:w-auto min-w-[200px] py-2"
                 >
-                    {saving ? "Saving..." : "Save Changes"}
+                    {saving ? "Guardando..." : "Guardar Cambios"}
                 </Button>
             </div>
 

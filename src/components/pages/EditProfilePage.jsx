@@ -135,7 +135,7 @@ export default function EditProfilePage({ user }) {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                            <Label htmlFor="name">Nombre de usuario</Label>
+                            <Label htmlFor="name" color="#A1A1AA">Nombre de usuario</Label>
                             <Input
                                 id="name"
                                 name="name"
@@ -147,7 +147,7 @@ export default function EditProfilePage({ user }) {
                         </div>
 
                         <div className="space-y-2">
-                            <Label htmlFor="birthday">Fecha de Cumpleaños</Label>
+                            <Label htmlFor="birthday" color="#A1A1AA">Fecha de Cumpleaños</Label>
                             <Input
                                 id="birthday"
                                 name="birthday"

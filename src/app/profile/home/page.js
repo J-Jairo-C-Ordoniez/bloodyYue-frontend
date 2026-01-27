@@ -12,8 +12,8 @@ import useErrorTokenStore from '../../../store/errorToken.store';
 export default function Home() {
     const { user, token } = useAuthStore.getState();
     const router = useRouter();
-    const [error, setError] = useState(false);
-    const { auth } = useAuth('newToken');
+    const [errors, setErrors] = useState(false);
+    const { error, refreshToken } = useAuth('none');
     const [loading, setLoading] = useState(user && token ? false : true);
 
     useErrorTokenStore.getState().setErrorToken(user && token ? false : true);
@@ -24,15 +24,12 @@ export default function Home() {
         (async () => {
             if (!errorToken || !loading) return
 
-            const res = await auth();
-            if (res?.error) {
-                return router.replace('/');
-            }
+            const res = await refreshToken();
 
-            setError(user?.data?.status);
+            setErrors(user?.data?.status);
 
             if (user && user?.data?.status !== 'active') {
-                return setError('Su cuenta no esta activa');
+                return setErrors('Su cuenta no esta activa');
             }
 
             useAuthStore.getState().setAuth(res.data.accessToken, res.data.user);
@@ -42,7 +39,11 @@ export default function Home() {
         })()
     }, []);
 
+    if (error) {
+        return router.replace('/');
+    }
+
     return (
-        loading ? <Loader /> : error ? <Error message={error} typeError="Error 401" /> : <HomePage user={user} />
+        loading ? <Loader /> : errors ? <Error message={errors} typeError="Error 401" /> : <HomePage user={user} />
     );
 }

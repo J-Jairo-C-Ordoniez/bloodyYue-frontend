@@ -98,7 +98,7 @@ export default function LabelsSection() {
                         </DialogHeader>
                         <form onSubmit={handleSubmit} className="space-y-4 pt-4">
                             <div className="space-y-2">
-                                <Label htmlFor="labelName">Nombre de la Etiqueta</Label>
+                                <Label htmlFor="labelName" color="#A1A1AA">Nombre de la Etiqueta</Label>
                                 <Input
                                     id="labelName"
                                     value={currentLabel.name}
@@ -108,7 +108,7 @@ export default function LabelsSection() {
                                 />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="labelColor">Color</Label>
+                                <Label htmlFor="labelColor" color="#A1A1AA">Color</Label>
                                 <div className="flex gap-3">
                                     <Input
                                         id="labelColor"
@@ -165,7 +165,7 @@ export default function LabelsSection() {
                                             </DialogHeader>
                                             <form onSubmit={handleSubmit} className="space-y-4 pt-4">
                                                 <div className="space-y-2">
-                                                    <Label htmlFor="editName">Nombre de la Etiqueta</Label>
+                                                    <Label htmlFor="editName" color="#A1A1AA">Nombre de la Etiqueta</Label>
                                                     <Input
                                                         id="editName"
                                                         value={currentLabel.name}
@@ -174,7 +174,7 @@ export default function LabelsSection() {
                                                     />
                                                 </div>
                                                 <div className="space-y-2">
-                                                    <Label htmlFor="editColor">Color</Label>
+                                                    <Label htmlFor="editColor" color="#A1A1AA">Color</Label>
                                                     <div className="flex gap-3">
                                                         <Input
                                                             id="editColor"

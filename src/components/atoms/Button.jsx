@@ -43,11 +43,10 @@ function Button({
   asChild = false,
   ...props
 }) {
-  // Map old variants to new ones for backward compatibility
   const variantMap = {
     primary: "default",
     danger: "destructive",
-    submit: "default", // Or a specific custom class if needed
+    submit: "default",
   };
 
   const activeVariant = variantMap[variant] || variant;

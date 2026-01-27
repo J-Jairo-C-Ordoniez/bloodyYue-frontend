@@ -7,8 +7,8 @@ import validatorInput from "../../utils/validatorsInputs";
 import useCodeStore from "../../store/code.store";
 
 export default function CodeVerify({ title, setStep = null, onSuccess = null }) {
-    const { auth } = useAuth('codeVerify');
-    const [errors, setErrors] = useState(null);
+    const { loading, error, codeVerify } = useAuth('none');
+    const [errors, setErrors] = useState(error);
     const [formData, setFormData] = useState({ otp: '' });
 
     const handleOtpChange = (value) => {
@@ -20,8 +20,7 @@ export default function CodeVerify({ title, setStep = null, onSuccess = null }) 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const email = useCodeStore.getState().email;
-        console.log(formData.otp, email);
-        const res = await auth({ code: formData.otp, email })
+        const res = await codeVerify({ code: formData.otp, email })
         if (res.error) {
             return setErrors(res.message)
         }
@@ -38,23 +37,23 @@ export default function CodeVerify({ title, setStep = null, onSuccess = null }) 
     return (
         <>
             <header className="space-y-2 text-center">
-                <Typography variant="small" className="text-purple-400">{title}</Typography>
-                <Typography variant="h2">Verificación de Identidad</Typography>
-                <Typography variant="subtitle">
+                <Typography variant="small" className="text-zinc-400">{title}</Typography>
+                <Typography variant="h2" className="text-white">Verificación de Identidad</Typography>
+                <Typography variant="subtitle" className="text-zinc-400">
                     Ingresa el código de 6 dígitos enviado a tu correo electrónico.
                 </Typography>
             </header>
-            <div className="space-y-8">
+            <div className="space-y-8 flex flex-col items-center">
                 <OtpInput value={formData.otp} onChange={handleOtpChange} />
-                <Button variant="submit" size="large" onClick={handleSubmit}>
-                    Verificar Codigo
+                <Button className="p-3" variant="submit" size="large" onClick={handleSubmit}>
+                    {loading ? 'Verificando...' : 'Verificar Codigo'}
                 </Button>
             </div>
 
             {errors && (
                 <article className="space-y-1">
                     <Typography variant="error">
-                        {errors}
+                        {errors || error}
                     </Typography>
                 </article>
             )}

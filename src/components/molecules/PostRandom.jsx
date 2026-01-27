@@ -18,7 +18,7 @@ export default function PostRandom({ post, width, height }) {
             </div>
 
             <div className="absolute top-6 right-6 z-20">
-                <Label variant="pill" className="bg-white/90 backdrop-blur-sm text-yellow-600 shadow-xl border-none">
+                <Label variant="pill" color="#ca8a04" className="bg-white/90 backdrop-blur-sm shadow-xl border-none">
                     <Icon name="Star" size={16} className="fill-current" />
                     Top Rated Artist
                 </Label>

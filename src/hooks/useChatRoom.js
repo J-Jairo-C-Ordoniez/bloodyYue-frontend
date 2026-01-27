@@ -1,11 +1,13 @@
 import { useEffect, useState, useCallback } from 'react';
 import chatApi from '@/api/chat';
 import { socket } from '@/utils/socket';
+import useAuthStore from '@/store/auth.store';
 
 export default function useChatRoom(chatId) {
     const [messages, setMessages] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const { user } = useAuthStore();
 
     const fetchMessages = useCallback(async () => {
         if (!chatId) return;
@@ -28,42 +30,42 @@ export default function useChatRoom(chatId) {
     useEffect(() => {
         fetchMessages();
 
-        if (chatId) {
+        if (chatId && user?.userId) {
+            socket.auth = { userId: user.userId };
             socket.connect();
-            socket.emit('join_chat', chatId);
 
-            const onReceiveMessage = (newMessage) => {
-                if (newMessage.chatId === chatId) {
+            socket.emit('joinChat', { chatId });
+
+            const onNewMessage = (newMessage) => {
+                if (String(newMessage.chatId) === String(chatId)) {
                     setMessages((prev) => [...prev, newMessage]);
                 }
             };
 
-            socket.on('receive_message', onReceiveMessage);
+            socket.on('newMessage', onNewMessage);
 
             return () => {
-                socket.emit('leave_chat', chatId);
-                socket.off('receive_message', onReceiveMessage);
+                // The backend doesn't have a leaveChat but it's good practice
+                // However, I'll stick to what the backend handles or just disconnect/off
+                socket.off('newMessage', onNewMessage);
             };
         }
-    }, [chatId, fetchMessages]);
+    }, [chatId, user?.userId, fetchMessages]);
 
     const sendMessage = async (content) => {
         if (!content.trim() || !chatId) return;
 
-        // This is a placeholder for sending a message. 
-        // We might need an API call for persistence and/or just socket emit.
-        // Assuming there might be a chatMessagePost or similar.
-        // For now, let's emit via socket.
         const messageData = {
             chatId,
             content,
+            userId: user?.userId, // Include sender ID for correct styling
             createdAt: new Date().toISOString()
         };
 
-        socket.emit('send_message', messageData);
+        socket.emit('sendMessage', { chatId, content });
 
-        // Optimistic update (or Wait for server confirmation via socket)
-        // Usually, the server emits back to 'receive_message' which includes the sender.
+        // Optimistic update: add to state immediately
+        setMessages((prev) => [...prev, messageData]);
     };
 
     return {

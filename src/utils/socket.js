@@ -4,5 +4,5 @@ const URL = process.env.NEXT_PUBLIC_SOCKET_URL || 'https://localhost:5000';
 
 export const socket = io(URL, {
     autoConnect: false,
-    withCredentials: true,
+    withCredentials: false,
 });

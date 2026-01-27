@@ -4,7 +4,7 @@ import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
-} from "../ui/collapsible"
+} from "@/components/molecules/Collapsible"
 
 import {
     SidebarGroup,
@@ -15,11 +15,11 @@ import {
     SidebarMenuSub,
     SidebarMenuSubButton,
     SidebarMenuSubItem,
-} from "../ui/sidebar"
+} from "@/components/molecules/Sidebar"
 
 import { ChevronRight } from "lucide-react"
 
-export function NavClouds({
+export default function NavClouds({
     items,
     onSelect
 }) {

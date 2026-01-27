@@ -1,42 +1,67 @@
-export default function Button({
-    children,
-    variant = 'primary',
-    size = 'medium',
-    onClick,
-    className = '',
-    type = 'button',
-    isActive = false
+import * as React from "react"
+import { Slot } from "@radix-ui/react-slot"
+import { cva } from "class-variance-authority";
+
+import { cn } from "@/lib/utils"
+
+const buttonVariants = cva(
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  {
+    variants: {
+      variant: {
+        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        destructive:
+          "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60",
+        outline:
+          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50",
+        secondary:
+          "bg-secondary text-secondary-foreground hover:bg-secondary/80",
+        ghost:
+          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
+        link: "text-primary underline-offset-4 hover:underline",
+      },
+      size: {
+        default: "h-9 px-4 py-2 has-[>svg]:px-3",
+        sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
+        lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
+        icon: "size-9",
+        "icon-sm": "size-8",
+        "icon-lg": "size-10",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  }
+)
+
+function Button({
+  className,
+  variant = "default",
+  size = "default",
+  asChild = false,
+  ...props
 }) {
-    const baseStyles = 'cursor-pointer flex items-center justify-center gap-2 font-medium transition-all duration-300 rounded-full outline-none';
+  // Map old variants to new ones for backward compatibility
+  const variantMap = {
+    primary: "default",
+    danger: "destructive",
+    submit: "default", // Or a specific custom class if needed
+  };
 
-    const variants = {
-        primary: 'bg-white text-black hover:bg-gray-200 focus:ring-white',
-        secondary: 'bg-transparent border-2 border-white/20 text-white hover:bg-white/10 focus:ring-white/50 backdrop-blur-sm',
-        ghost: 'bg-transparent text-white hover:bg-white/10 hover:text-white',
-        danger: 'bg-red-500 text-white hover:bg-red-600 focus:ring-red-500',
-        submit: 'bg-[#6B21A8] hover:bg-[#581c87] text-white py-3 rounded-xl font-semibold transition-all shadow-[0_0_20px_-5px_#6B21A8] border-none w-full',
-        noneDetails: 'w-fit',
-        menuApp: `justify-start gap-2 px-4 py-3 rounded-xl transition-colors duration-200 ${isActive
-            ? 'text-zinc-100'
-            : 'text-zinc-500 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-900 dark:hover:text-zinc-100'
-        }`,
-    };
+  const activeVariant = variantMap[variant] || variant;
+  const Comp = asChild ? Slot : "button"
 
-    const sizes = {
-        none: '',
-        xsmall: 'ml-4 p-1 text-xs',
-        small: 'px-4 py-1.5 text-sm',
-        medium: 'px-6 py-2.5 text-base',
-        large: 'px-8 py-3.5 text-lg',
-    };
+  return (
+    <Comp
+      data-slot="button"
+      data-variant={activeVariant}
+      data-size={size}
+      className={cn(buttonVariants({ variant: activeVariant, size, className }))}
+      {...props} />
+  );
+}
 
-    return (
-        <button
-            type={type}
-            className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`}
-            onClick={onClick}
-        >
-            {children}
-        </button>
-    );
-};
+export { Button, buttonVariants }
+export default Button

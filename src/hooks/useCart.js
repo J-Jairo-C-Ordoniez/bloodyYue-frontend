@@ -1,66 +1,59 @@
 import { useEffect, useState } from 'react';
 import cart from '../api/cart/index';
 
-/**
- * Custom hook para manejar operaciones del carrito de compras
- * @param {Object|null} body - Parámetros para la petición del carrito
- * @param {string} variant - Variante de operación ('itemsGet')
- * @returns {Object} Estado del carrito con items, loading y error
- */
-
 export default function useCart(body = null, variant = 'itemsGet') {
-  const [cartItems, setCartItems] = useState(null);
-  const [isLoadingCartItems, setIsLoadingCartItems] = useState(true);
-  const [errorCartItems, setErrorCartItems] = useState(null);
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const variants = {
-    itemsPost: cart.cartItemsPost,
-    itemsGet: cart.cartItemsGet,
-    itemsByIdGet: cart.cartItemsByIdGet,
-    itemPut: cart.cartItemPut,
-    itemDiscardedPatch: cart.cartItemDiscardedPatch
-  }
+  const fetchCart = useCallback(async (customBody, customVariant) => {
+    const activeVariant = customVariant || variant;
+    const activeBody = customBody || body;
 
-  const fetchCart = async () => {
-    let isMounted = true;
+    setLoading(true);
+    setError(null);
     try {
-      setIsLoadingCartItems(true);
-      setErrorCartItems(null);
-      const data = await variants[variant](body);
-
-      if (isMounted) {
-        setCartItems(data);
+      const res = await cart[activeVariant](activeBody);
+      if (res.error) {
+        setError(res.message);
+      } else {
+        setData(res.data);
       }
+      return res;
     } catch (err) {
-      if (isMounted) {
-        setErrorCartItems(err?.message || 'Error al cargar los items del carrito');
-      }
+      const msg = err?.message || 'Error loading cart';
+      setError(msg);
+      return { error: true, message: msg };
     } finally {
-      if (isMounted) {
-        setIsLoadingCartItems(false);
-      }
+      setLoading(false);
     }
-    return () => { isMounted = false };
-  };
-
-  const discardItem = async (id) => {
-    try {
-      const data = await variants.itemDiscardedPatch({ id });
-      return data;
-    } catch (error) {
-      throw error;
-    }
-  }
+  }, [body, variant]);
 
   useEffect(() => {
-    fetchCart();
+    if (variant !== 'none') {
+      fetchCart();
+    }
   }, []);
 
+  const discardItem = async (id) => {
+    return await cart.cartItemDiscardedPatch({ id });
+  }
+
+  const addItem = async (data) => {
+    return await cart.cartItemsPost(data);
+  }
+
+  const updateItem = async (id, data) => {
+    return await cart.cartItemPut({ id, data });
+  }
+
   return {
-    cartItems,
-    isLoadingCartItems,
-    errorCartItems,
-    refetch: fetchCart,
-    discardItem
+    cartItems: data,
+    loading,
+    error,
+    refreshCart: fetchCart,
+    discardItem,
+    addItem,
+    updateItem
   };
 }

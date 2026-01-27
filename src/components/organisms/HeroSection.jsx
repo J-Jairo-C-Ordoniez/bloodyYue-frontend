@@ -1,6 +1,6 @@
 import Typography from '../atoms/Typography';
 import Link from '../atoms/Link';
-import Icon from '../atoms/Icon';   
+import Icon from '../atoms/Icon';
 import Label from '../atoms/Label';
 import usePosts from '../../hooks/usePosts';
 import LoaderCard from '../molecules/LoaderCard';
@@ -8,7 +8,8 @@ import PostRandom from '../molecules/PostRandom';
 import ErrorCard from '../molecules/ErrorCard';
 
 export default function HeroSection({ subtitle, abaut }) {
-    const { post, isLoadingPost, errorPost } = usePosts();
+    const { posts, loading, error } = usePosts(null, 'random');
+
     return (
         <section className="relative min-h-[90vh] overflow-hidden py-10 px-4 flex justify-center items-center bg-[#0B0B0F]">
             <div className="container grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -28,15 +29,15 @@ export default function HeroSection({ subtitle, abaut }) {
                         </Typography>
 
                         <div className="flex gap-4 mt-6">
-                            <Link 
-                                variant="primary" 
+                            <Link
+                                variant="primary"
                                 href="#commissions"
                                 className="rounded-full px-8 py-4 text-lg shadow-lg shadow-indigo-500/30"
                             >
                                 Solicitar Comisión
                             </Link>
-                            <Link 
-                                variant="secondary" 
+                            <Link
+                                variant="secondary"
                                 href="#gallery"
                                 className="rounded-full px-8 py-4 text-lg border-2"
                             >
@@ -64,11 +65,11 @@ export default function HeroSection({ subtitle, abaut }) {
 
                 <div className="relative w-full aspect-4/5 max-w-[500px] mx-auto lg:ml-auto">
                     <div className="rotate-4 w-full h-full rounded-3xl overflow-hidden shadow-2xl shadow-indigo-500/20 transform transition-all duration-500 hover:shadow-indigo-500/40">
-                        {isLoadingPost && <LoaderCard />}
-                        {(errorPost || post?.error) && (
-                            <ErrorCard message={errorPost || post?.message || 'Error al cargar el post destacado'} />
+                        {loading && <LoaderCard />}
+                        {error && (
+                            <ErrorCard message={error || 'Error al cargar el post destacado'} />
                         )}
-                        {!isLoadingPost && !errorPost && !post?.error && post?.data && <PostRandom post={post.data} width={500} height={700} />}
+                        {posts && <PostRandom post={posts} width={500} height={700} />}
                     </div>
                 </div>
             </div>

@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from "react"
 import { IconTrendingUp, IconUsers, IconCurrencyDollar, IconShoppingCart } from "@tabler/icons-react"
-import { Card, CardAction, CardDescription, CardFooter, CardHeader, CardTitle } from "../ui/card"
-import { Badge } from "../ui/badge"
+import { Card, CardAction, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/molecules/Card"
+import { Badge } from "@/components/atoms/Badge"
 import salesApi from "../../api/sales/index"
 import usersApi from "../../api/users/index"
 
@@ -18,7 +18,7 @@ export default function SectionCards() {
   useEffect(() => {
     const fetchMetrics = async () => {
       const [salesRes, usersRes] = await Promise.all([
-        salesApi.salesGetLisGet({id: 0}),
+        salesApi.salesGetLisGet({ id: 0 }),
         usersApi.usersGet()
       ])
 

@@ -3,9 +3,9 @@
 import { useState, useEffect } from "react"
 import labelsApi from "@/api/labels"
 import Typography from "../atoms/Typography"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Button } from "@/components/atoms/Button"
+import { Input } from "@/components/atoms/Input"
+import { Label } from "@/components/atoms/Label"
 import {
     Table,
     TableBody,
@@ -13,14 +13,14 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table"
+} from "@/components/molecules/Table"
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/components/molecules/Dialog"
 import { toast } from "sonner"
 import LoaderCard from "@/components/molecules/LoaderCard"
 import { IconPlus, IconTrash, IconPencil } from "@tabler/icons-react"

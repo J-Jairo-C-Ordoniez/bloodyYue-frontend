@@ -6,9 +6,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "@/components/molecules/Sidebar"
 
-export function NavMain({
+export default function NavMain({
   items,
   onSelect
 }) {

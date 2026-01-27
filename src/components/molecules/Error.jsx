@@ -1,5 +1,5 @@
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
-import { Button } from "../ui/button";
+import { Alert, AlertDescription, AlertTitle } from "./Alert";
+import Button from "../atoms/Button";
 import Link from "../atoms/Link";
 import Icon from "../atoms/Icon";
 

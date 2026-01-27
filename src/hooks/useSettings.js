@@ -1,43 +1,38 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import settings from '../api/settings/index';
 import media from '../api/media/index';
 
-/**
- * Custom hook para manejar operaciones de configuración
- * @param {string|number} id - ID de la configuración a obtener
- * @returns {Object} Estado de configuración con data, loading y error
- */
-export default function useSettings(id) {
-  const [setting, setSetting] = useState(null);
-  const [isLoadingSetting, setIsLoadingSetting] = useState(true);
-  const [errorSetting, setErrorSetting] = useState(null);
+export default function useSettings(id, variant = 'getSettings') {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const fetchSettings = useCallback(async (customId) => {
+    const activeId = customId || id;
+
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await settings.getSettings(activeId);
+      if (res.error) {
+        setError(res.message);
+      } else {
+        setData(res.data);
+      }
+      return res;
+    } catch (err) {
+      const msg = err?.message || 'Error loading settings';
+      setError(msg);
+      return { error: true, message: msg };
+    } finally {
+      setLoading(false);
+    }
+  }, [id, variant]);
 
   useEffect(() => {
-    let isMounted = true;
-
-    (async () => {
-      try {
-        setIsLoadingSetting(true);
-        setErrorSetting(null);
-        const data = await settings.getSettings(id);
-
-        if (isMounted) {
-          setSetting(data);
-        }
-      } catch (err) {
-        if (isMounted) {
-          setErrorSetting(err?.message || 'Error al cargar la configuración');
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoadingSetting(false);
-        }
-      }
-    })()
-
-    return () => {
-      isMounted = false;
-    };
+    if (variant !== 'none') {
+      fetchSettings();
+    }
   }, []);
 
   const updateSettings = async (id, data) => {
@@ -49,9 +44,10 @@ export default function useSettings(id) {
   };
 
   return {
-    setting,
-    isLoadingSetting,
-    errorSetting,
+    settings: data,
+    loading,
+    error,
+    refreshSettings: fetchSettings,
     updateSettings,
     uploadHero
   };

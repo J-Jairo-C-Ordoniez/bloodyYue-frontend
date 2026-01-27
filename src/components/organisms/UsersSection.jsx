@@ -13,14 +13,14 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "../ui/table"
+} from "@/components/molecules/Table"
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "../ui/select"
+} from "@/components/molecules/Select"
 import { toast } from "sonner"
 import LoaderCard from "../molecules/LoaderCard"
 

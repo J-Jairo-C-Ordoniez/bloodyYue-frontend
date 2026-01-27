@@ -5,7 +5,7 @@ import LoaderCard from '../molecules/LoaderCard';
 import ErrorCard from '../molecules/ErrorCard';
 
 export default function WorkSection() {
-    const { post, isLoadingPost, errorPost } = usePosts({ id: 0 }, 'list');
+    const { posts, loading, error } = usePosts();
 
     return (
         <section className="py-20 px-4 bg-[#0B0B0E]">
@@ -18,21 +18,21 @@ export default function WorkSection() {
                 />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                    {isLoadingPost && (
+                    {loading && (
                         <>
                             <LoaderCard variant="card" />
                             <LoaderCard variant="card" />
                             <LoaderCard variant="card" />
                         </>
                     )}
-                    
-                    {(errorPost || post?.error) && (
+
+                    {error && (
                         <div className="col-span-full">
-                            <ErrorCard message={errorPost || post?.message || 'Error al cargar los trabajos'} />
+                            <ErrorCard message={error || 'Error al cargar los trabajos'} />
                         </div>
                     )}
 
-                    {!isLoadingPost && !errorPost && !post?.error && post?.data?.map((item) => (
+                    {posts && posts.map((item) => (
                         <WorkCard
                             key={item.postId}
                             postId={item.postId}
@@ -42,6 +42,7 @@ export default function WorkSection() {
                             content={item.content}
                             typePost={item.typePost}
                             createdAt={item.createdAt}
+                            labels={item.labels}
                         />
                     ))}
                 </div>

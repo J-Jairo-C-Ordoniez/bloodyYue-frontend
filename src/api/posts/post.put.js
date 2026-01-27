@@ -5,7 +5,12 @@ export default async function postPut({ id, data }) {
         auth: true,
         options: {
             method: "PUT",
-            body: JSON.stringify(data),
+            body: JSON.stringify({
+                title: data.title,
+                description: data.description,
+                content: data.content,
+                typePost: data.typePost
+            }),
         }
     });
 

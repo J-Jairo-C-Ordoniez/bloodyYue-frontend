@@ -6,15 +6,15 @@ import Loader from '../molecules/Loader';
 import Error from '../molecules/Error';
 
 export default function VerifyAccountLoader() {
-    const { post, isLoadingPost, errorPost } = usePosts();
+    const { posts, loading, error } = usePosts(null, 'random');
 
-    if (isLoadingPost) {
+    if (loading) {
         return <Loader />;
     }
 
-    if (errorPost || post.error) {
-        return <Error message={post?.message} typeError={post?.typeError} />;
+    if (error) {
+        return <Error message={error} />;
     }
 
-    return <VerifyAccountPage data={post.data} />;
+    return <VerifyAccountPage data={posts} />;
 }

@@ -1,6 +1,11 @@
 import { useState } from 'react';
 import cart from '../../api/cart/index';
-import Dialog from '../atoms/Dialog';
+import {
+    Dialog,
+    DialogContent,
+    DialogHeader,
+    DialogTitle,
+} from './Dialog';
 import Button from '../atoms/Button';
 import Input from '../atoms/Input';
 import validatorInput from '../../utils/validatorsInputs';
@@ -97,50 +102,48 @@ export default function CommissionOrderFormDialog({ isOpen, onClose, commissionI
     ]
 
     return (
-        <Dialog
-            isOpen={isOpen}
-            onClose={onClose}
-            title={`Ordenar: ${title}`}
-            className="bg-[#121212] m-auto!"
-        >
-            <form onSubmit={handleSubmit} method="post" className="space-y-6">
-                <div className="grid grid-cols-2 gap-5">
-                    {inputs.map((input) => {
-                        const Component = input.type === 'checkbox' ? Checkbox : Input;
-                        return (
-                            <div key={input.id} className={input.colSpan}>
-                                <Component
-                                    id={input.id}
-                                    name={input.name}
-                                    label={input.label}
-                                    type={input.type}
-                                    placeholder={input.placeholder}
-                                    value={input.value}
-                                    checked={input.checked}
-                                    onChange={input.onChange}
-                                    disabled={input.disabled}
-                                />
-                            </div>
-                        );
-                    })}
-                </div>
+        <Dialog open={isOpen} onOpenChange={onClose}>
+            <DialogContent className="bg-[#121212] border-zinc-800 max-w-lg">
+                <DialogHeader>
+                    <DialogTitle className="text-white">Ordenar: {title}</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleSubmit} method="post" className="space-y-6 pt-4">
+                    <div className="grid grid-cols-2 gap-5">
+                        {inputs.map((input) => {
+                            return (
+                                <div key={input.id} className={input.colSpan}>
+                                    <Input
+                                        id={input.id}
+                                        name={input.name}
+                                        label={input.label}
+                                        type={input.type}
+                                        placeholder={input.placeholder}
+                                        value={input.value}
+                                        onChange={input.onChange}
+                                        disabled={input.disabled}
+                                    />
+                                </div>
+                            );
+                        })}
+                    </div>
 
-                <Button
-                    type="submit"
-                    variant="submit"
-                    size="large"
-                >
-                    Confirmar Pedido
-                </Button>
-            </form>
+                    <Button
+                        type="submit"
+                        variant="submit"
+                        className="w-full h-12 text-lg font-bold"
+                    >
+                        Confirmar Pedido
+                    </Button>
+                </form>
 
-            {errors && (
-                <article className="space-y-1 mt-10">
-                    <Typography variant="error">
-                        {errors}
-                    </Typography>
-                </article>
-            )}
+                {errors && (
+                    <article className="mt-4 p-3 bg-red-900/10 border border-red-900/50 rounded-lg">
+                        <Typography variant="error" className="text-center text-sm">
+                            {errors}
+                        </Typography>
+                    </article>
+                )}
+            </DialogContent>
         </Dialog>
     );
 }

@@ -1,60 +1,59 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import posts from '../api/posts/index';
 
-/**
- * Custom hook para manejar operaciones de reacciones de posts
- * @param {Object|null} body - Parámetros para la petición de reacciones
- * @param {string} variant - Variante de operación ('getReactions')
- * @returns {Object} Estado de reacciones con data, loading y error
- */
-
 export default function useReactions(body = null, variant = 'getReactions') {
-  const [reactions, setReactions] = useState(null);
-  const [isLoadingReactions, setIsLoadingReactions] = useState(true);
-  const [errorReactions, setErrorReactions] = useState(null);
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const variants = {
-    getReactions: posts.postReactionsGet,
-    postReactions: posts.postReactionsPost,
-  }
+  const fetchReactions = useCallback(async (customBody, customVariant) => {
+    const activeVariant = customVariant || variant;
+    const activeBody = customBody || body;
+
+    setLoading(true);
+    setError(null);
+    try {
+      const variants = {
+        getReactions: posts.postReactionsGet,
+        postReactions: posts.postReactionsPost,
+      }
+
+      const res = await variants[activeVariant](activeBody);
+      if (res.error) {
+        setError(res.message);
+      } else {
+        setData(res.data);
+      }
+      return res;
+    } catch (err) {
+      const msg = err?.message || 'Error loading reactions';
+      setError(msg);
+      return { error: true, message: msg };
+    } finally {
+      setLoading(false);
+    }
+  }, [body, variant]);
 
   useEffect(() => {
-    if (variant === '') {
-      setIsLoadingReactions(false);
-      setReactions(variants[variant]);
-      return;
+    if (variant !== 'none') {
+      fetchReactions();
     }
-
-    let isMounted = true;
-
-    (async () => {
-      try {
-        setIsLoadingReactions(true);
-        setErrorReactions(null);
-        const data = await variants[variant](body ?? body);
-
-        if (isMounted) {
-          setReactions(data);
-        }
-      } catch (err) {
-        if (isMounted) {
-          setErrorReactions(err?.message || 'Error al cargar las reacciones');
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoadingReactions(false);
-        }
-      }
-    })()
-
-    return () => {
-      isMounted = false;
-    };
   }, []);
 
+  const addReaction = async (reactionData) => {
+    return await posts.postReactionsPost(reactionData);
+  }
+
+  const removeReaction = async (reactionData) => {
+    return await posts.postReactionsDelete(reactionData);
+  }
+
   return {
-    reactions,
-    isLoadingReactions,
-    errorReactions,
+    reactions: data,
+    loading,
+    error,
+    refreshReactions: fetchReactions,
+    addReaction,
+    removeReaction
   };
 }

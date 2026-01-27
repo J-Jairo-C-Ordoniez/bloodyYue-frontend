@@ -1,64 +1,111 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import posts from '../api/posts/index';
 
-/**
- * Custom hook para manejar operaciones de posts
- * @param {Object|null} body - Parámetros para la petición de posts
- * @param {string} variant - Variante de operación ('random', 'list')
- * @returns {Object} Estado de posts con data, loading y error
- */
-export default function usePosts(body = null, variant = 'random') {
-  const [post, setPost] = useState(null);
-  const [isLoadingPost, setIsLoadingPost] = useState(true);
-  const [errorPost, setErrorPost] = useState(null);
+export default function usePosts(body = { id: 0 }, variant = 'list') {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const variants = {
-    post: posts.postPost,
-    list: posts.postListGet,
-    getById: posts.postGetIdGet,
-    filterLabel: posts.postFilterLabelGet,
-    filterTitle: posts.postFilterTitleGet,
-    delete: posts.postDelete,
-    random: posts.postRandomGet,
-    put: posts.postPut,
-    labelsPut: posts.postLabelsPut,
-    reactionsPost: posts.postReactionsPost,
-    reactionsGet: posts.postReactionsGet,
-    reactionsDelete: posts.postReactionsDelete,
-  }
+  const loadPosts = useCallback(async (customBody, customVariant) => {
+    const activeVariant = customVariant || variant;
+    const activeBody = customBody || body;
+
+    if (activeVariant === 'none') return;
+
+    setLoading(true);
+    setError(null);
+    try {
+      let res;
+      switch (activeVariant) {
+        case 'random':
+          res = await posts.postRandomGet();
+          break;
+        case 'getById':
+          res = await posts.postGetIdGet(activeBody);
+          break;
+        case 'filterLabel':
+          res = await posts.postFilterLabelGet(activeBody);
+          break;
+        case 'filterTitle':
+          res = await posts.postFilterTitleGet(activeBody);
+          break;
+        case 'list':
+        default:
+          res = await posts.postListGet(activeBody);
+          break;
+      }
+
+      if (res.error) {
+        setError(res.message);
+      } else {
+        setData(res.data);
+      }
+      return res;
+    } catch (err) {
+      setError(err.message || 'Error loading posts');
+      return { error: true, message: err.message };
+    } finally {
+      setLoading(false);
+    }
+  }, [body, variant]);
 
   useEffect(() => {
-    let isMounted = true;
-
-    (async () => {
-      try {
-        setIsLoadingPost(true);
-        setErrorPost(null);
-        const data = await variants[variant](body ?? body);
-
-        if (isMounted) {
-          setPost(data);
-        }
-
-      } catch (err) {
-        if (isMounted) {
-          setErrorPost(err?.message || 'Error al cargar los posts');
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoadingPost(false);
-        }
-      }
-    })()
-
-    return () => {
-      isMounted = false;
-    };
+    if (variant !== 'none') {
+      loadPosts();
+    }
   }, []);
 
+  const createPost = useCallback(async (postData) => {
+    setLoading(true);
+    try {
+      const res = await posts.postPost({ data: postData });
+      if (res.error) throw new Error(res.message);
+      await loadPosts();
+      return { success: true, data: res.data };
+    } catch (err) {
+      return { success: false, error: err.message };
+    } finally {
+      setLoading(false);
+    }
+  }, [loadPosts]);
+
+  const updatePost = useCallback(async (id, postData) => {
+    setLoading(true);
+    try {
+      const res = await posts.postPut({ id, data: postData });
+      if (res.error) throw new Error(res.message);
+      await loadPosts();
+      return { success: true, data: res.data };
+    } catch (err) {
+      return { success: false, error: err.message };
+    } finally {
+      setLoading(false);
+    }
+  }, [loadPosts]);
+
+  const deletePost = useCallback(async (id) => {
+    setLoading(true);
+    try {
+      const res = await posts.postDelete({ id });
+      if (res.error) throw new Error(res.message);
+      await loadPosts();
+      return { success: true };
+    } catch (err) {
+      return { success: false, error: err.message };
+    } finally {
+      setLoading(false);
+    }
+  }, [loadPosts]);
+
+  const refreshPosts = useCallback(() => loadPosts(), [loadPosts]);
+
   return {
-    post,
-    isLoadingPost,
-    errorPost,
+    posts: data,
+    loading,
+    error,
+    createPost,
+    updatePost,
+    deletePost,
+    refreshPosts
   };
 }

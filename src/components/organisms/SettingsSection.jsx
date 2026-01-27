@@ -4,9 +4,9 @@ import validatorInput from "../../utils/validatorsInputs"
 import Typography from "../atoms/Typography"
 import Input from "../atoms/Input"
 import Button from "../atoms/Button"
-import { Label } from "../ui/label"
-import { Textarea } from "../ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card"
+import { Label } from "@/components/atoms/Label"
+import { Textarea } from "@/components/atoms/Textarea"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/molecules/Card"
 import LoaderCard from "../molecules/LoaderCard"
 import Image from '../atoms/Image'
 import Icon from '../atoms/Icon'

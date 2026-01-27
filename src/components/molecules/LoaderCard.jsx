@@ -1,4 +1,4 @@
-import { Skeleton } from "../ui/skeleton";
+import { Skeleton } from "../atoms/Skeleton";
 
 /**
  * Componente de carga para cards usando Skeleton

@@ -10,16 +10,16 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/ui/table"
+} from "@/components/molecules/Table"
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/select"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
+} from "@/components/molecules/Select"
+import { Badge } from "@/components/atoms/Badge"
+import { Button } from "@/components/atoms/Button"
 import { toast } from "sonner"
 import LoaderCard from "@/components/molecules/LoaderCard"
 import { IconMessage, IconArrowRight } from "@tabler/icons-react"
@@ -34,7 +34,7 @@ export function SalesSection() {
 
     const fetchSales = async () => {
         setLoading(true)
-        const response = await salesApi.salesGetLisGet({id: 0})
+        const response = await salesApi.salesGetLisGet({ id: 0 })
         if (!response.error) {
             setSales(response.data)
         } else {

@@ -1,4 +1,4 @@
-import { Alert, AlertDescription } from "../ui/alert";
+import { Alert, AlertDescription } from "./Alert";
 import Icon from "../atoms/Icon";
 
 /**

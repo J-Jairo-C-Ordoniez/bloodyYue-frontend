@@ -7,9 +7,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/ui/sidebar"
+} from "@/components/molecules/Sidebar"
 
-export function NavSecondary({
+export default function NavSecondary({
   items,
   ...props
 }) {

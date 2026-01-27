@@ -1,10 +1,10 @@
 "use client"
 
 import Link from "../atoms/Link"
-import { NavClouds } from "@/components/molecules/NavClouds"
-import { NavMain } from "@/components/molecules/NavMain"
-import { NavSecondary } from "@/components/molecules/NavSecondary"
-import { NavUser } from "@/components/molecules/NavUser"
+import NavClouds from "@/components/molecules/NavClouds"
+import NavMain from "@/components/molecules/NavMain"
+import NavSecondary from "@/components/molecules/NavSecondary"
+import NavUser from "@/components/molecules/NavUser"
 import {
   Sidebar,
   SidebarContent,
@@ -13,7 +13,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "../ui/sidebar"
+} from "../molecules/Sidebar"
 
 import {
   IconCamera,

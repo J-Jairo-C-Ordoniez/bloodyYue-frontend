@@ -4,25 +4,25 @@ import LoaderCard from '../molecules/LoaderCard';
 import ErrorCard from '../molecules/ErrorCard';
 
 export default function CommissionApp() {
-    const { commission, isLoadingCommission, errorCommission } = useCommissions({ id: 0 }, 'list');
+    const { commissions, loading, error } = useCommissions({ id: 0 }, 'list');
 
     return (
         <section id="commission" className="bg-[#0B0B0E]">
             <div className="container mx-auto px-4">
                 <div className='grid gap-8 grid-cols-1 max-w-2xl mx-auto'>
-                    {isLoadingCommission && (
+                    {loading && (
                         <>
                             <LoaderCard variant="card" />
                             <LoaderCard variant="card" />
                             <LoaderCard variant="card" />
                         </>
                     )}
-                    {errorCommission || commission?.error && (
+                    {error && (
                         <div className="col-span-full">
-                            <ErrorCard message={commission?.message || errorCommission} variant="default" />
+                            <ErrorCard message={error} variant="default" />
                         </div>
                     )}
-                    {!isLoadingCommission && !errorCommission && commission?.data && commission?.data.map((item) => (
+                    {!loading && !error && commissions && commissions.map((item) => (
                         <CommissionCard
                             key={item.commissionId}
                             commissionId={item.commissionId}

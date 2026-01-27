@@ -2,53 +2,53 @@ import { useEffect, useState, useCallback } from 'react';
 import chat from '../api/chat/index';
 import { socket } from '../utils/socket';
 
-export default function useChats() {
-    const [chats, setChats] = useState([]);
-    const [isLoadingChats, setIsLoadingChats] = useState(true);
-    const [errorChats, setErrorChats] = useState(null);
+export default function useChats(variant = 'list') {
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
-    const fetchChats = async () => {
+    const fetchChats = useCallback(async () => {
+        setLoading(true);
+        setError(null);
         try {
-            setIsLoadingChats(true);
-            setErrorChats(null);
-            const data = await chat.chatGet();
-
-            if (data?.error) {
-                setErrorChats(data?.message);
+            const res = await chat.chatGet();
+            if (res?.error) {
+                setError(res.message);
             } else {
-                setChats(data?.data);
+                setData(res.data);
             }
+            return res;
         } catch (err) {
-            setErrorChats(err?.message || 'Error al cargar chats');
+            const msg = err?.message || 'Error loading chats';
+            setError(msg);
+            return { error: true, message: msg };
         } finally {
-            setIsLoadingChats(false);
+            setLoading(false);
         }
-    };
+    }, [variant]);
 
     useEffect(() => {
-        fetchChats();
+        if (variant !== 'none') {
+            fetchChats();
+        }
     }, []);
 
-    // Socket listeners for new messages
     useEffect(() => {
         function onMessage(newMessage) {
-            // Logic to update chat list (re-ordering/updating snippet)
-            // Ideally backend sends the full chat object or we manually construct it
-            // For simplicity: refetch or update if we can match the chatId
-            setChats(prev => {
+            setData(prev => {
                 const chatIndex = prev.findIndex(c => c.chatId === newMessage.chatId);
                 if (chatIndex > -1) {
-                    const updatedChat = { ...prev[chatIndex], lastMessage: newMessage.content, updatedAt: new Date() }; // Mock update
+                    const updatedChat = { ...prev[chatIndex], lastMessage: newMessage.content, updatedAt: new Date() };
                     const newChats = [...prev];
                     newChats.splice(chatIndex, 1);
                     newChats.unshift(updatedChat);
                     return newChats;
                 }
-                return prev; // Or refetch() if it's a new chat
+                return prev;
             });
         }
 
-        socket.on('receive_message', onMessage); // Adjust event name
+        socket.on('receive_message', onMessage);
 
         return () => {
             socket.off('receive_message', onMessage);
@@ -56,24 +56,22 @@ export default function useChats() {
     }, []);
 
     const createChat = async (userId) => {
-        // Logic to create chat
         try {
             const res = await chat.chatPost({ userId });
             if (res && !res.error) {
-                // Add to list or navigate
                 fetchChats();
             }
             return res;
         } catch (e) {
-            console.error(e);
+            return { error: true, message: e.message };
         }
     };
 
     return {
-        chats,
-        isLoadingChats,
-        errorChats,
-        refetch: fetchChats,
+        chats: data,
+        loading,
+        error,
+        refreshChats: fetchChats,
         createChat
     };
 }

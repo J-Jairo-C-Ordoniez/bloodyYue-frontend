@@ -6,7 +6,7 @@ import SiteHeader from "../organisms/SiteHeader";
 import SectionCards from "../organisms/SectionCards";
 import ChartAreaInteractive from "../organisms/ChartAreaInteractive";
 import RecentSalesSummary from "../organisms/RecentSalesSummary";
-import { SidebarInset, SidebarProvider } from "../ui/sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/molecules/Sidebar";
 import { useState } from "react";
 import { UsersSection } from "../organisms/UsersSection";
 import { RolesSection } from "../organisms/RolesSection";

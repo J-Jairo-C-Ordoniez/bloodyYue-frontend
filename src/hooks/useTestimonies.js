@@ -1,61 +1,44 @@
 import { useEffect, useState } from 'react';
 import users from '../api/users/index';
 
-/**
- * Custom hook para manejar operaciones de testimonios
- * @param {Object|null} body - Parámetros para la petición de testimonios
- * @param {string} variant - Variante de operación ('testimoniesGet')
- * @returns {Object} Estado de testimonios con data, loading y error
- */
 export default function useTestimonies(body = null, variant = 'testimoniesGet') {
-  const [testimony, setTestimony] = useState(null);
-  const [isLoadingTestimony, setIsLoadingTestimony] = useState(true);
-  const [errorTestimony, setErrorTestimony] = useState(null);
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const variants = {
-    testimoniesGet: users.testimoniesGet,
-  }
+  const fetchTestimonies = useCallback(async (customBody, customVariant) => {
+    const activeVariant = customVariant || variant;
+    const activeBody = customBody || body;
+
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await users.testimoniesGet(activeBody);
+      if (res.error) {
+        setError(res.message);
+      } else {
+        setData(res.data);
+      }
+      return res;
+    } catch (err) {
+      const msg = err?.message || 'Error loading testimonies';
+      setError(msg);
+      return { error: true, message: msg };
+    } finally {
+      setLoading(false);
+    }
+  }, [body, variant]);
 
   useEffect(() => {
-    let isMounted = true;
-
-    (async () => {
-      try {
-        setIsLoadingTestimony(true);
-        setErrorTestimony(null);
-        const data = await variants[variant](body);
-
-        if (isMounted) {
-          setTestimony(data);
-        }
-
-        if (data?.error) {
-          return setErrorTestimony(data?.message);
-        }
-
-        if (isMounted) {
-          setTestimony(data);
-        }
-
-      } catch (err) {
-        if (isMounted) {
-          setErrorTestimony(err?.message || 'Error al cargar los testimonios');
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoadingTestimony(false);
-        }
-      }
-    })()
-
-    return () => {
-      isMounted = false;
-    };
+    if (variant !== 'none') {
+      fetchTestimonies();
+    }
   }, []);
 
   return {
-    testimony,
-    isLoadingTestimony,
-    errorTestimony,
+    testimonies: data,
+    loading,
+    error,
+    refreshTestimonies: fetchTestimonies
   };
 }

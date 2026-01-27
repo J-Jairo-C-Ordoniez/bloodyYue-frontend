@@ -8,13 +8,12 @@ import Button from '../atoms/Button';
 import Icon from '../atoms/Icon';
 import PayPalCheckout from '../molecules/PayPalCheckout';
 import { toast } from 'sonner';
-import cart from '../../api/cart';
 
 export default function CartSection() {
-    const { cartItems, isLoadingCartItems, errorCartItems, refetch, discardItem } = useCart();
+    const { cartItems, loading, error, refreshCart, discardItem } = useCart();
     const { createSale, updateSaleStatus } = useSales();
 
-    const filteredItems = cartItems?.data?.filter(item => item.status === 'selected') || [];
+    const filteredItems = cartItems?.filter(item => item.status === 'selected') || [];
 
     const handleDiscard = async (id) => {
         try {
@@ -68,7 +67,7 @@ export default function CartSection() {
             // Usually sale creation might consume the cart item or we update cart item status?
             // "cartItems" table has status 'selected', 'discarded', 'purchased'.
             // The backend PROBABLY updates cartItem to 'purchased' when sale is paid.
-            refetch();
+            refreshCart();
         } catch (error) {
             toast.error('Hubo un problema al procesar algunos items.');
             console.error(error);
@@ -91,20 +90,20 @@ export default function CartSection() {
                 </header>
 
                 <div className="space-y-6">
-                    {isLoadingCartItems && (
+                    {loading && (
                         <>
                             <LoaderCard variant="list" />
                             <LoaderCard variant="list" />
                         </>
                     )}
 
-                    {(errorCartItems || cartItems?.error) && (
+                    {error && (
                         <div className="p-4">
-                            <ErrorCard message={errorCartItems || 'Error al cargar el carrito'} />
+                            <ErrorCard message={error} />
                         </div>
                     )}
 
-                    {!isLoadingCartItems && !errorCartItems && filteredItems.length === 0 && (
+                    {!loading && !error && filteredItems.length === 0 && (
                         <div className="text-center py-20 bg-zinc-800/20 rounded-2xl border border-zinc-800/50">
                             <Icon name="ShoppingCart" size={48} className="mx-auto text-zinc-500 mb-4" />
                             <Typography variant="h5" className="text-zinc-300 mb-2 font-semibold">
@@ -118,7 +117,7 @@ export default function CartSection() {
                         </div>
                     )}
 
-                    {!isLoadingCartItems && !errorCartItems && filteredItems.map((cartItem) => (
+                    {!loading && !error && filteredItems.map((cartItem) => (
                         <div className="flex-1" key={cartItem.cartItemId}>
                             <CartItemSmall
                                 id={cartItem.cartItemId}

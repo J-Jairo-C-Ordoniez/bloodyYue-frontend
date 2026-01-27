@@ -1,57 +1,61 @@
 import { useEffect, useState } from 'react';
 import labels from '../api/labels/index';
 
-/**
- * Custom hook para manejar operaciones de labels/etiquetas
- * @param {Object|null} body - Parámetros para la petición de labels
- * @param {string} variant - Variante de operación ('labelsGet')
- * @returns {Object} Estado de labels con data, loading y error
- */
 export default function useLabels(body = null, variant = 'labelsGet') {
-  const [label, setLabel] = useState(null);
-  const [isLoadingLabel, setIsLoadingLabel] = useState(true);
-  const [errorLabel, setErrorLabel] = useState(null);
+  const [data, setData] = useState(variant === 'labelsGet' ? [] : null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const variants = {
-    labelsGet: labels.labelsGet,
-    labelsGetId: labels.labelsGetId,
-    labelsPost: labels.labelsPost,
-    labelsPut: labels.labelsPut,
-    labelsDelete: labels.labelsDelete,
-  }
+  const fetchLabels = useCallback(async (customBody, customVariant) => {
+    const activeVariant = customVariant || variant;
+    const activeBody = customBody || body;
+
+    if (activeVariant === 'none') return;
+
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await labels[activeVariant](activeBody);
+      if (res.error) {
+        setError(res.message);
+      } else {
+        setData(res.data);
+      }
+      return res;
+    } catch (err) {
+      const msg = err?.message || 'Error loading labels';
+      setError(msg);
+      return { error: true, message: msg };
+    } finally {
+      setLoading(false);
+    }
+  }, [body, variant]);
 
   useEffect(() => {
-    let isMounted = true;
-
-    (async () => {
-      try {
-        setIsLoadingLabel(true);
-        setErrorLabel(null);
-        const data = await variants[variant](body);
-
-        if (isMounted) {
-          setLabel(data);
-        }
-
-      } catch (err) {
-        if (isMounted) {
-          setErrorLabel(err?.message || 'Error al cargar las etiquetas');
-        }
-      } finally {
-        if (isMounted) {
-          setIsLoadingLabel(false);
-        }
-      }
-    })()
-
-    return () => {
-      isMounted = false;
-    };
+    if (variant !== 'none') {
+      fetchLabels();
+    }
   }, []);
 
+  const createLabel = async (data) => {
+    return await labels.labelsPost(data);
+  };
+
+  const updateLabel = async (id, data) => {
+    return await labels.labelsPut({ id, data });
+  };
+
+  const deleteLabel = async (id) => {
+    return await labels.labelsDelete({ id });
+  };
+
   return {
-    label,
-    isLoadingLabel,
-    errorLabel,
+    labels: data,
+    loading,
+    error,
+    refreshLabels: fetchLabels,
+    createLabel,
+    updateLabel,
+    deleteLabel
   };
 }

@@ -19,32 +19,32 @@ export default function ProfileHeader({ user }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [isNotificationOpen, setIsNotificationOpen] = useState(false);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
-    const [notifications, setNotifications] = useState([]);
-    const { notifications: getNotifications } = useNotifications();
-    const { notifications: readNotification } = useNotifications('notificationReadPut');
-    const { notifications: readAllNotifications } = useNotifications('notificationReadAllPut');
+    const { notifications, refreshNotifications } = useNotifications();
     const { auth: logout } = useAuth('logout');
     const router = useRouter();
 
     useSocket();
 
     const toggleNotifications = async () => {
-        setIsNotificationOpen(!isNotificationOpen);
-        const res = await getNotifications();
-        if (res.error) return setNotifications([]);
-        setNotifications(res.data);
+        const nextState = !isNotificationOpen;
+        setIsNotificationOpen(nextState);
+        if (nextState) {
+            await refreshNotifications();
+        }
     };
 
     const onRead = async (notificationId) => {
-        const res = await readNotification({ notificationId });
-        if (res.error) return;
-        toggleNotifications();
+        const res = await refreshNotifications({ notificationId }, 'notificationReadPut');
+        if (res && !res.error) {
+            await refreshNotifications();
+        }
     };
 
     const onReadAll = async () => {
-        const res = await readAllNotifications();
-        if (res.error) return;
-        toggleNotifications();
+        const res = await refreshNotifications(null, 'notificationReadAllPut');
+        if (res && !res.error) {
+            await refreshNotifications();
+        }
     };
 
     return (

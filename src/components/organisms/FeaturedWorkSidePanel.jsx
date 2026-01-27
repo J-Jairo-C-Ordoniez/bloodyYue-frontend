@@ -2,6 +2,12 @@ import Image from "../atoms/Image"
 import Typography from "../atoms/Typography"
 
 export default function FeaturedWorkSidePanel({ post }) {
+    if (!post || Array.isArray(post) || !post.content) return (
+        <section className="hidden lg:flex relative w-1/2 h-full bg-[#0B0B0E] items-center justify-center p-12 overflow-hidden border-r border-zinc-800">
+            <Typography variant="h1" className="text-zinc-800 animate-pulse text-6xl font-black">BloodyYue</Typography>
+        </section>
+    );
+
     return (
         <section className="hidden lg:flex relative w-1/2 h-full bg-black/50 items-end p-12 overflow-hidden">
             <div className="absolute inset-0 w-full h-full opacity-80">

@@ -1,8 +1,8 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/molecules/Card"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/molecules/Table"
 import { format } from "date-fns"
 import salesApi from "../../api/sales"
 import Label from "../atoms/Label"
@@ -13,7 +13,7 @@ export default function RecentSalesSummary() {
 
     useEffect(() => {
         const fetchSales = async () => {
-            const response = await salesApi.salesGetLisGet({id: 0})
+            const response = await salesApi.salesGetLisGet({ id: 0 })
             if (!response.error) {
                 setSales(response.data)
             }
@@ -67,7 +67,7 @@ export default function RecentSalesSummary() {
                                         {format(new Date(sale.createdAt), 'MMM dd')}
                                     </TableCell>
                                     <TableCell className="flex justify-end items-center">
-                                        <Label variant="default" color={`${sale.status === 'paid' ? '#009900' : sale.status === 'cancelled' ? '#FF0000' :'#FFFF00'}`}>
+                                        <Label variant="default" color={`${sale.status === 'paid' ? '#009900' : sale.status === 'cancelled' ? '#FF0000' : '#FFFF00'}`}>
                                             {sale.status}
                                         </Label>
                                     </TableCell>

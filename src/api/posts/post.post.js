@@ -5,7 +5,15 @@ export default async function postPost({ data }) {
         auth: true,
         options: {
             method: 'POST',
-            body: JSON.stringify(data),
+            body: JSON.stringify({
+                post: {
+                    title: data.title,
+                    description: data.description,
+                    content: data.content,
+                    typePost: data.typePost,
+                },
+                labels: data.labels
+            }),
         }
     });
 

@@ -9,19 +9,20 @@ import Video from '../atoms/Video';
 import Icon from '../atoms/Icon';
 import Typography from '../atoms/Typography';
 import likesCount from '../../utils/likesCount';
-import posts from '../../api/posts/index';
 
-export default function WorkCard({ postId, title, description, content, typePost = 'image', createdAt }) {
+export default function WorkCard({ postId, title, description, content, typePost = 'image', createdAt, labels }) {
     const [isDetailsOpen, setIsDetailsOpen] = useState(false);
     const [isAuthOpen, setIsAuthOpen] = useState(false);
-    const { reactions } = useReactions({ id: postId });
-    const [reaction, setReaction] = useState(likesCount(reactions?.data));
-    const [isLiked, setIsLiked] = useState(reactions?.data?.some(r => r.userId === useAuthStore.getState().user?.userId) || false);
+    const { reactions: reactionsData, addReaction, removeReaction } = useReactions({ id: postId });
+    const [reaction, setReaction] = useState(0);
+    const [isLiked, setIsLiked] = useState(false);
 
     useEffect(() => {
-        setReaction(likesCount(reactions?.data));
-        setIsLiked(reactions?.data?.some(r => r.userId === useAuthStore.getState().user?.userId) || false);
-    }, [reactions]);
+        if (reactionsData) {
+            setReaction(likesCount(reactionsData));
+            setIsLiked(reactionsData.some(r => r.userId === useAuthStore.getState().user?.userId) || false);
+        }
+    }, [reactionsData]);
 
     const handleLike = async () => {
         const user = useAuthStore.getState().user;
@@ -31,17 +32,15 @@ export default function WorkCard({ postId, title, description, content, typePost
         }
 
         if (isLiked) {
-            let res = await posts.postReactionsDelete({ postId })
+            let res = await removeReaction({ postId })
             if (res.error) return
             setIsLiked(false)
-            return setReaction(reaction - 1)
-        }
-
-        if (!isLiked) {
-            let res = await posts.postReactionsPost({ postId })
+            setReaction(prev => prev - 1)
+        } else {
+            let res = await addReaction({ postId })
             if (res.error) return
             setIsLiked(true)
-            return setReaction(reaction + 1)
+            setReaction(prev => prev + 1)
         }
     };
 
@@ -123,7 +122,18 @@ export default function WorkCard({ postId, title, description, content, typePost
                 likes={reaction}
                 isLiked={isLiked}
                 onLike={handleLike}
-                postId={postId}
+                postData={
+                    {
+                        postId,
+                        title,
+                        typePost,
+                        description,
+                        labels,
+                        isLiked,
+                        content,
+                        createdAt,
+                    }
+                }
             />
 
             <AuthRequiredDialog

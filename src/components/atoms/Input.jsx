@@ -1,68 +1,25 @@
-import React, { useState } from 'react';
-import Icon from './Icon';
+import * as React from "react"
 
-export default function Input({
-    type = 'text',
-    placeholder,
-    label,
-    icon,
-    id,
-    name,
-    value,
-    onChange,
-    className = '',
-    disabled = false
+import { cn } from "@/lib/utils"
+
+function Input({
+  className,
+  type,
+  ...props
 }) {
-    const [showPassword, setShowPassword] = useState(false);
-    const isPassword = type === 'password';
-    const inputType = isPassword ? (showPassword ? 'text' : 'password') : type;
-
-    return (
-        <div className={`flex flex-col gap-1.5 w-full ${className}`}>
-            {label && (
-                <label htmlFor={id} className="text-sm font-medium text-gray-200">
-                    {label}
-                </label>
-            )}
-            <div className="relative group">
-                {icon && (
-                    <div className="absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none">
-                        <Icon name={icon} size={18} color="#6B7280" />
-                    </div>
-                )}
-
-                <input
-                    type={inputType}
-                    id={id}
-                    name={name}
-                    value={value}
-                    onChange={onChange}
-                    placeholder={placeholder}
-                    required
-                    disabled={disabled}
-                    className={`
-                        w-full px-4 py-3 bg-[#1A1A1D] border border-white/10 rounded-lg 
-                        text-white placeholder-gray-500 outline-none transition-all duration-300
-                        focus:border-[#6B21A8] focus:ring-1 focus:ring-[#6B21A8]
-                        ${icon ? 'pl-10' : ''}
-                        ${isPassword ? 'pr-12' : ''}
-                    `}
-                />
-
-                {isPassword && (
-                    <button
-                        type="button"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white transition-colors"
-                    >
-                        {showPassword ? (
-                            <Icon name="EyeOff" size={18} />
-                        ) : (
-                            <Icon name="Eye" size={18} />
-                        )}
-                    </button>
-                )}
-            </div>
-        </div>
-    );
+  return (
+    <input
+      type={type}
+      data-slot="input"
+      className={cn(
+        "file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
+        "focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]",
+        "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+        className
+      )}
+      {...props} />
+  );
 }
+
+export { Input }
+export default Input 

@@ -1,11 +1,11 @@
 "use client"
 
-import {useState, useEffect, useMemo} from "react"
+import { useState, useEffect, useMemo } from "react"
 import { useIsMobile } from "../../hooks/use-mobile"
-import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "../ui/chart";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select"
-import { ToggleGroup, ToggleGroupItem } from "../ui/toggle-group"
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/molecules/Card"
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/molecules/Chart";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/molecules/Select"
+import { ToggleGroup, ToggleGroupItem } from "@/components/molecules/ToggleGroup"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 import salesApi from "../../api/sales"
 
@@ -23,11 +23,11 @@ export default function ChartAreaInteractive() {
 
   useEffect(() => {
     const fetchChartData = async () => {
-      const response = await salesApi.salesGetLisGet({id: 0})
+      const response = await salesApi.salesGetLisGet({ id: 0 })
       if (!response.error) {
         const grouped = response.data.reduce((acc, sale) => {
           if (sale.status !== 'paid') return acc
-          
+
           const date = new Date(sale.createdAt).toISOString().split('T')[0]
           acc[date] = (acc[date] || 0) + parseFloat(sale.total)
           return acc

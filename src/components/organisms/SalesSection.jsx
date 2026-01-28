@@ -75,8 +75,6 @@ export function SalesSection() {
         const response = await chatApi.chatPost({ participantId })
         if (!response.error) {
             toast.success("Chat abierto")
-            // The response body contains the chatId (new or existing)
-            // Based on api/chat/chat.post.js, it returns response.body in .data
             const chatId = response.data?.chatId || response.data
             const participantName = response.data?.participantName || "Cliente"
             openChat(chatId, participantName)

@@ -11,7 +11,7 @@ import Loader from "./Loader";
 
 export default function ChatWindow() {
     const { activeChatId, minimized, toggleMinimize, closeChat, participantName } = useChatStore();
-    const { user } = useAuthStore();
+    const user = useAuthStore.getState().user;
     const { messages, loading, sendMessage } = useChatRoom(activeChatId);
     const [inputValue, setInputValue] = useState("");
     const scrollRef = useRef(null);
@@ -33,7 +33,7 @@ export default function ChatWindow() {
     return (
         <div className={`
             flex flex-col bg-zinc-950 border border-zinc-800 rounded-t-2xl shadow-2xl transition-all duration-300
-            w-80 sm:w-96 overflow-hidden
+            w-80 sm:w-96 overflow-hidden scrollbar
             ${minimized ? 'h-14' : 'h-[500px]'}
         `}>
             <header className="flex items-center justify-between px-4 py-3 bg-zinc-900 border-b border-zinc-800 cursor-pointer" onClick={toggleMinimize}>
@@ -61,11 +61,11 @@ export default function ChatWindow() {
                                 <Loader size="sm" />
                             </div>
                         ) : (
-                            messages.map((msg, idx) => (
+                            messages.map((msg) => (
                                 <ChatMessage
-                                    key={idx}
+                                    key={msg.messageId}
                                     message={msg}
-                                    isOwn={String(msg.senderId) === String(user?.userId)}
+                                    isOwn={msg.senderId === user.userId}
                                 />
                             ))
                         )}

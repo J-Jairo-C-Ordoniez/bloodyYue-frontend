@@ -13,7 +13,7 @@ export default function ChatMessage({ message, isOwn }) {
                     ? "bg-purple-600 text-white rounded-tr-none"
                     : "bg-zinc-800 text-zinc-200 rounded-tl-none border border-zinc-700"
             )}>
-                <Typography variant="body" className="text-sm leading-relaxed">
+                <Typography variant="body" className="text-sm leading-relaxed text-zinc-200">
                     {message.content}
                 </Typography>
                 <div className={cn(

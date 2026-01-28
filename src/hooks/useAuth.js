@@ -67,7 +67,7 @@ export default function useAuth(variant = 'loginPost') {
       setLoading(false);
     }
   }, []);
-  
+
   const login = useCallback(async (postData) => {
     setLoading(true);
     try {
@@ -94,6 +94,19 @@ export default function useAuth(variant = 'loginPost') {
     }
   }, []);
 
+  const logout = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await auth.logoutPost();
+      if (res.error) setError(res.message);
+      return res;
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   return {
     auth: data,
     loading,
@@ -102,6 +115,7 @@ export default function useAuth(variant = 'loginPost') {
     codeGet,
     resetPassword,
     login,
-    refreshToken
+    refreshToken,
+    logout
   };
 }

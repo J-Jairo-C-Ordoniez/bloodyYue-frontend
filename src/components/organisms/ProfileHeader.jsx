@@ -15,12 +15,13 @@ import { useRouter } from 'next/navigation';
 import ProfileDropdown from '../molecules/ProfileDropdown';
 import useAuthStore from '../../store/auth.store';
 
-export default function ProfileHeader({ user }) {
+export default function ProfileHeader() {
     const [searchQuery, setSearchQuery] = useState('');
     const [isNotificationOpen, setIsNotificationOpen] = useState(false);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
+    const { user, clearAuth } = useAuthStore();
     const { notifications, refreshNotifications } = useNotifications();
-    const { auth: logout } = useAuth('logout');
+    const { logout } = useAuth('none');
     const router = useRouter();
 
     useSocket();

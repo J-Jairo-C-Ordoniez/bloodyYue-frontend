@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import cart from '../api/cart/index';
 
 export default function useCart(body = null, variant = 'itemsGet') {

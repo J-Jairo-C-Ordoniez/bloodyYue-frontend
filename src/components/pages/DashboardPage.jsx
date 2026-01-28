@@ -44,8 +44,6 @@ export default function DashboardPage() {
                 return <PostsManager />;
             case 'sales-history':
                 return <SalesSection />;
-            case 'chats':
-                return <div className="p-4 text-white font-medium">Chat Messaging Interface (Coming Soon)</div>;
             default:
                 return (
                     <div className="flex flex-1 flex-col gap-4 p-4 pt-0">

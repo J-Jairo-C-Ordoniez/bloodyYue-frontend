@@ -55,7 +55,6 @@ export default function ChatWindow() {
 
             {!minimized && (
                 <>
-                    {/* Messages Area */}
                     <div ref={scrollRef} className="flex-1 overflow-y-auto p-4 space-y-2 bg-zinc-950/50">
                         {loading && messages.length === 0 ? (
                             <div className="h-full flex items-center justify-center">
@@ -66,7 +65,7 @@ export default function ChatWindow() {
                                 <ChatMessage
                                     key={idx}
                                     message={msg}
-                                    isOwn={String(msg.userId) === String(user?.userId)}
+                                    isOwn={String(msg.senderId) === String(user?.userId)}
                                 />
                             ))
                         )}

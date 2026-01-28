@@ -7,10 +7,12 @@ import ErrorCard from '../molecules/ErrorCard';
 import MessageItem from '../molecules/MessageItem';
 import useCart from '../../hooks/useCart';
 import useChats from '../../hooks/useChats';
+import { useChatStore } from '../../store/chat.store';
 
 export default function ProfileSidebarRight({ setActiveTab }) {
-    const { cartItems, isLoadingCartItems, errorCartItems } = useCart();
-    const { chats, isLoadingChats, errorChats } = useChats();
+    const { openChat } = useChatStore();
+    const { cartItems, loading: isLoadingCartItems, error: errorCartItems } = useCart();
+    const { chats, loading: isLoadingChats, error: errorChats } = useChats();
 
     return (
         <aside className="w-80 sticky top-24">
@@ -93,6 +95,7 @@ export default function ProfileSidebarRight({ setActiveTab }) {
                                 user={chat.name}
                                 avatar={chat.avatar}
                                 isOnline={false}
+                                onClick={() => openChat(chat.chatId, chat.name)}
                             />
                         ))
                     )}

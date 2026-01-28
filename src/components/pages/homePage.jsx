@@ -12,8 +12,11 @@ import Image from '../atoms/Image';
 import Button from '../atoms/Button';
 import Typography from '../atoms/Typography';
 import Icon from '../atoms/Icon';
+import ProfileSidebarRight from '../organisms/ProfileSidebarRight';
+import useAuthStore from '../../store/auth.store';
 
-export default function HomePage({ setError, user, initialTab = 'home' }) {
+export default function HomePage({ setError, initialTab = 'home' }) {
+    const { user } = useAuthStore();
     const [viewMode, setViewMode] = useState('grid');
     const [activeTab, setActiveTab] = useState(initialTab);
 
@@ -27,7 +30,7 @@ export default function HomePage({ setError, user, initialTab = 'home' }) {
 
     const renderMainContent = () => {
         switch (activeTab) {
-            case 'home':
+            /* case 'home':
                 return <ProfileFeed viewMode={viewMode} setViewMode={setViewMode} />;
             case 'purchases':
                 return <PurchasesList />;
@@ -38,7 +41,7 @@ export default function HomePage({ setError, user, initialTab = 'home' }) {
             case 'cart':
                 return <CartSection />;
             default:
-                return <ProfileFeed />;
+                return <ProfileFeed />; */
         }
     };
 
@@ -56,8 +59,8 @@ export default function HomePage({ setError, user, initialTab = 'home' }) {
                                     : <Icon name="User" size={100} className="text-zinc-600" />
                                 }
                             </div>
-                            <Button 
-                                size='small' 
+                            <Button
+                                size='small'
                                 variant="secondary"
                                 className="absolute bottom-2 right-2 z-20 rounded-full bg-black/50 backdrop-blur text-white hover:bg-black/70 opacity-0 group-hover:opacity-100 transition-all">
                                 <Icon name="Camera" size={24} />
@@ -79,8 +82,14 @@ export default function HomePage({ setError, user, initialTab = 'home' }) {
             <main className="container mx-auto px-6 mt-16">
                 <ProfileTabs activeTab={activeTab} onTabChange={setActiveTab} tabs={tabs} />
 
-                <div className="min-h-[500px] animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    {renderMainContent()}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mt-8">
+                    <div className="lg:col-span-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        {renderMainContent()}
+                    </div>
+
+                    <div className="hidden lg:block lg:col-span-4">
+                        <ProfileSidebarRight setActiveTab={setActiveTab} />
+                    </div>
                 </div>
             </main>
         </div>

@@ -58,13 +58,12 @@ export default function useChatRoom(chatId) {
         const messageData = {
             chatId,
             content,
-            userId: user?.userId, // Include sender ID for correct styling
+            senderId: user?.userId,
             createdAt: new Date().toISOString()
         };
 
         socket.emit('sendMessage', { chatId, content });
 
-        // Optimistic update: add to state immediately
         setMessages((prev) => [...prev, messageData]);
     };
 

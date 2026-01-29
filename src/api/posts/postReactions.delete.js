@@ -8,7 +8,6 @@ export default async function postReactionsDelete({ postId }) {
         },
     });
 
-    console.log(data)
 
     if (data.error) {
         return {

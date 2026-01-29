@@ -1,11 +1,11 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import labelsApi from "@/api/labels"
+import useLabels from "../../hooks/useLabels"
 import Typography from "../atoms/Typography"
-import { Button } from "@/components/atoms/Button"
-import { Input } from "@/components/atoms/Input"
-import { Label } from "@/components/atoms/Label"
+import { Button } from "../atoms/Button"
+import { Input } from "../atoms/Input"
+import { Label } from "../atoms/Label"
 import {
     Table,
     TableBody,
@@ -13,53 +13,37 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/molecules/Table"
+} from "../molecules/Table"
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/molecules/Dialog"
+} from "../molecules/Dialog"
 import { toast } from "sonner"
-import LoaderCard from "@/components/molecules/LoaderCard"
+import LoaderCard from "../molecules/LoaderCard"
 import { IconPlus, IconTrash, IconPencil } from "@tabler/icons-react"
 
 export default function LabelsSection() {
-    const [labels, setLabels] = useState([])
-    const [loading, setLoading] = useState(true)
+    const { labels, loading, createLabel, updateLabel, deleteLabel, refreshLabels } = useLabels()
     const [isEditing, setIsEditing] = useState(false)
     const [currentLabel, setCurrentLabel] = useState({ name: "", color: "#000000" })
-
-    useEffect(() => {
-        fetchLabels()
-    }, [])
-
-    const fetchLabels = async () => {
-        setLoading(true)
-        const response = await labelsApi.labelsGet()
-        if (!response.error) {
-            setLabels(response.data)
-        } else {
-            toast.error("Failed to load labels: " + response.message)
-        }
-        setLoading(false)
-    }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
         let response;
         if (isEditing) {
-            response = await labelsApi.labelsPut({ id: currentLabel.labelId, data: currentLabel })
+            response = await updateLabel(currentLabel.labelId, currentLabel)
         } else {
-            response = await labelsApi.labelsPost({ name: currentLabel.name, color: currentLabel.color })
+            response = await createLabel({ name: currentLabel.name, color: currentLabel.color })
         }
 
         if (!response.error) {
             toast.success(isEditing ? "Label updated" : "Label created")
             setCurrentLabel({ name: "", color: "#000000" })
             setIsEditing(false)
-            fetchLabels()
+            refreshLabels()
         } else {
             toast.error("Action failed: " + response.message)
         }
@@ -71,10 +55,10 @@ export default function LabelsSection() {
     }
 
     const handleDelete = async (id) => {
-        const response = await labelsApi.labelsDelete({ id })
+        const response = await deleteLabel(id)
         if (!response.error) {
             toast.success("Label deleted")
-            fetchLabels()
+            refreshLabels()
         } else {
             toast.error("Delete failed: " + response.message)
         }

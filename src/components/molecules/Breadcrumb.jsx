@@ -2,7 +2,7 @@ import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { ChevronRight, MoreHorizontal } from "lucide-react"
 
-import { cn } from "@/lib/utils"
+import { cn } from "../../lib/utils"
 
 function Breadcrumb({
   ...props
@@ -18,7 +18,7 @@ function BreadcrumbList({
     <ol
       data-slot="breadcrumb-list"
       className={cn(
-        "text-muted-foreground flex flex-wrap items-center gap-1.5 text-sm break-words sm:gap-2.5",
+        "text-muted-foreground flex flex-wrap items-center gap-1.5 text-sm wrap-break-words sm:gap-2.5",
         className
       )}
       {...props} />
@@ -62,7 +62,7 @@ function BreadcrumbPage({
       role="link"
       aria-disabled="true"
       aria-current="page"
-      className={cn("text-foreground font-normal", className)}
+      className={cn("wrap-break-word font-normal text-foreground", className)}
       {...props} />
   );
 }

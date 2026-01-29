@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react';
-import labels from '../api/labels/index';
+import { useEffect, useState, useCallback } from 'react';
+import labels from '@/api/labels/index';
 
 export default function useLabels(body = null, variant = 'labelsGet') {
   const [data, setData] = useState(variant === 'labelsGet' ? [] : null);

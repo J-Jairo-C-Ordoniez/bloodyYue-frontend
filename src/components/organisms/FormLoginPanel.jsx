@@ -49,11 +49,9 @@ export default function FormLoginPanel({ formData, handleChange, handleSubmit, e
                 <article className="grid grid-cols-2 gap-4">
                     <SocialButton
                         provider="discord"
-                        onClick={() => console.log('Discord login')}
                     />
                     <SocialButton
                         provider="google"
-                        onClick={() => console.log('Google login')}
                     />
                 </article>
 

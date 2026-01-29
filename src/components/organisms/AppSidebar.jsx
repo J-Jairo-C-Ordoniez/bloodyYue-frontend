@@ -5,6 +5,7 @@ import NavClouds from "@/components/molecules/NavClouds"
 import NavMain from "@/components/molecules/NavMain"
 import NavSecondary from "@/components/molecules/NavSecondary"
 import NavUser from "@/components/molecules/NavUser"
+import useAuthStore from "@/store/auth.store"
 import {
   Sidebar,
   SidebarContent,
@@ -28,11 +29,6 @@ import {
 } from "@tabler/icons-react"
 
 const data = {
-  user: {
-    name: "Admin User",
-    email: "admin@bloodyyue.com",
-    avatar: "/avatars/admin.jpg",
-  },
   navMain: [
     {
       title: "Dashboard",
@@ -78,18 +74,14 @@ const data = {
       ],
     },
     {
-      title: "Ventas y chat",
+      title: "Ventas",
       icon: IconReport,
       url: "sales",
       items: [
         {
           title: "Historial de ventas",
           url: "sales-history",
-        },
-        {
-          title: "Chats activos",
-          url: "chats",
-        },
+        }
       ],
     },
   ],
@@ -98,16 +90,12 @@ const data = {
       title: "Ayuda",
       url: "#",
       icon: IconHelp,
-    },
-    {
-      title: "Buscar",
-      url: "#",
-      icon: IconSearch,
-    },
+    }
   ],
 }
 
 export default function AppSidebar({ onSelect }) {
+  const { user } = useAuthStore.getState();
   return (
     <Sidebar collapsible="offcanvas" className="bg-[#0B0B0E] border-r-0">
       <SidebarHeader>
@@ -127,7 +115,7 @@ export default function AppSidebar({ onSelect }) {
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>
   );

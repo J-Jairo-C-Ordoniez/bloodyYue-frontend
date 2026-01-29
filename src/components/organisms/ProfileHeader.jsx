@@ -19,7 +19,7 @@ export default function ProfileHeader() {
     const [searchQuery, setSearchQuery] = useState('');
     const [isNotificationOpen, setIsNotificationOpen] = useState(false);
     const [isProfileOpen, setIsProfileOpen] = useState(false);
-    const { user, clearAuth } = useAuthStore();
+    const { user } = useAuthStore.getState();
     const { notifications, refreshNotifications } = useNotifications();
     const { logout } = useAuth('none');
     const router = useRouter();

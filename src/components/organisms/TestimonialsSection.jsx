@@ -30,15 +30,21 @@ export default function TestimonialsSection() {
                         <ErrorCard message={error} variant="default" />
                     </div>
                 )}
-                {!loading && !error && testimonies && testimonies.map((item, index) => (
-                    <div key={item.id || index} className={index === 1 || index === 4 || index === 5 ? "md:col-span-2" : "md:col-span-1"}>
-                        <TestimonyCard
-                            testimonyId={item.id}
-                            userId={item.userId}
-                            message={item.message}
-                        />
-                    </div>
-                ))}
+                {!loading && !error && testimonies && testimonies.map((item, index) => {
+                    const isWide = index % 5 === 1 || index % 5 === 4;
+                    return (
+                        <div
+                            key={item.id || index}
+                            className={`transition-all duration-500 delay-[${index * 100}ms] ${isWide ? "md:col-span-2" : "md:col-span-1"}`}
+                        >
+                            <TestimonyCard
+                                testimonyId={item.id}
+                                userId={item.userId}
+                                message={item.message}
+                            />
+                        </div>
+                    );
+                })}
             </div>
         </section>
     );

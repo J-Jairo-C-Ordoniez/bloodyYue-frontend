@@ -1,5 +1,5 @@
-import { Separator } from "@/components/atoms/Separator"
-import { SidebarTrigger } from "@/components/molecules/Sidebar"
+import { Separator } from "../atoms/Separator"
+import { SidebarTrigger } from "../molecules/Sidebar"
 import Typography from "../atoms/Typography";
 
 export default function SiteHeader() {

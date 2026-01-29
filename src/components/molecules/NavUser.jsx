@@ -1,10 +1,10 @@
 "use client"
 
+import Link from "../atoms/Link"
+import Button from "../atoms/Button"
+import Icon from "../atoms/Icon"
 import {
-  IconCreditCard,
   IconDotsVertical,
-  IconLogout,
-  IconNotification,
   IconUserCircle,
 } from "@tabler/icons-react"
 
@@ -28,11 +28,14 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/molecules/Sidebar"
+import { useRouter } from "next/navigation"
+import useAuthStore from "../../store/auth.store"
+import useAuth from "../../hooks/useAuth"
 
-export default function NavUser({
-  user
-}) {
+export default function NavUser({ user }) {
   const { isMobile } = useSidebar()
+  const { logout } = useAuth('none');
+  const router = useRouter()
 
   return (
     <SidebarMenu>
@@ -77,22 +80,26 @@ export default function NavUser({
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
               <DropdownMenuItem>
-                <IconUserCircle />
-                Account
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <IconCreditCard />
-                Billing
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <IconNotification />
-                Notifications
+                <Link href="/profile/home">
+                  <IconUserCircle />
+                  Cuenta
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <IconLogout />
-              Log out
+              <Button
+                onClick={async () => {
+                  await logout();
+                  useAuthStore.getState().clearAuth();
+                  router.push('/');
+                }}
+                variant='default'
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-zinc-400 hover:text-red-400 hover:bg-red-500/10 transition-all group text-left"
+              >
+                <Icon name="LogOut" size={18} />
+                <span className="font-medium">Cerrar Sesión</span>
+              </Button>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

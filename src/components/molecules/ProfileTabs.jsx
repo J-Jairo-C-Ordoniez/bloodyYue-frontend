@@ -2,11 +2,11 @@ import Button from "../atoms/Button";
 
 export default function ProfileTabs({ activeTab, onTabChange, tabs }) {
     return (
-        <div className="flex items-center gap-8 border-b border-zinc-800 mb-8 sticky top-[73px] bg-[#0B0B0E]/80 backdrop-blur-md z-40 pt-4">
+        <div className="flex items-center gap-8 border-b border-zinc-800 mb-8 pt-4">
             {tabs.map((tab) => (
                 <Button
                     key={tab.id}
-                    variant="default"
+                    variant="transparent"
                     size="small"
                     onClick={() => onTabChange(tab.id)}
                     className={`pb-4 text-sm font-medium transition-all relative ${activeTab === tab.id

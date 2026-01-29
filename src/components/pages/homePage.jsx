@@ -15,7 +15,7 @@ import Icon from '../atoms/Icon';
 import ProfileSidebarRight from '../organisms/ProfileSidebarRight';
 import useAuthStore from '../../store/auth.store';
 
-export default function HomePage({ setError, initialTab = 'home' }) {
+export default function HomePage({ initialTab = 'home' }) {
     const { user } = useAuthStore();
     const [viewMode, setViewMode] = useState('grid');
     const [activeTab, setActiveTab] = useState(initialTab);
@@ -30,7 +30,7 @@ export default function HomePage({ setError, initialTab = 'home' }) {
 
     const renderMainContent = () => {
         switch (activeTab) {
-            /* case 'home':
+            case 'home':
                 return <ProfileFeed viewMode={viewMode} setViewMode={setViewMode} />;
             case 'purchases':
                 return <PurchasesList />;
@@ -41,7 +41,7 @@ export default function HomePage({ setError, initialTab = 'home' }) {
             case 'cart':
                 return <CartSection />;
             default:
-                return <ProfileFeed />; */
+                return <ProfileFeed />;
         }
     };
 

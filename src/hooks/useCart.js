@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import cart from '../api/cart/index';
 
-export default function useCart(body = null, variant = 'itemsGet') {
+export default function useCart(body = null, variant = 'cartItemsGet') {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -47,11 +47,15 @@ export default function useCart(body = null, variant = 'itemsGet') {
     return await cart.cartItemPut({ id, data });
   }
 
+  const refreshCart = async () => {
+    return await fetchCart();
+  }
+
   return {
     cartItems: data,
     loading,
     error,
-    refreshCart: fetchCart,
+    refreshCart,
     discardItem,
     addItem,
     updateItem

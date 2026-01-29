@@ -11,12 +11,12 @@ import CommissionCard from '../molecules/CommissionCard';
 import formatDataHomeSection from '../../utils/formatDataHomeSection';
 
 export default function ProfileFeed() {
-    const { post, isLoadingPost, errorPost } = usePosts({ id: 0 }, 'list');
-    const { commission, isLoadingCommission, errorCommission } = useCommissions({ id: 0 }, 'list');
-    const allContent = useMemo(() => formatDataHomeSection(post, commission), [post?.data, commission?.data]);
+    const { posts, loading, error } = usePosts();
+    const { commissions, loading: isLoadingCommission, error: errorCommission } = useCommissions();
+    const allContent = useMemo(() => formatDataHomeSection(posts, commissions), [posts, commissions]);
 
-    const isLoading = isLoadingPost || isLoadingCommission;
-    const hasError = errorPost || errorCommission || post?.error || commission?.error;
+    const isLoading = loading || isLoadingCommission;
+    const hasError = error || errorCommission;
 
     return (
         <section className="flex flex-col space-y-6 w-full">

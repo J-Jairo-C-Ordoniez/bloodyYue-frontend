@@ -11,8 +11,13 @@ import { useChatStore } from '../../store/chat.store';
 
 export default function ProfileSidebarRight({ setActiveTab }) {
     const { openChat } = useChatStore();
-    const { cartItems, loading: isLoadingCartItems, error: errorCartItems } = useCart();
+    const { cartItems, loading: isLoadingCartItems, error: errorCartItems, discardItem, refreshCart } = useCart();
     const { chats, loading: isLoadingChats, error: errorChats } = useChats();
+
+    const handleDiscard = async (cartItemId) => {
+        await discardItem(cartItemId);
+        await refreshCart();
+    };
 
     return (
         <aside className="w-80 sticky top-24">
@@ -28,7 +33,7 @@ export default function ProfileSidebarRight({ setActiveTab }) {
                         variant="ghost"
                         color='#FF00FF'
                     >
-                        {cartItems?.data?.length || 0} Items
+                        {cartItems?.filter(cartItem => cartItem.status === 'selected').length || 0} Items
                     </Label>
                 </header>
 
@@ -45,15 +50,23 @@ export default function ProfileSidebarRight({ setActiveTab }) {
                             <ErrorCard message={errorCartItems || 'No hay items en el carrito'} />
                         </div>
                     )}
-                    {!isLoadingCartItems && !errorCartItems && cartItems?.data && cartItems?.data?.length > 0 && cartItems?.data?.map((cartItem) => (
-                        <CartItemSmall
-                            key={cartItem.cartItemId}
-                            id={cartItem.cartItemId}
-                            commissionId={cartItem.commissionId}
-                            quantity={cartItem.quantity}
-                            status={cartItem.status}
-                            priceAtMoment={cartItem.priceAtMoment}
-                        />
+
+                    {cartItems && cartItems?.length === 0 && (
+                        <Typography variant="body" className="text-sm text-zinc-500">No hay items en el carrito</Typography>
+                    )}
+
+                    {cartItems && cartItems?.length > 0 && cartItems?.map((cartItem) => (
+                        cartItem.status === 'selected' && (
+                            <CartItemSmall
+                                key={cartItem.cartItemId}
+                                id={cartItem.cartItemId}
+                                commissionId={cartItem.commissionId}
+                                quantity={cartItem.quantity}
+                                status={cartItem.status}
+                                priceAtMoment={cartItem.priceAtMoment}
+                                onDiscard={handleDiscard}
+                            />
+                        )
                     ))}
                 </article>
 
@@ -76,7 +89,7 @@ export default function ProfileSidebarRight({ setActiveTab }) {
                 </Button>
             </section>
 
-            <section className='mt-80'>
+            <section className='mt-4'>
                 <div className="flex items-center justify-between px-1 mb-4">
                     <Typography variant="subtitle" className="text-sm font-bold text-zinc-100">Chats</Typography>
                 </div>

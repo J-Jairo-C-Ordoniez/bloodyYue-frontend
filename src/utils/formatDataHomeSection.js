@@ -1,6 +1,6 @@
 export default function formatDataHomeSection(post, commission) {
     const filterData = (data, type) => {
-        const rta = (data?.data || []).map(p => {
+        const rta = (data || []).map(p => {
             return {
                 ...p,
                 feedType: type,

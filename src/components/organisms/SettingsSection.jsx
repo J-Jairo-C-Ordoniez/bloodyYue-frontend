@@ -226,13 +226,13 @@ export default function SettingsSection() {
                 </Button>
             </div>
 
-            {errors && (
+            {/* {errors && (
                 <article className="space-y-1">
                     <Typography variant="error">
                         {errors}
                     </Typography>
                 </article>
-            )}
+            )} */}
         </form>
     )
 }

@@ -7,21 +7,22 @@ import Button from '../atoms/Button';
 import Icon from '../atoms/Icon';
 
 export default function CartItemSmall({ id, commissionId, quantity, priceAtMoment, onDiscard }) {
-    const { commission, isLoadingCommission, errorCommission } = useCommissions({ id: commissionId }, 'getById');
+    const { commissions, isLoadingCommission, errorCommission } = useCommissions({ id: commissionId }, 'getById');
 
     return (
         <article className="flex items-center gap-3 p-2 rounded-xl hover:bg-zinc-800/50 transition-colors cursor-pointer group">
             {isLoadingCommission && <LoaderCard variant="list" />}
-            {(errorCommission || commission?.error) && (
-                <ErrorCard message={errorCommission || commission?.message || 'Error al cargar la comisión'} />
+            {(errorCommission || commissions?.error) && (
+                <ErrorCard message={errorCommission || commissions?.message || 'Error al cargar la comisión'} />
             )}
-            {commission?.data && (
+
+            {commissions && (
                 <section data-id={id} className="w-full flex items-center justify-between gap-3">
                     <article className="flex items-center gap-3">
                         <div className="h-10 w-10 relative rounded-lg overflow-hidden shrink-0 border border-zinc-800">
                             <Image
-                                src={commission?.data?.content}
-                                alt={commission?.data?.title}
+                                src={commissions?.content}
+                                alt={commissions?.title}
                                 width={40}
                                 height={40}
                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
@@ -29,7 +30,7 @@ export default function CartItemSmall({ id, commissionId, quantity, priceAtMomen
                         </div>
                         <div className="flex flex-col flex-1 min-w-0">
                             <Typography variant="body" className="text-sm font-semibold text-zinc-100 truncate uppercase">
-                                {commission?.data?.title}
+                                {commissions?.title}
                             </Typography>
                             <Typography variant="body" className="text-xs text-zinc-500 font-medium">
                                 ${priceAtMoment} - CANTIDAD: {quantity}

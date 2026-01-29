@@ -25,12 +25,15 @@ import LoaderCard from "@/components/molecules/LoaderCard"
 import { IconMessage } from "@tabler/icons-react"
 import Typography from "../atoms/Typography"
 import { useChatStore } from "@/store/chat.store"
+import useAuthStore from "@/store/auth.store"
 
 export function SalesSection() {
+    const { user } = useAuthStore()
     const { openChat } = useChatStore()
     const {
         sales,
         loading,
+        error,
         fetchSaleDetails,
         updateDetailsStatus
     } = useSales('salesGetLisGet', { id: 0 })
@@ -101,7 +104,21 @@ export function SalesSection() {
         }
     }
 
-    if (loading && !sales) return <LoaderCard title="Cargando ventas..." />
+    const salesArray = Array.isArray(sales) ? sales : []
+
+    if (loading && salesArray.length === 0) return <LoaderCard title="Cargando ventas..." />
+
+    if (error) {
+        return (
+            <div className="p-6">
+                <div className="bg-red-500/10 border border-red-500/50 p-4 rounded-xl mb-4">
+                    <Typography className="text-red-500 font-bold">Error al cargar ventas:</Typography>
+                    <Typography className="text-red-400 text-sm">{error}</Typography>
+                </div>
+                <Button onClick={() => window.location.reload()} variant="outline">Reintentar</Button>
+            </div>
+        )
+    }
 
     return (
         <div className="p-6 space-y-12">
@@ -118,7 +135,7 @@ export function SalesSection() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {sales?.map((sale) => (
+                            {salesArray.map((sale) => (
                                 <TableRow key={sale.saleId} className="hover:bg-zinc-800/30 transition-colors">
                                     <TableCell className="font-mono text-xs text-zinc-500">{sale.saleId}</TableCell>
                                     <TableCell className="font-bold text-purple-400">${sale.total}</TableCell>
@@ -126,6 +143,13 @@ export function SalesSection() {
                                     <TableCell>{getStatusBadge(sale.status)}</TableCell>
                                 </TableRow>
                             ))}
+                            {salesArray.length === 0 && !loading && (
+                                <TableRow>
+                                    <TableCell colSpan={4} className="text-center py-10 text-zinc-500">
+                                        No se encontraron ventas registradas.
+                                    </TableCell>
+                                </TableRow>
+                            )}
                         </TableBody>
                     </Table>
                 </div>
@@ -147,7 +171,7 @@ export function SalesSection() {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {sales?.filter(s => s.status === 'paid').map((sale) => {
+                            {salesArray.filter(s => s.status === 'paid').map((sale) => {
                                 const details = paidSalesDetails[sale.saleId]
                                 return (
                                     <TableRow key={`details-${sale.saleId}`} className="hover:bg-zinc-800/30 transition-colors">
@@ -175,14 +199,21 @@ export function SalesSection() {
                                             )}
                                         </TableCell>
                                         <TableCell>
-                                            <Button variant="ghost" size="icon" title="Hablar con el cliente" onClick={() => handleInitiateChat(details?.userId)} className="text-purple-400 hover:text-purple-300 hover:bg-purple-900/20">
+                                            <Button
+                                                variant="ghost"
+                                                size="icon"
+                                                title={details?.status === 'done' ? "Venta finalizada" : "Hablar con el cliente"}
+                                                onClick={() => handleInitiateChat(details?.userId)}
+                                                disabled={details?.status === 'done'}
+                                                className="text-purple-400 hover:text-purple-300 hover:bg-purple-900/20 disabled:opacity-30 disabled:grayscale"
+                                            >
                                                 <IconMessage size={18} />
                                             </Button>
                                         </TableCell>
                                     </TableRow>
                                 )
                             })}
-                            {sales?.filter(s => s.status === 'paid').length === 0 && (
+                            {salesArray.filter(s => s.status === 'paid').length === 0 && (
                                 <TableRow>
                                     <TableCell colSpan={4} className="text-center py-8 text-zinc-500 text-sm">
                                         No hay productos pagados pendientes de entrega.

@@ -52,9 +52,9 @@ export default function ProfileHeader() {
         <header className="sticky top-0 z-50 border-b bg-[#0B0B0E]/80 backdrop-blur-xl border-white/5 transition-all duration-300">
             <div className="container mx-auto px-6 h-[72px] flex justify-between items-center gap-8">
                 <Link href="/" className="group">
-                    <h1 className="text-xl font-bold text-white tracking-tighter group-hover:text-zinc-300 transition-colors">
-                        Bloody<span className="text-zinc-500 font-light">Yue</span>
-                    </h1>
+                    <Typography className="text-xl font-bold text-white tracking-tighter group-hover:text-zinc-300 transition-colors">
+                        BloodyYue
+                    </Typography>
                 </Link>
 
                 <div className="flex-1 max-w-sm">

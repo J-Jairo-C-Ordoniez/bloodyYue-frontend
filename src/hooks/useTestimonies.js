@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import users from '../api/users/index';
 
 export default function useTestimonies(body = null, variant = 'testimoniesGet') {
@@ -13,7 +13,7 @@ export default function useTestimonies(body = null, variant = 'testimoniesGet') 
     setLoading(true);
     setError(null);
     try {
-      const res = await users.testimoniesGet(activeBody);
+      const res = await users[activeVariant](activeBody);
       if (res.error) {
         setError(res.message);
       } else {

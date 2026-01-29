@@ -1,17 +1,19 @@
 'use client';
 
+import EditProfilePage from '../../../components/pages/EditProfilePage';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import useAuth from '../../../hooks/useAuth';
-import EditProfilePage from '../../../components/pages/EditProfilePage';
 import Loader from '../../../components/molecules/Loader';
 import useAuthStore from '../../../store/auth.store';
+import Error from '../../../components/molecules/Error';
 import useErrorTokenStore from '../../../store/errorToken.store';
 
 export default function EditProfile() {
     const { user, token } = useAuthStore.getState();
     const router = useRouter();
-    const { auth } = useAuth('newToken');
+    const [errors, setErrors] = useState(false);
+    const { error, refreshToken } = useAuth('none');
     const [loading, setLoading] = useState(user && token ? false : true);
 
     useErrorTokenStore.getState().setErrorToken(user && token ? false : true);
@@ -20,11 +22,14 @@ export default function EditProfile() {
         const errorToken = useErrorTokenStore.getState().errorToken;
 
         (async () => {
-            if (!errorToken) return
+            if (!errorToken || !loading) return
 
-            const res = await auth();
-            if (res?.error) {
-                return router.replace('/');
+            const res = await refreshToken();
+
+            setErrors(user?.data?.status);
+
+            if (user && user?.data?.status !== 'active') {
+                return setErrors('Su cuenta no esta activa');
             }
 
             useAuthStore.getState().setAuth(res.data.accessToken, res.data.user);
@@ -32,9 +37,13 @@ export default function EditProfile() {
             useErrorTokenStore.getState().setErrorToken(false)
             setLoading(false);
         })()
-    }, [user]);
+    }, []);
+
+    if (error) {
+        return router.replace('/');
+    }
 
     return (
-        loading ? <Loader /> : <EditProfilePage user={user} />
+        loading ? <Loader /> : errors ? <Error message={errors} typeError="Error 401" /> : <EditProfilePage user={user} />
     );
 }

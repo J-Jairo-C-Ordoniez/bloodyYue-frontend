@@ -10,9 +10,9 @@ import Button from '../atoms/Button';
 import SectionHeader from '../molecules/SectionHeader';
 
 export default function ExploreSection({ setActiveTab }) {
-    const { post, isLoadingPost } = usePosts({ id: 0 }, 'list');
-    const { commission, isLoadingCommission } = useCommissions({ id: 0 }, 'list');
-    const { testimony, isLoadingTestimonies } = useTestimonies();
+    const { posts, isLoadingPost } = usePosts();
+    const { commissions, isLoadingCommission } = useCommissions();
+    const { testimonies, isLoadingTestimonies } = useTestimonies();
 
     return (
         <div className="space-y-16 pb-20">
@@ -30,7 +30,7 @@ export default function ExploreSection({ setActiveTab }) {
                             <LoaderCard variant="card" />
                             <LoaderCard variant="card" />
                         </>
-                    ) : post?.data?.map(item => (
+                    ) : posts?.map(item => (
                         <WorkCard
                             key={'featured-' + item.postId}
                             {...item}
@@ -55,7 +55,7 @@ export default function ExploreSection({ setActiveTab }) {
                         >
                             Cargando comisiones...
                         </Typography>
-                    ) : commission?.data?.map(item => (
+                    ) : commissions?.map(item => (
                         <CommissionCard
                             key={item.commissionId}
                             status={true}
@@ -90,7 +90,7 @@ export default function ExploreSection({ setActiveTab }) {
                         >
                             Cargando testimonios...
                         </Typography>
-                    ) : testimony?.data?.map(item => (
+                    ) : testimonies?.map(item => (
                         <TestimonyCard
                             key={item.testimonyId}
                             {...item}

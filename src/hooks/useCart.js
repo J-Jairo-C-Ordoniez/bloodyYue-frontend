@@ -1,61 +1,28 @@
-import { useEffect, useState, useCallback } from 'react';
-import cart from '../api/cart/index';
+import { useEffect, useCallback } from 'react';
+import { useCartStore } from '../store/cart.store';
 
-export default function useCart(body = null, variant = 'cartItemsGet') {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const fetchCart = useCallback(async (customBody, customVariant) => {
-    const activeVariant = customVariant || variant;
-    const activeBody = customBody || body;
-
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await cart[activeVariant](activeBody);
-      if (res.error) {
-        setError(res.message);
-      } else {
-        setData(res.data);
-      }
-      return res;
-    } catch (err) {
-      const msg = err?.message || 'Error loading cart';
-      setError(msg);
-      return { error: true, message: msg };
-    } finally {
-      setLoading(false);
-    }
-  }, [body, variant]);
-
-  useEffect(() => {
-    if (variant !== 'none') {
-      fetchCart();
-    }
-  }, []);
-
-  const discardItem = async (id) => {
-    return await cart.cartItemDiscardedPatch({ id });
-  }
-
-  const addItem = async (data) => {
-    return await cart.cartItemsPost(data);
-  }
-
-  const updateItem = async (id, data) => {
-    return await cart.cartItemPut({ id, data });
-  }
-
-  const refreshCart = async () => {
-    return await fetchCart();
-  }
-
-  return {
-    cartItems: data,
+export default function useCart() {
+  const {
+    cartItems,
     loading,
     error,
-    refreshCart,
+    fetchCart,
+    addItem,
+    discardItem,
+    updateItem
+  } = useCartStore();
+
+  useEffect(() => {
+    if (cartItems.length === 0 && !loading && !error) {
+      fetchCart();
+    }
+  }, [fetchCart]);
+
+  return {
+    cartItems,
+    loading,
+    error,
+    refreshCart: fetchCart,
     discardItem,
     addItem,
     updateItem

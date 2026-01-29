@@ -16,7 +16,6 @@ export default function ProfileSidebarRight({ setActiveTab }) {
 
     const handleDiscard = async (cartItemId) => {
         await discardItem(cartItemId);
-        await refreshCart();
     };
 
     return (
@@ -74,9 +73,9 @@ export default function ProfileSidebarRight({ setActiveTab }) {
                 <div className="flex items-center justify-between mb-4 pt-4 border-t border-zinc-800">
                     <Typography variant="body" className="text-sm text-zinc-500">Total</Typography>
                     <Typography variant="body" className="text-sm font-bold text-zinc-100">
-                        ${cartItems?.data &&
-                            cartItems?.data?.length > 0 &&
-                            cartItems?.data?.reduce((total, cartItem) => total + cartItem.priceAtMoment * cartItem.quantity, 0).toFixed(2)}
+                        ${cartItems &&
+                            cartItems?.length > 0 &&
+                            cartItems?.reduce((total, cartItem) => total + cartItem.priceAtMoment * cartItem.quantity, 0).toFixed(2)}
                     </Typography>
                 </div>
 

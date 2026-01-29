@@ -6,31 +6,37 @@ import { Card, CardAction, CardDescription, CardFooter, CardHeader, CardTitle } 
 import { Badge } from "@/components/atoms/Badge"
 import useSales from "@/hooks/useSales"
 import useUsers from "@/hooks/useUsers"
+import useAuthStore from "@/store/auth.store"
 
 export default function SectionCards() {
-  const { sales, loading: salesLoading } = useSales('salesGetLisGet', { id: 0 })
+  const { user } = useAuthStore()
+  const { sales, loading: salesLoading, error: salesError } = useSales('salesGetLisGet', { id: user?.userId || 0 })
   const { userData: users, loading: usersLoading } = useUsers('usersGet')
 
   const metrics = useMemo(() => {
-    if (!sales || !users) return {
+    const salesArray = Array.isArray(sales) ? sales : []
+    const usersArray = Array.isArray(users) ? users : []
+
+    if (salesArray.length === 0 && usersArray.length === 0) return {
       totalRevenue: 0,
       newCustomers: 0,
       activeAccounts: 0,
       totalSales: 0
     }
 
-    const totalRevenue = sales.reduce((acc, s) => acc + (s.status === 'paid' ? (parseFloat(s.total)) : 0), 0)
-    const activeAccounts = users.filter(u => u.status === 'active').length
+    const totalRevenue = salesArray.reduce((acc, s) => acc + (s.status === 'paid' ? (parseFloat(s.total)) : 0), 0)
+    const activeAccounts = usersArray.filter(u => u.status === 'active').length
 
     return {
       totalRevenue: totalRevenue.toFixed(2),
-      newCustomers: users.length,
+      newCustomers: usersArray.length,
       activeAccounts: activeAccounts,
-      totalSales: sales.length
+      totalSales: salesArray.length
     }
   }, [sales, users])
 
   const isLoading = salesLoading || usersLoading
+  const hasError = salesError
 
   return (
     <div className="p-6 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4">

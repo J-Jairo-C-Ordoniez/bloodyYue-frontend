@@ -21,7 +21,7 @@ export default function ProfileDropdown({ isOpen, onClose, user, onLogout }) {
                     <div className="container flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full overflow-hidden bg-zinc-800 shrink-0">
                             {user?.avatar ? (
-                                <Image src={user.avatar} alt={user.username} width={40} height={40} className="w-full h-full object-cover" />
+                                <Image src={user.avatar} alt={user.name} width={40} height={40} className="w-full h-full object-cover" />
                             ) : (
                                 <div className="w-full h-full flex items-center justify-center">
                                     <Icon name="User" size={20} className="text-zinc-500" />

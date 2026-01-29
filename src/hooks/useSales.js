@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import salesApi from '../api/sales/index';
 
 export default function useSales(variant = 'salesMeGet', options = {}) {
@@ -6,9 +6,11 @@ export default function useSales(variant = 'salesMeGet', options = {}) {
     const [error, setError] = useState(null);
     const [data, setData] = useState(null);
 
+    const activeOptions = useMemo(() => options, [JSON.stringify(options)]);
+
     const fetchSales = useCallback(async (customVariant, customParams) => {
         const activeVariant = customVariant || variant;
-        const activeParams = customParams || options;
+        const activeParams = customParams || activeOptions;
 
         if (activeVariant === 'none') return;
 
@@ -17,7 +19,8 @@ export default function useSales(variant = 'salesMeGet', options = {}) {
         try {
             const apiFunc = salesApi[activeVariant];
             if (!apiFunc) {
-                throw new Error(`API function ${activeVariant} not found in salesApi`);
+                setError(`API function ${activeVariant} not found in salesApi`);
+                return { error: true, message: `API function ${activeVariant} not found` };
             }
 
             const res = await apiFunc(activeParams);
@@ -34,13 +37,13 @@ export default function useSales(variant = 'salesMeGet', options = {}) {
         } finally {
             setLoading(false);
         }
-    }, [variant, options]);
+    }, [variant, activeOptions]);
 
     useEffect(() => {
         if (variant !== 'none' && variant.endsWith('Get')) {
             fetchSales();
         }
-    }, []);
+    }, [fetchSales, variant]);
 
     const createSale = async (saleData) => {
         setLoading(true);

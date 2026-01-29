@@ -5,11 +5,14 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { format } from "date-fns"
 import useSales from "@/hooks/useSales"
 import Label from "../atoms/Label"
+import useAuthStore from "@/store/auth.store"
 
 export default function RecentSalesSummary() {
-    const { sales, loading } = useSales('salesGetLisGet', { id: 0 })
+    const { user } = useAuthStore()
+    const { sales, loading, error } = useSales('salesGetLisGet', { id: user?.userId || 0 })
 
-    const recentSales = sales ? sales.slice(0, 5) : []
+    const salesArray = Array.isArray(sales) ? sales : []
+    const recentSales = salesArray.slice(0, 5)
 
     return (
         <Card className="h-full">
@@ -35,9 +38,15 @@ export default function RecentSalesSummary() {
                             <TableRow>
                                 <TableCell colSpan={5} className="text-center py-4 text-xs text-muted-foreground">Cargando...</TableCell>
                             </TableRow>
+                        ) : error ? (
+                            <TableRow>
+                                <TableCell colSpan={5} className="text-center py-4 text-xs text-red-500/70 italic border border-red-500/10 bg-red-500/5">
+                                    Error: {error}
+                                </TableCell>
+                            </TableRow>
                         ) : recentSales.length === 0 ? (
                             <TableRow>
-                                <TableCell colSpan={5} className="text-center py-4 text-xs text-muted-foreground">No se encontraron ventas</TableCell>
+                                <TableCell colSpan={5} className="text-center py-4 text-xs text-muted-foreground">No hay ventas registradas</TableCell>
                             </TableRow>
                         ) : (
                             recentSales.map((sale) => (

@@ -14,9 +14,10 @@ import useUsers from '../../hooks/useUsers';
 
 export default function EditProfilePage({ user }) {
     const router = useRouter();
+    const [errors, setErrors] = useState(null)
     const [loading, setLoading] = useState(false);
-    const setAuth = useAuthStore((state) => state.setAuth);
-    const token = useAuthStore((state) => state.token);
+    const setAuth = useAuthStore.getState().setAuth;
+    const token = useAuthStore.getState().token;
     const { updateProfile, uploadMedia } = useUsers();
 
     const [formData, setFormData] = useState({
@@ -30,21 +31,10 @@ export default function EditProfilePage({ user }) {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = async () => {
-            const base64File = reader.result;
-            try {
-                const res = await uploadMedia({ file: base64File, context });
-                if (!res.error) {
-                    setFormData(prev => ({ ...prev, [context]: res.data }));
-                } else {
-                    console.error('Upload failed:', res.message);
-                }
-            } catch (error) {
-                console.error('Error uploading file:', error);
-            }
-        };
+        const res = await uploadMedia({ file, context });
+        if (!res.error) {
+            setFormData(prev => ({ ...prev, [context]: res.data }));
+        }
     };
 
     const handleChange = (e) => {
@@ -55,21 +45,13 @@ export default function EditProfilePage({ user }) {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        try {
-            const res = await updateProfile(formData);
+        const res = await updateProfile(formData);
 
-            if (!res.error) {
-                // Update local store to reflect changes immediately
-                setAuth(token, { ...user, ...formData });
-                router.push('/profile/home');
-            } else {
-                console.error(res.message);
-                // Could add toast here
-            }
-        } catch (error) {
-            console.error(error);
-        } finally {
-            setLoading(false);
+        if (res.error) {
+            setErrors(res.message);
+        } else {
+            setAuth(token, { ...user, ...formData });
+            router.push('/profile/home');
         }
     };
 
@@ -82,7 +64,6 @@ export default function EditProfilePage({ user }) {
                 </Typography>
 
                 <form onSubmit={handleSubmit} className="space-y-6 bg-zinc-900/50 p-8 rounded-2xl border border-zinc-800">
-                    {/* Poster Preview */}
                     <div className="flex flex-col gap-4">
                         <div className="w-full h-32 rounded-xl overflow-hidden bg-zinc-800 ring-2 ring-zinc-700 flex items-center justify-center relative group">
                             {formData.poster ? (
@@ -91,7 +72,7 @@ export default function EditProfilePage({ user }) {
                                 <Icon name="Image" size={40} className="text-zinc-500" />
                             )}
                             <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                                <Icon name="Upload" size={24} className="text-white" />
+                                <Icon name="Upload" size={32} className="mb-2" />
                                 <input
                                     type="file"
                                     accept="image/*"
@@ -105,7 +86,6 @@ export default function EditProfilePage({ user }) {
                         </Typography>
                     </div>
 
-                    {/* Avatar Upload */}
                     <div className="flex items-center gap-6">
                         <div className="w-24 h-24 rounded-full overflow-hidden bg-zinc-800 ring-2 ring-zinc-700 flex items-center justify-center relative group">
                             {formData.avatar ? (
@@ -114,7 +94,7 @@ export default function EditProfilePage({ user }) {
                                 <Icon name="User" size={40} className="text-zinc-500" />
                             )}
                             <label className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-                                <Icon name="Upload" size={20} className="text-white" />
+                                <Icon name="Upload" size={32} className="mb-2" />
                                 <input
                                     type="file"
                                     accept="image/*"
@@ -173,6 +153,14 @@ export default function EditProfilePage({ user }) {
                         </Button>
                     </div>
                 </form>
+
+                {errors && (
+                    <article className="space-y-1">
+                        <Typography variant="error">
+                            {errors}
+                        </Typography>
+                    </article>
+                )}
             </main>
         </div>
     );

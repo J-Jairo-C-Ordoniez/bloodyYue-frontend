@@ -12,7 +12,6 @@ import Image from '../atoms/Image';
 import Button from '../atoms/Button';
 import Typography from '../atoms/Typography';
 import Icon from '../atoms/Icon';
-import ProfileSidebarRight from '../organisms/ProfileSidebarRight';
 import useAuthStore from '../../store/auth.store';
 
 export default function HomePage({ initialTab = 'home' }) {
@@ -55,7 +54,7 @@ export default function HomePage({ initialTab = 'home' }) {
                         <div className="relative group">
                             <div className="w-40 h-40 flex items-center justify-center rounded-full overflow-hidden ring-4 ring-[#0B0B0E] bg-zinc-900 shadow-2xl relative z-10">
                                 {user?.avatar
-                                    ? <Image src={user.avatar} alt={user.username} fill className="object-cover" />
+                                    ? <Image src={user.avatar} alt={user.name} fill className="object-cover" />
                                     : <Icon name="User" size={100} className="text-zinc-600" />
                                 }
                             </div>
@@ -82,14 +81,8 @@ export default function HomePage({ initialTab = 'home' }) {
             <main className="container mx-auto px-6 mt-16">
                 <ProfileTabs activeTab={activeTab} onTabChange={setActiveTab} tabs={tabs} />
 
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mt-8">
-                    <div className="lg:col-span-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        {renderMainContent()}
-                    </div>
-
-                    <div className="hidden lg:block lg:col-span-4">
-                        <ProfileSidebarRight setActiveTab={setActiveTab} />
-                    </div>
+                <div className="lg:col-span-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
+                    {renderMainContent()}
                 </div>
             </main>
         </div>

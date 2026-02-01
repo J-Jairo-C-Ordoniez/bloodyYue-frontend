@@ -26,7 +26,7 @@ export default function AboutSection({ abaut, work, content }) {
     ]
 
     return (
-        <section className="py-20 px-4 bg-[#0B0B0E]">
+        <section id="about" className="py-20 px-4">
             <div className="container max-w-4xl mx-auto">
                 <SectionHeader
                     title="Sobre mí"

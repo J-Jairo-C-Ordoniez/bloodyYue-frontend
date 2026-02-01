@@ -7,7 +7,7 @@ export default function Menu({ variant = 'default', links }) {
     };
 
     return (
-        <nav>
+        <nav className="menu">
             <ul className={variants[variant]}>
                 {links.map((item, index) => (
                     <li key={index}>

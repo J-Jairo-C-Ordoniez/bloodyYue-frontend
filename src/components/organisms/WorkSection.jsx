@@ -8,7 +8,7 @@ export default function WorkSection() {
     const { posts, loading, error } = usePosts();
 
     return (
-        <section className="py-20 px-4 bg-[#0B0B0E]">
+        <section id="works" className="py-20 px-4">
             <div className="max-w-7xl mx-auto">
                 <SectionHeader
                     title="Mí Trabajo"

@@ -24,7 +24,7 @@ export default function LandingPage({ data }) {
         <>
             <HeaderSection title={title} />
 
-            <main data-id={settingId} className="bg-[#0B0B0E] min-h-screen">
+            <main data-id={settingId} className="min-h-screen">
                 <HeroSection
                     subtitle={subtitle}
                     abaut={abaut}

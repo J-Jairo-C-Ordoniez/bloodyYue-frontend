@@ -7,7 +7,7 @@ import ErrorCard from "../molecules/ErrorCard";
 export default function TestimonialsSection() {
     const { testimonies, loading, error } = useTestimonies();
     return (
-        <section className="py-20 px-4 md:px-8 max-w-7xl mx-auto bg-[#0B0B0E]">
+        <section className="py-20 px-4 md:px-8 max-w-7xl mx-auto">
             <header className="text-center mb-16 relative">
                 <Typography variant="h3" className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter leading-tight">
                     Que Dicen <br />

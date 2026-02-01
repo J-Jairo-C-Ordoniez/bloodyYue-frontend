@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../styles/globals.css";
 import ChatFloating from "../components/organisms/ChatFloating";
 import { Toaster } from "sonner";
+import SmoothScroll from "../components/atoms/smoothScroll";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,12 +22,12 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="es">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background`}
-      >
-        {children}
-        <ChatFloating />
-        <Toaster position="top-right" richColors />
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased bg-transparent`}>
+        <SmoothScroll>
+          {children}
+          <ChatFloating />
+          <Toaster position="top-right" richColors />
+        </SmoothScroll>
       </body>
     </html>
   );

@@ -1,3 +1,8 @@
+"use client";
+
+import { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
 import Typography from '../atoms/Typography';
 import Link from '../atoms/Link';
 import Icon from '../atoms/Icon';
@@ -9,10 +14,33 @@ import ErrorCard from '../molecules/ErrorCard';
 
 export default function HeroSection({ subtitle, abaut }) {
     const { posts, loading, error } = usePosts(null, 'random');
+    const cardRef = useRef(null);
+    const containerRef = useRef(null);
+
+    useGSAP(() => {
+        const card = cardRef.current;
+
+        gsap.from(card, {
+            scale: 0.8,
+            opacity: 0,
+            duration: 1.5,
+            ease: "elastic.out(1, 0.5)",
+            delay: 0.5
+        });
+
+        gsap.to(card, {
+            y: -15,
+            duration: 2,
+            repeat: -1,
+            yoyo: true,
+            opacity: 1,
+            ease: "sine.inOut"
+        });
+    }, { scope: containerRef });
 
     return (
-        <section className="relative min-h-[90vh] overflow-hidden py-10 px-4 flex justify-center items-center bg-[#0B0B0F]">
-            <div className="container grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <section className="relative min-h-[90vh] overflow-hidden py-10 px-4 flex justify-center items-center">
+            <div ref={containerRef} className="container grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <article className="flex flex-col gap-8">
                     <div className="relative z-10 max-w-2xl flex flex-col gap-6 animate-fade-in-up">
                         <Label variant="status" color="#00C853" className="w-fit flex items-center gap-2">
@@ -64,7 +92,7 @@ export default function HeroSection({ subtitle, abaut }) {
                 </article>
 
                 <div className="relative w-full aspect-4/5 max-w-[500px] mx-auto lg:ml-auto">
-                    <div className="rotate-4 w-full h-full rounded-3xl overflow-hidden shadow-2xl shadow-indigo-500/20 transform transition-all duration-500 hover:shadow-indigo-500/40">
+                    <div ref={cardRef} className="rotate-4 w-full h-full rounded-3xl overflow-hidden shadow-2xl shadow-indigo-500/20 transform transition-all duration-500 hover:shadow-indigo-500/40">
                         {loading && <LoaderCard />}
                         {error && (
                             <ErrorCard message={error || 'Error al cargar el post destacado'} />

@@ -1,9 +1,9 @@
 import { IconPencil, IconTrash } from "@tabler/icons-react"
-import { Button } from "@/components/atoms/Button"
+import { Button } from "../../atoms/Button"
 import {
     Dialog,
     DialogTrigger,
-} from "@/components/molecules/Dialog"
+} from "../../molecules/Dialog"
 
 export default function CommissionList({ commissions, onEdit }) {
     if (!commissions || commissions.length === 0) {

@@ -2,18 +2,25 @@ import { useState, useEffect, useCallback } from 'react';
 import roles from '../api/roles';
 
 export default function useRoles(roleId = null, variant = 'rolesGetId') {
-    const [data, setData] = useState(null);
+    const [data, setData] = useState(variant === 'rolesGet' ? [] : null);
+    const [permits, setPermits] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const fetchRole = useCallback(async (customId) => {
+    const fetchRoles = useCallback(async (customId, customVariant) => {
+        const activeVariant = customVariant || variant;
         const activeId = customId || roleId;
-        if (!activeId) return;
 
         setLoading(true);
         setError(null);
         try {
-            const response = await roles.rolesGetId({ rolId: activeId });
+            let response;
+            if (activeVariant === 'rolesGetId' && activeId) {
+                response = await roles.rolesGetId({ rolId: activeId });
+            } else {
+                response = await roles.rolesGet();
+            }
+
             if (response.error) {
                 setError(response.message);
             } else {
@@ -21,29 +28,82 @@ export default function useRoles(roleId = null, variant = 'rolesGetId') {
             }
             return response;
         } catch (err) {
-            const msg = err.message || 'An error occurred fetching the role';
+            const msg = err.message || 'An error occurred fetching roles';
             setError(msg);
             return { error: true, message: msg };
         } finally {
             setLoading(false);
         }
-    }, [roleId]);
+    }, [roleId, variant]);
 
-    useEffect(() => {
-        if (roleId) {
-            fetchRole();
+    const fetchAllPermits = useCallback(async () => {
+        setLoading(true);
+        try {
+            const res = await roles.rolesGetAllPermitsGet();
+            if (!res.error) setPermits(res.data);
+            return res;
+        } finally {
+            setLoading(false);
         }
     }, []);
 
-    const getAllRoles = async () => {
-        return await roles.rolesGet();
-    }
+    useEffect(() => {
+        if (variant === 'rolesGet' || (variant === 'rolesGetId' && roleId)) {
+            fetchRoles();
+        }
+    }, []);
+
+    const createRole = async (newRole) => {
+        setLoading(true);
+        try {
+            const res = await roles.rolesPost({ data: newRole });
+            if (!res.error) await fetchRoles();
+            return res;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const assignPermit = async (rolId, permitId) => {
+        setLoading(true);
+        try {
+            const res = await roles.rolesAssignPermitPost({ data: { rolId, permitId } });
+            return res;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const removePermit = async (rolId, permitId) => {
+        setLoading(true);
+        try {
+            const res = await roles.rolesRemovePermitDelete({ data: { rolId, permitId } });
+            return res;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchRoleDetails = useCallback(async (id) => {
+        setLoading(true);
+        try {
+            const response = await roles.rolesGetId({ rolId: id });
+            return response;
+        } finally {
+            setLoading(false);
+        }
+    }, []);
 
     return {
-        role: data,
+        roles: data,
+        permits,
         loading,
         error,
-        getRoleById: fetchRole,
-        getAllRoles
+        refreshRoles: fetchRoles,
+        fetchAllPermits,
+        fetchRoleDetails,
+        createRole,
+        assignPermit,
+        removePermit
     };
 }

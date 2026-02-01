@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import users from '../api/users/index';
-import mediaUserPost from '../api/media/mediaUser.post';
+import auth from '../api/auth/index';
 
 export default function useUsers(variant = 'meProfileGet', body = null) {
     const [data, setData] = useState(null);
@@ -49,8 +49,26 @@ export default function useUsers(variant = 'meProfileGet', body = null) {
         }
     }
 
-    const uploadMedia = async ({ file, context }) => {
-        return await mediaUserPost({ file, context });
+    const changeStatus = async (userId, status) => {
+        setLoading(true);
+        try {
+            const res = await auth.changeStatusPatch({ userId, status });
+            if (!res.error) await fetchUser();
+            return res;
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const changeRole = async (userId, rolId) => {
+        setLoading(true);
+        try {
+            const res = await auth.changeRolePost({ userId, rolId });
+            if (!res.error) await fetchUser();
+            return res;
+        } finally {
+            setLoading(false);
+        }
     }
 
     return {
@@ -59,6 +77,7 @@ export default function useUsers(variant = 'meProfileGet', body = null) {
         error,
         refreshUser: fetchUser,
         updateProfile,
-        uploadMedia,
+        changeStatus,
+        changeRole
     }
 }

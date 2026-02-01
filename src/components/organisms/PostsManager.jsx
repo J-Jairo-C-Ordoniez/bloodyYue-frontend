@@ -1,26 +1,24 @@
-"use client"
-
 import { useState, useEffect } from "react"
-import usePosts from "@/hooks/usePosts"
-import labelsApi from "@/api/labels"
-import mediaApi from "@/api/media"
+import usePosts from "../../hooks/usePosts"
+import useLabels from "../../hooks/useLabels"
+import mediaApi from "../../api/media"
 import Typography from "../atoms/Typography"
-import { Button } from "@/components/atoms/Button"
+import { Button } from "../atoms/Button"
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle,
-} from "@/components/molecules/Dialog"
+} from "../molecules/Dialog"
 import { toast } from "sonner"
-import LoaderCard from "@/components/molecules/LoaderCard"
+import LoaderCard from "../molecules/LoaderCard"
 import { IconPlus } from "@tabler/icons-react"
 import PostList from "./posts/PostList"
 import PostForm from "./posts/PostForm"
 
 export function PostsManager() {
     const { posts, loading, createPost, updatePost, deletePost } = usePosts();
-    const [labels, setLabels] = useState([])
+    const { labels } = useLabels();
     const [isEditing, setIsEditing] = useState(false)
     const [uploading, setUploading] = useState(false)
     const [isOpen, setIsOpen] = useState(false)
@@ -31,13 +29,6 @@ export function PostsManager() {
         typePost: "image",
         labels: []
     })
-
-    useEffect(() => {
-        (async () => {
-            const res = await labelsApi.labelsGet();
-            if (!res.error) setLabels(res.data);
-        })();
-    }, []);
 
     const handleFileChange = async (e) => {
         const file = e.target.files?.[0]

@@ -12,7 +12,7 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "@/components/atoms/Avatar"
+} from "../atoms/Avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,13 +21,13 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/molecules/DropdownMenu"
+} from "./DropdownMenu"
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/molecules/Sidebar"
+} from "./Sidebar"
 import { useRouter } from "next/navigation"
 import useAuthStore from "../../store/auth.store"
 import useAuth from "../../hooks/useAuth"

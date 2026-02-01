@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import useAuth from '../../../hooks/useAuth';
 import Loader from '../../../components/molecules/Loader';
 import useAuthStore from '../../../store/auth.store';
-import DashboardLoader from "@/components/pages/DashboardLoader";
+import DashboardLoader from "../../../components/pages/DashboardLoader";
 import useErrorTokenStore from '../../../store/errorToken.store';
 
 export default function Dashboard() {

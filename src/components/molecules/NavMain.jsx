@@ -6,7 +6,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from "@/components/molecules/Sidebar"
+} from "./Sidebar"
 
 export default function NavMain({
   items,

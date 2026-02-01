@@ -29,8 +29,7 @@ export default function PayPalCheckout({ amount, onSuccess, onError }) {
             const details = await actions.order.capture();
             await onSuccess(details);
         } catch (error) {
-            console.error(error);
-            if (onError) onError(error);
+            toast.error("Error al procesar el pago");
         } finally {
             setIsPending(false);
         }

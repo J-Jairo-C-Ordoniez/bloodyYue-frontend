@@ -44,11 +44,10 @@ export default async function fetchClient(endpoint, { auth = true, headers, opti
     return response.json();
   } catch (error) {
     clearTimeout(timeoutId);
-    console.error(`Fetch error for ${endpoint}:`, error);
     return {
       error: true,
       status: error.name === 'AbortError' ? 'TIMEOUT' : 'NETWORK_ERROR',
-      body: error.message
+      message: error.message
     };
   }
 }

@@ -1,12 +1,12 @@
 import { useState, useEffect, useRef } from "react";
-import { useChatStore } from "@/store/chat.store";
-import useChatRoom from "@/hooks/useChatRoom";
+import { useChatStore } from "../../store/chat.store";
+import useChatRoom from "../../hooks/useChatRoom";
 import { Button } from "../atoms/Button";
 import { Input } from "../atoms/Input";
 import { IconX, IconMinus, IconSend } from "@tabler/icons-react";
 import ChatMessage from "./ChatMessage";
 import Typography from "../atoms/Typography";
-import useAuthStore from "@/store/auth.store";
+import useAuthStore from "../../store/auth.store";
 import Loader from "./Loader";
 
 export default function ChatWindow() {

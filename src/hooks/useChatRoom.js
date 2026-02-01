@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from 'react';
-import chatApi from '@/api/chat';
-import { socket } from '@/utils/socket';
-import useAuthStore from '@/store/auth.store';
+import chatApi from '../api/chat';
+import { socket } from '../utils/socket';
+import useAuthStore from '../store/auth.store';
 
 export default function useChatRoom(chatId) {
     const [messages, setMessages] = useState([]);

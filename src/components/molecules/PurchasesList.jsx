@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from "react"
-import useSales from "@/hooks/useSales"
-import chatApi from "@/api/chat"
+import useSales from "../../hooks/useSales"
+import chatApi from "../../api/chat"
 import {
     Table,
     TableBody,
@@ -10,15 +10,15 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/molecules/Table"
-import { Badge } from "@/components/atoms/Badge"
-import { Button } from "@/components/atoms/Button"
+} from "./Table"
+import { Badge } from "../atoms/Badge"
+import { Button } from "../atoms/Button"
 import { toast } from "sonner"
-import LoaderCard from "@/components/molecules/LoaderCard"
-import ErrorCard from "@/components/molecules/ErrorCard"
+import LoaderCard from "./LoaderCard"
+import ErrorCard from "./ErrorCard"
 import { IconMessage, IconShoppingBag } from "@tabler/icons-react"
 import Typography from "../atoms/Typography"
-import { useChatStore } from "@/store/chat.store"
+import { useChatStore } from "../../store/chat.store"
 
 export default function PurchasesList() {
     const { openChat } = useChatStore()

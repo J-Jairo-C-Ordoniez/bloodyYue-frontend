@@ -71,9 +71,9 @@ export default function useChats(variant = 'list') {
         };
     }, []);
 
-    const createChat = async (userId) => {
+    const createChat = async (body) => {
         try {
-            const res = await chat.chatPost({ userId });
+            const res = await chat.chatPost(body);
             if (res && !res.error) {
                 fetchChats();
             }

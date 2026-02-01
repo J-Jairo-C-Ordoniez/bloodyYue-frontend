@@ -1,11 +1,9 @@
-"use client"
-
 import { useState, useEffect } from "react"
-import rolesApi from "@/api/roles"
+import useRoles from "../../hooks/useRoles"
 import Typography from "../atoms/Typography"
-import { Button } from "@/components/atoms/Button"
-import { Input } from "@/components/atoms/Input"
-import { Label } from "@/components/atoms/Label"
+import { Button } from "../atoms/Button"
+import { Input } from "../atoms/Input"
+import { Label } from "../atoms/Label"
 import {
     Table,
     TableBody,
@@ -13,74 +11,75 @@ import {
     TableHead,
     TableHeader,
     TableRow,
-} from "@/components/molecules/Table"
+} from "../molecules/Table"
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/molecules/Dialog"
-import { Checkbox } from "@/components/atoms/Checkbox"
+} from "../molecules/Dialog"
+import { Checkbox } from "../atoms/Checkbox"
 import { toast } from "sonner"
-import LoaderCard from "@/components/molecules/LoaderCard"
+import LoaderCard from "../molecules/LoaderCard"
 import { IconPlus, IconShieldCheck } from "@tabler/icons-react"
 
 export function RolesSection() {
-    const [roles, setRoles] = useState([])
-    const [permits, setPermits] = useState([])
-    const [loading, setLoading] = useState(true)
+    const {
+        roles,
+        permits,
+        loading: rolesLoading,
+        createRole,
+        assignPermit,
+        removePermit,
+        fetchAllPermits,
+        fetchRoleDetails
+    } = useRoles(null, 'rolesGet')
+
     const [selectedRole, setSelectedRole] = useState(null)
     const [newRole, setNewRole] = useState({ name: "", description: "" })
     const [rolePermits, setRolePermits] = useState([])
+    const [isFetchingPermits, setIsFetchingPermits] = useState(false)
 
     useEffect(() => {
-        fetchData()
-    }, [])
-
-    const fetchData = async () => {
-        setLoading(true)
-        const [rolesRes, permitsRes] = await Promise.all([
-            rolesApi.rolesGet(),
-            rolesApi.rolesGetAllPermitsGet()
-        ])
-        if (!rolesRes.error) setRoles(rolesRes.data)
-        if (!permitsRes.error) setPermits(permitsRes.data)
-        setLoading(false)
-    }
+        fetchAllPermits()
+    }, [fetchAllPermits])
 
     const handleCreateRole = async (e) => {
         e.preventDefault()
-        const response = await rolesApi.rolesPost({ data: newRole })
+        const response = await createRole(newRole)
         if (!response.error) {
-            toast.success("Role created successfully")
+            toast.success("Rol creado exitosamente")
             setNewRole({ name: "", description: "" })
-            fetchData()
         } else {
-            toast.error("Failed to create role: " + response.message)
+            toast.error("Error al crear rol: " + response.message)
         }
     }
 
     const openPermitsDialog = async (role) => {
         setSelectedRole(role)
-        const response = await rolesApi.rolesGetId({ rolId: role.rolId })
+        setIsFetchingPermits(true)
+        const response = await fetchRoleDetails(role.rolId)
+
         if (!response.error) {
             setRolePermits(response.data.permits || [])
+        } else {
+            setRolePermits([])
+            toast.error("Error al cargar permisos del rol")
         }
+        setIsFetchingPermits(false)
     }
 
-    const togglePermit = async (permitId, checked) => {
-        const data = { rolId: selectedRole.rolId, permitId }
+    const handleTogglePermit = async (permitId, checked) => {
         let response;
         if (checked) {
-            response = await rolesApi.rolesAssignPermitPost({ data })
+            response = await assignPermit(selectedRole.rolId, permitId)
         } else {
-            response = await rolesApi.rolesRemovePermitDelete({ data })
+            response = await removePermit(selectedRole.rolId, permitId)
         }
 
         if (!response.error) {
-            toast.success(checked ? "Permission assigned" : "Permission removed")
-            // Update local state for permissions
+            toast.success(checked ? "Permiso asignado" : "Permiso removido")
             if (checked) {
                 const permit = permits.find(p => p.permitId === permitId)
                 setRolePermits(prev => [...prev, permit])
@@ -88,11 +87,11 @@ export function RolesSection() {
                 setRolePermits(prev => prev.filter(p => p.permitId !== permitId))
             }
         } else {
-            toast.error("Action failed: " + response.message)
+            toast.error("Error: " + response.message)
         }
     }
 
-    if (loading) return <LoaderCard title="Loading Roles & Permissions..." />
+    if (rolesLoading && roles.length === 0) return <LoaderCard title="Cargando Roles y Permisos..." />
 
     return (
         <section className="p-4 space-y-6">
@@ -116,7 +115,7 @@ export function RolesSection() {
                                     id="roleName"
                                     value={newRole.name}
                                     onChange={(e) => setNewRole({ ...newRole, name: e.target.value })}
-                                    placeholder="e.g., Moderador"
+                                    placeholder="Ej. Moderador"
                                     required
                                 />
                             </div>
@@ -160,7 +159,7 @@ export function RolesSection() {
                                     <Dialog>
                                         <DialogTrigger asChild>
                                             <Button variant="outline" size="sm" onClick={() => openPermitsDialog(role)}>
-                                                Configure Permisos
+                                                Configurar Permisos
                                             </Button>
                                         </DialogTrigger>
                                         <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
@@ -173,10 +172,10 @@ export function RolesSection() {
                                                         <Checkbox
                                                             id={`permit-${permit.permitId}`}
                                                             checked={rolePermits.some(p => p.permitId === permit.permitId)}
-                                                            onCheckedChange={(checked) => togglePermit(permit.permitId, checked)}
+                                                            onCheckedChange={(checked) => handleTogglePermit(permit.permitId, checked)}
                                                         />
                                                         <div className="space-y-0.5">
-                                                            <Label htmlFor={`permit-${permit.permitId}`} color="#A1A1AA" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer">
+                                                            <Label htmlFor={`permit-${permit.permitId}`} color="#A1A1AA" className="text-sm font-medium leading-none cursor-pointer">
                                                                 {permit.name}
                                                             </Label>
                                                             <p className="text-[10px] text-muted-foreground">{permit.description}</p>

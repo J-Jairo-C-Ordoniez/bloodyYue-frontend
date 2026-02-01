@@ -2,12 +2,12 @@
 
 import { useState, useEffect, useMemo } from "react"
 import { useIsMobile } from "../../hooks/use-mobile"
-import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/molecules/Card"
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/molecules/Chart";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/molecules/Select"
-import { ToggleGroup, ToggleGroupItem } from "@/components/molecules/ToggleGroup"
+import { Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle } from "../molecules/Card"
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from "../molecules/Chart";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../molecules/Select"
+import { ToggleGroup, ToggleGroupItem } from "../molecules/ToggleGroup"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
-import useSales from "@/hooks/useSales"
+import useSales from "../../hooks/useSales"
 
 const chartConfig = {
   sales: {

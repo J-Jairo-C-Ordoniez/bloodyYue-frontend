@@ -2,11 +2,11 @@
 
 import { useMemo } from "react"
 import { IconTrendingUp, IconUsers, IconCurrencyDollar, IconShoppingCart } from "@tabler/icons-react"
-import { Card, CardAction, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/molecules/Card"
-import { Badge } from "@/components/atoms/Badge"
-import useSales from "@/hooks/useSales"
-import useUsers from "@/hooks/useUsers"
-import useAuthStore from "@/store/auth.store"
+import { Card, CardAction, CardDescription, CardFooter, CardHeader, CardTitle } from "../molecules/Card"
+import { Badge } from "../atoms/Badge"
+import useSales from "../../hooks/useSales"
+import useUsers from "../../hooks/useUsers"
+import useAuthStore from "../../store/auth.store"
 
 export default function SectionCards() {
   const { user } = useAuthStore()

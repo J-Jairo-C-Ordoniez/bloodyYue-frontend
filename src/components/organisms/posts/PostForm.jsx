@@ -1,15 +1,15 @@
-import { Button } from "@/components/atoms/Button"
-import { Input } from "@/components/atoms/Input"
-import { Label } from "@/components/atoms/Label"
-import { Textarea } from "@/components/atoms/Textarea"
-import { Checkbox } from "@/components/atoms/Checkbox"
+import { Button } from "../../atoms/Button"
+import { Input } from "../../atoms/Input"
+import { Label } from "../../atoms/Label"
+import { Textarea } from "../../atoms/Textarea"
+import { Checkbox } from "../../atoms/Checkbox"
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/components/molecules/Select"
+} from "../../molecules/Select"
 import { IconUpload, IconVideo, IconPencil } from "@tabler/icons-react"
 
 export default function PostForm({

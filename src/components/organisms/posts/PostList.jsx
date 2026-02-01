@@ -1,5 +1,5 @@
 import { IconPencil, IconTrash, IconImage } from "@tabler/icons-react"
-import { Button } from "@/components/atoms/Button"
+import { Button } from "../../atoms/Button"
 
 export default function PostList({ posts, onEdit, onDelete }) {
     if (!posts || posts.length === 0) {

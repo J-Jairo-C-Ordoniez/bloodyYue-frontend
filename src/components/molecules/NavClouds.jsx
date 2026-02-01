@@ -4,7 +4,7 @@ import {
     Collapsible,
     CollapsibleContent,
     CollapsibleTrigger,
-} from "@/components/molecules/Collapsible"
+} from "./Collapsible"
 
 import {
     SidebarGroup,
@@ -15,7 +15,7 @@ import {
     SidebarMenuSub,
     SidebarMenuSubButton,
     SidebarMenuSubItem,
-} from "@/components/molecules/Sidebar"
+} from "./Sidebar"
 
 import { ChevronRight } from "lucide-react"
 

@@ -1,9 +1,6 @@
-"use client"
-
-import { useState, useEffect } from "react"
-import usersApi from "../../api/users/index"
-import authApi from "../../api/auth/index"
-import rolesApi from "../../api/roles/index"
+import { useMemo } from "react"
+import useUsers from "../../hooks/useUsers"
+import useRoles from "../../hooks/useRoles"
 import Typography from "../atoms/Typography"
 
 import {
@@ -25,54 +22,30 @@ import { toast } from "sonner"
 import LoaderCard from "../molecules/LoaderCard"
 
 export function UsersSection() {
-    const [users, setUsers] = useState([])
-    const [roles, setRoles] = useState([])
-    const [loading, setLoading] = useState(true)
+    const { userData: users, loading: usersLoading, changeStatus, changeRole } = useUsers('usersGet')
+    const { roles, loading: rolesLoading } = useRoles(null, 'rolesGet')
 
-    useEffect(() => {
-        fetchUsers()
-        fetchRoles()
-    }, [])
-
-    const fetchUsers = async () => {
-        const response = await usersApi.usersGet()
-        if (!response.error) {
-            setUsers(response.data)
-        } else {
-            toast.error("Failed to load users: " + response.message)
-        }
-        setLoading(false)
-    }
-
-    const fetchRoles = async () => {
-        const response = await rolesApi.rolesGet()
-        if (!response.error) {
-            setRoles(response.data)
-        } else {
-            toast.error("Failed to update role: " + response.message)
-        }
-    }
+    const loading = usersLoading || rolesLoading
 
     const handleStatusChange = async (userId, newStatus) => {
-        const response = await authApi.changeStatusPatch({ userId, status: newStatus })
+        const response = await changeStatus(userId, newStatus)
         if (!response.error) {
-            toast.success("User status updated")
-            setUsers(prev => prev.map(u => u.userId === userId ? { ...u, status: newStatus } : u))
+            toast.success("Estado del usuario actualizado")
         } else {
-            toast.error("Failed to update status: " + response.message)
+            toast.error("Error al actualizar estado: " + response.message)
         }
     }
 
     const handleRoleChange = async (userId, newRolId) => {
-        const response = await authApi.changeRolePost({ userId, rolId: newRolId })
+        const response = await changeRole(userId, newRolId)
         if (!response.error) {
-            setUsers(prev => prev.map(u => u.userId === userId ? { ...u, rolId: newRolId } : u))
+            toast.success("Rol del usuario actualizado")
         } else {
-            toast.error("Failed to update role: " + response.message)
+            toast.error("Error al actualizar rol: " + response.message)
         }
     }
 
-    if (loading) return <LoaderCard title="Loading Users..." />
+    if (loading && !users) return <LoaderCard title="Cargando Usuarios..." />
 
     return (
         <section className="p-6">

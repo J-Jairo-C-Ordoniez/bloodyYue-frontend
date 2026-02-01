@@ -43,11 +43,10 @@ export default async function fetchClientMedia(endpoint, { auth = true, headers,
     return response.json();
   } catch (error) {
     clearTimeout(timeoutId);
-    console.error(`Fetch error for ${endpoint}:`, error);
     return {
       error: true,
       status: error.name === 'AbortError' ? 'TIMEOUT' : 'NETWORK_ERROR',
-      body: error.message
+      message: error.message
     };
   }
 }

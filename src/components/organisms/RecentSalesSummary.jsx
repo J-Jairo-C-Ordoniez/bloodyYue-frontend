@@ -1,11 +1,11 @@
 "use client"
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/molecules/Card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/molecules/Table"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../molecules/Card"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../molecules/Table"
 import { format } from "date-fns"
-import useSales from "@/hooks/useSales"
+import useSales from "../../hooks/useSales"
 import Label from "../atoms/Label"
-import useAuthStore from "@/store/auth.store"
+import useAuthStore from "../../store/auth.store"
 
 export default function RecentSalesSummary() {
     const { user } = useAuthStore()

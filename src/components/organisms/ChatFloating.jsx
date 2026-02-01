@@ -1,6 +1,6 @@
 "use client"
 
-import { useChatStore } from "@/store/chat.store";
+import { useChatStore } from "../../store/chat.store";
 import ChatWindow from "../molecules/ChatWindow";
 
 export default function ChatFloating() {

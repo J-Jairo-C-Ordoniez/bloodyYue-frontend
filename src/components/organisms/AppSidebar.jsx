@@ -1,11 +1,11 @@
 "use client"
 
 import Link from "../atoms/Link"
-import NavClouds from "@/components/molecules/NavClouds"
-import NavMain from "@/components/molecules/NavMain"
-import NavSecondary from "@/components/molecules/NavSecondary"
-import NavUser from "@/components/molecules/NavUser"
-import useAuthStore from "@/store/auth.store"
+import NavClouds from "../molecules/NavClouds"
+import NavMain from "../molecules/NavMain"
+import NavSecondary from "../molecules/NavSecondary"
+import NavUser from "../molecules/NavUser"
+import useAuthStore from "../../store/auth.store"
 import {
   Sidebar,
   SidebarContent,

@@ -1,18 +1,16 @@
-"use client"
-
 import { useState, useEffect } from "react"
-import useCommissions from "@/hooks/useCommissions"
-import labelsApi from "@/api/labels"
-import postsApi from "@/api/posts"
-import mediaApi from "@/api/media"
+import useCommissions from "../../hooks/useCommissions"
+import useLabels from "../../hooks/useLabels"
+import usePosts from "../../hooks/usePosts"
+import mediaApi from "../../api/media"
 import Typography from "../atoms/Typography"
-import { Button } from "@/components/atoms/Button"
+import { Button } from "../atoms/Button"
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle,
-} from "@/components/molecules/Dialog"
+} from "../molecules/Dialog"
 import { toast } from "sonner"
 import LoaderCard from "../molecules/LoaderCard"
 import { IconPlus } from "@tabler/icons-react"
@@ -21,7 +19,8 @@ import CommissionForm from "./commissions/CommissionForm"
 
 export function CommissionsManager() {
     const { commissions, loading, createCommission, updateCommission } = useCommissions();
-    const [labels, setLabels] = useState([])
+    const { labels } = useLabels();
+    const { posts: postsList, loading: postsLoading } = usePosts();
     const [isEditing, setIsEditing] = useState(false)
     const [uploading, setUploading] = useState(false)
     const [isOpen, setIsOpen] = useState(false)
@@ -34,29 +33,6 @@ export function CommissionsManager() {
         labels: [],
         exampleId: null
     })
-
-    const [postsList, setPostsList] = useState([])
-    const [postsLoading, setPostsLoading] = useState(false)
-
-    useEffect(() => {
-        (async () => {
-            const res = await labelsApi.labelsGet();
-            if (!res.error) setLabels(res.data);
-        })();
-    }, []);
-
-    useEffect(() => {
-        if (isOpen && postsList.length === 0) {
-            fetchPosts()
-        }
-    }, [isOpen, postsList.length]);
-
-    const fetchPosts = async () => {
-        setPostsLoading(true)
-        const res = await postsApi.postListGet({ id: 0 })
-        if (!res.error) setPostsList(res.data)
-        setPostsLoading(false)
-    }
 
     const handleFileChange = async (e) => {
         const file = e.target.files?.[0]

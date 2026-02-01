@@ -46,8 +46,7 @@ export default function CommissionCard({ commissionId, title, price, content, st
                 handleCloseDetails();
             }
         } catch (error) {
-            console.error(error);
-            alert("Error desconocido");
+            toast.error("Ocurrió un error al cargar la comisión");
         } finally {
             setIsLoading(false);
         }

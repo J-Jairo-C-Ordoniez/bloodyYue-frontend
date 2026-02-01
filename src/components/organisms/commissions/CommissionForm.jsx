@@ -1,16 +1,16 @@
-import { Button } from "@/components/atoms/Button"
-import { Input } from "@/components/atoms/Input"
-import { Label } from "@/components/atoms/Label"
-import { Textarea } from "@/components/atoms/Textarea"
-import { Checkbox } from "@/components/atoms/Checkbox"
+import { Button } from "../../atoms/Button"
+import { Input } from "../../atoms/Input"
+import { Label } from "../../atoms/Label"
+import { Textarea } from "../../atoms/Textarea"
+import { Checkbox } from "../../atoms/Checkbox"
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/molecules/Dialog"
-import LoaderCard from "@/components/molecules/LoaderCard"
+} from "../../molecules/Dialog"
+import LoaderCard from "../../molecules/LoaderCard"
 import { IconTrash, IconUpload, IconPencil } from "@tabler/icons-react"
 import { useState } from "react"
 

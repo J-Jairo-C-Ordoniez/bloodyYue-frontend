@@ -2,10 +2,29 @@ import Image from "../atoms/Image";
 import Label from "../atoms/Label";
 import Typography from "../atoms/Typography";
 import Icon from "../atoms/Icon";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { useRef } from "react";
 
 export default function PostRandom({ post, width, height }) {
+    const cardRef = useRef(null);
+
+    useGSAP(() => {
+        const card = cardRef.current;
+
+        gsap.from(card, {
+            y: 32,
+            scale: 0.96,
+            rotate: -4,
+            opacity: 0,
+            delay: 0.4,
+            duration: 1,
+            ease: "power3.out",
+        });
+    }, { scope: cardRef });
+
     return (
-        <article className="relative w-full h-full group overflow-hidden bg-white/5 ring-1 ring-white/10 rounded-3xl shadow-2xl">
+        <article ref={cardRef} className="relative w-full h-full group overflow-hidden bg-white/5 ring-1 ring-white/10 rounded-3xl">
             <div className="absolute inset-0">
                 <Image
                     src={post.content}

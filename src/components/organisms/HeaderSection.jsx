@@ -3,31 +3,56 @@
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import Typography from "../atoms/Typography";
-import Link from "../atoms/Link";
 import Menu from "../molecules/Menu";
 import gsap from "gsap";
 
 export default function HeaderSection({ title }) {
-    const container = useRef();
+    const titleRef = useRef();
 
     useGSAP(() => {
-        const tl = gsap.timeline();
-        tl.from(".title", {
+        const letters = document.querySelectorAll(".title-letter");
+
+        gsap.from(titleRef.current, {
+            y: -10,
+            duration: 1,
+            ease: "power2.out",
             opacity: 0,
-            y: 50,
-            duration: 1
         });
-        tl.from(".menu", {
-            opacity: 0,
-            y: 50,
-            duration: 1
-        });
-        tl.from(".links", {
-            opacity: 0,
-            y: 50,
-            duration: 1
-        });
-    }, { scope: container });
+
+        const hoverIn = () => {
+            gsap.to(letters, {
+                y: -6,
+                rotate: (i) => i % 2 === 0 ? -3 : 3,
+                duration: 0.4,
+                stagger: {
+                    each: 0.05,
+                    from: "center"
+                },
+                ease: "power2.out"
+            });
+        };
+
+        const hoverOut = () => {
+            gsap.to(letters, {
+                y: 0,
+                rotate: 0,
+                duration: 0.5,
+                stagger: {
+                    each: 0.02,
+                    from: "edges"
+                },
+                ease: "power3.out"
+            });
+        };
+
+        titleRef.current.addEventListener("mouseenter", hoverIn);
+        titleRef.current.addEventListener("mouseleave", hoverOut);
+
+        return () => {
+            titleRef.current.removeEventListener("mouseenter", hoverIn);
+            titleRef.current.removeEventListener("mouseleave", hoverOut);
+        };
+    }, { scope: titleRef });
 
     const menu = [
         { title: 'Sobre mí', href: '#about' },
@@ -36,24 +61,23 @@ export default function HeaderSection({ title }) {
         { title: 'Testimonios', href: '#testimonials' },
     ];
 
-    return (
-        <header ref={container} className="flex justify-center items-center min-h-[10vh]">
+    return (    
+        <header className="flex justify-center items-center sticky top-0 z-50 min-h-[10vh] md:px-10 lg:px-15 xl:px-20">
             <div className="flex justify-between items-center container mx-auto px-4">
-                <div className="flex justify-between items-center py-4 interactive">
+                <div ref={titleRef} className="flex justify-between items-center py-4 interactive">
                     <Typography
                         variant="h1"
                         className="text-white title"
                     >
-                        {title}
+                        {title.split("").map((letter, index) => (
+                            <span key={index} className="inline-block title-letter font-medium">
+                                {letter}
+                            </span>
+                        ))}
                     </Typography>
                 </div>
 
                 <Menu links={menu} />
-
-                <div className="flex gap-4 links">
-                    <Link href="/users/login" variant="secondary">Acceder</Link>
-                    <Link href="/users/register" variant="primary">Registrarse</Link>
-                </div>
             </div>
         </header>
     );

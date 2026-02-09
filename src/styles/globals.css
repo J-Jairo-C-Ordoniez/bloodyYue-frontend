@@ -87,7 +87,8 @@
 @layer base {
   body {
     background: #0B0B0F;
-    color: #e0e0e0
+    color: #e0e0e0;
+    overflow-x: hidden;
   }
 }
 
@@ -99,5 +100,6 @@
 html,
 body {
   background: #0B0B0F;
-  color: #e0e0e0
+  color: #e0e0e0;
+  overflow-x: hidden;
 }

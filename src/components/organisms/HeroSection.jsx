@@ -1,109 +1,176 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Typography from '../atoms/Typography';
-import Link from '../atoms/Link';
 import Icon from '../atoms/Icon';
-import Label from '../atoms/Label';
 import usePosts from '../../hooks/usePosts';
-import LoaderCard from '../molecules/LoaderCard';
 import PostRandom from '../molecules/PostRandom';
 import ErrorCard from '../molecules/ErrorCard';
 
-export default function HeroSection({ subtitle, abaut }) {
-    const { posts, loading, error } = usePosts(null, 'random');
-    const cardRef = useRef(null);
-    const containerRef = useRef(null);
+gsap.registerPlugin(ScrollTrigger);
+
+export default function HeroSection({ subtitle }) { 
+    const sectionRef = useRef(null);
+    const titleRef = useRef(null);
+    const contentRef = useRef(null);
+    const canvasRef = useRef(null);
+    const { posts, error } = usePosts(null, 'random');
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        let animationFrameId;
+
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        const particles = [];
+        const particleCount = 60; 
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.size = Math.random() * 2 + 1;
+                this.alpha = Math.random() * 0.5 + 0.1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0) this.x = width;
+                if (this.x > width) this.x = 0;
+                if (this.y < 0) this.y = height;
+                if (this.y > height) this.y = 0;
+            }
+
+            draw() {
+                ctx.fillStyle = `rgba(255, 0, 0, ${this.alpha})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        const render = () => {
+            ctx.clearRect(0, 0, width, height);
+
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+                    if (dist < 150) {
+                        ctx.lineWidth = 1 - dist / 150;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            animationFrameId = requestAnimationFrame(render);
+        };
+
+        render();
+
+        const handleResize = () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+            cancelAnimationFrame(animationFrameId);
+        };
+    }, []);
 
     useGSAP(() => {
-        const card = cardRef.current;
+        const tl = gsap.timeline();
 
-        gsap.from(card, {
-            scale: 0.8,
+        tl.from(titleRef.current, {
+            y: 50,
             opacity: 0,
-            duration: 1.5,
-            ease: "elastic.out(1, 0.5)",
-            delay: 0.5
+            duration: 1.2,
+            ease: "power3.out"
+        })
+            .from(contentRef.current, {
+                y: 50,
+                opacity: 0,
+                scale: 0.95,
+                duration: 1.2,
+                ease: "power3.out"
+            }, "-=0.8");
+
+        gsap.to(sectionRef.current, {
+            scrollTrigger: {
+                trigger: sectionRef.current,
+                start: "center center",
+                end: "bottom top",
+                scrub: true,
+            },
+            opacity: 0,
+            y: -100,
+            scale: 0.95,
+            filter: "blur(10px)"
         });
 
-        gsap.to(card, {
-            y: -15,
-            duration: 2,
-            repeat: -1,
-            yoyo: true,
-            opacity: 1,
-            ease: "sine.inOut"
-        });
-    }, { scope: containerRef });
+    }, { scope: sectionRef });
 
     return (
-        <section className="relative min-h-[90vh] overflow-hidden py-10 px-4 flex justify-center items-center">
-            <div ref={containerRef} className="container grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <article className="flex flex-col gap-8">
-                    <div className="relative z-10 max-w-2xl flex flex-col gap-6 animate-fade-in-up">
-                        <Label variant="status" color="#00C853" className="w-fit flex items-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                            Comisones Abiertas
-                        </Label>
+        <section
+            ref={sectionRef}
+            className="relative min-h-[85vh] flex flex-col justify-center items-center overflow-hidden bg-[#050505]" // Darker background
+        >
+            <canvas
+                ref={canvasRef}
+                className="absolute top-0 left-0 w-full h-full z-0 opacity-40 pointer-events-none"
+            />
 
-                        <Typography variant="h1" className="text-4xl md:text-6xl font-bold tracking-tight leading-tight text-gray-300">
-                            {subtitle}
-                        </Typography>
-
-                        <Typography variant="paragraph" className="text-lg text-gray-400 max-w-lg">
-                            {abaut}
-                        </Typography>
-
-                        <div className="flex gap-4 mt-6">
-                            <Link
-                                variant="primary"
-                                href="#commissions"
-                                className="rounded-full px-8 py-4 text-lg shadow-lg shadow-indigo-500/30"
-                            >
-                                Solicitar Comisión
-                            </Link>
-                            <Link
-                                variant="secondary"
-                                href="#gallery"
-                                className="rounded-full px-8 py-4 text-lg border-2"
-                            >
-                                Ver Galería
-                            </Link>
-                        </div>
-                    </div>
-
-
-                    <div className="flex items-center gap-12 mt-8 pt-8 border-t border-slate-800">
-                        <div className="flex flex-col">
-                            <span className="text-2xl font-bold text-white">27.4k</span>
-                            <span className="text-sm text-slate-400 font-medium">Followers</span>
-                        </div>
-                        <div className="flex flex-col">
-                            <span className="text-2xl font-bold text-white">466</span>
-                            <span className="text-sm text-slate-400 font-medium">Artworks</span>
-                        </div>
-                        <div className="flex flex-col">
-                            <span className="text-2xl font-bold text-white">4.9/5</span>
-                            <span className="text-sm text-slate-400 font-medium">Rating</span>
-                        </div>
-                    </div>
+            <div className="container relative z-10 px-4 md:px-10 flex flex-col items-center">
+                <article ref={titleRef} className="mb-8 md:mb-12 text-center max-w-4xl mx-auto">
+                    <Typography
+                        variant="h1"
+                        className="text-4xl md:text-6xl lg:text-7xl font-light tracking-tighter text-transparent bg-clip-text bg-linear-to-r from-gray-100 to-gray-400"
+                    >
+                        {subtitle}
+                    </Typography>
                 </article>
 
-                <div className="relative w-full aspect-4/5 max-w-[500px] mx-auto lg:ml-auto">
-                    <div ref={cardRef} className="rotate-4 w-full h-full rounded-3xl overflow-hidden shadow-2xl shadow-indigo-500/20 transform transition-all duration-500 hover:shadow-indigo-500/40">
-                        {loading && <LoaderCard />}
+                <article ref={contentRef} className="relative w-full max-w-4xl aspect-video md:aspect-21/9 mx-auto perspective-1000">
+                    <div className="w-full h-full rounded-2xl overflow-hidden shadow-2xl shadow-purple-900/10 border border-white/5 bg-white/5 backdrop-blur-sm">
                         {error && (
                             <ErrorCard message={error || 'Error al cargar el post destacado'} />
                         )}
-                        {posts && <PostRandom post={posts} width={500} height={700} />}
+                        
+                        {posts && <PostRandom post={posts} width="200" height="200" className="w-full h-full object-cover" />}
                     </div>
-                </div>
+                </article>
             </div>
 
-            <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce opacity-50 hidden md:block">
-                <Icon name="ArrowDown" size={24} className="text-slate-400" />
+            <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce z-20 opacity-50 hover:opacity-100 transition-opacity">
+                <Icon name="ArrowDown" size={24} className="text-white" />
             </div>
         </section>
     );

@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import useAuth from '../../../hooks/useAuth';
-import HomePage from '../../../components/pages/HomePage';
-import Loader from '../../../components/molecules/Loader';
-import useAuthStore from '../../../store/auth.store';
-import useErrorTokenStore from '../../../store/errorToken.store';
+import useAuth from '@/hooks/useAuth';
+import HomePage from '@/components/pages/HomePage';
+import Loader from '@/components/molecules/Loader';
+import useAuthStore from '@/store/auth.store';
+import useErrorTokenStore from '@/store/errorToken.store';
 
 export default function Cart() {
     const { user, token } = useAuthStore.getState();

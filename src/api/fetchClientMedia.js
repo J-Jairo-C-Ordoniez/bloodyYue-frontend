@@ -1,7 +1,7 @@
 import useAuthStore from "../store/auth.store";
 import useErrorTokenStore from "../store/errorToken.store";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://localhost:5000/api';
+const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://bloodyyue-backend.onrender.com/api';
 
 export default async function fetchClientMedia(endpoint, { auth = true, headers, options } = {}) {
   const token = useAuthStore.getState().token;

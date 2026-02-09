@@ -36,10 +36,9 @@ export default function SectionCards() {
   }, [sales, users])
 
   const isLoading = salesLoading || usersLoading
-  const hasError = salesError
 
   return (
-    <div className="p-6 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-4 gap-6">
       <Card className="@container/card">
         <CardHeader>
           <CardDescription>Ganancias totales</CardDescription>

@@ -66,7 +66,7 @@ export default function DashboardPage() {
             <AppSidebar onSelect={setActiveSection} />
             <SidebarInset className="bg-[#0B0B0E]">
                 <SiteHeader />
-                <main className="flex flex-1 flex-col overflow-y-auto bg-[#0B0B0E]">
+                <main className="flex flex-1 flex-col gap-8 p-8 overflow-y-auto bg-[#0B0B0E]">
                     {renderSection()}
                 </main>
             </SidebarInset>

@@ -97,7 +97,7 @@ const data = {
 export default function AppSidebar({ onSelect }) {
   const { user } = useAuthStore.getState();
   return (
-    <Sidebar collapsible="offcanvas" className="bg-[#0B0B0E] border-r-0">
+    <Sidebar collapsible="offcanvas" className="bg-[#0B0B0E] border-none">
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>

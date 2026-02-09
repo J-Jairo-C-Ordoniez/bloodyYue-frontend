@@ -63,7 +63,7 @@ export default function WorkCard({ postId, title, description, content, typePost
                     </div>
                 </header>
 
-                <div className="aspect-square w-full bg-zinc-900 flex justify-center items-center overflow-hidden">
+                <div className="aspect-square w-full flex justify-center items-center overflow-hidden">
                     <Button
                         variant="noneDetails"
                         size="none"

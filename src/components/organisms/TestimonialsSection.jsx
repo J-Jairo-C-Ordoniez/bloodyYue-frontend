@@ -14,40 +14,71 @@ export default function TestimonialsSection() {
     const { testimonies, loading, error } = useTestimonies();
     const containerRef = useRef(null);
 
-    useGSAP(() => {
-        if (loading || !testimonies || testimonies.length === 0) return;
+    const shouldRender = loading || error || (testimonies && testimonies.length > 0);
 
-        // Header animation
-        gsap.from(".testimonial-header", {
+    useGSAP(() => {
+        if (!shouldRender || loading || !testimonies || testimonies.length === 0) return;
+
+        gsap.fromTo(".testimonial-header", {
             scrollTrigger: {
                 trigger: containerRef.current,
                 start: "top 85%",
             },
-            y: 30,
+            y: 50,
             opacity: 0,
+            scale: 0.9,
             duration: 1,
-            ease: "power2.out"
+            ease: "back.out(1.7)",
+            delay: 0.5
+        },
+            {
+                y: 0,
+                opacity: 1,
+                scale: 1,
+                duration: 1,
+                ease: "back.out(1.7)"
+            });
+
+        const cards = gsap.utils.toArray(".testimonial-card");
+
+        cards.forEach((card, index) => {
+            gsap.fromTo(card,
+                {
+                    y: 100,
+                    opacity: 0,
+                    scale: 0.9,
+                },
+                {
+                    scrollTrigger: {
+                        trigger: card,
+                        start: "top 85%",
+                        toggleActions: "play none none reverse"
+                    },
+                    y: 0,
+                    opacity: 1,
+                    scale: 1,
+                    duration: 0.8,
+                    ease: "back.out(1.5)",
+                    delay: (index % 3) * 0.1
+                }
+            );
+
+            gsap.to(card, {
+                y: -10,
+                duration: 2 + Math.random() * 1.5,
+                yoyo: true,
+                repeat: -1,
+                ease: "sine.inOut",
+                delay: Math.random() * 2
+            });
         });
 
-        // Cards batch animation
-        ScrollTrigger.batch(".testimonial-card", {
-            onEnter: batch => gsap.from(batch, {
-                y: 50,
-                opacity: 0,
-                scale: 0.9,
-                stagger: 0.15,
-                duration: 0.8,
-                ease: "back.out(1.5)", // bouncy effect for testimonials
-                overwrite: true
-            }),
-            start: "top 90%",
-            once: true
-        });
+    }, { scope: containerRef, dependencies: [testimonies, loading, shouldRender] });
 
-    }, { scope: containerRef, dependencies: [testimonies, loading] });
+    if (!shouldRender) return null;
 
     return (
-        <section ref={containerRef} className="py-20 px-4 md:px-8 max-w-7xl mx-auto">
+        <section ref={containerRef} className="py-20 px-4 md:px-8 max-w-7xl mx-auto perspective-1000">
             <header className="text-center mb-16 relative testimonial-header">
                 <Typography variant="h3" className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter leading-tight">
                     Que Dicen <br />

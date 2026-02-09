@@ -71,13 +71,10 @@ export default function CommissionCard({ commissionId, title, price, content, st
                             }`}>
                             {status === 'closed' ? 'Cerrado' : 'Abierto'}
                         </span>
-                        <span className="px-2 py-0.5 rounded-full bg-purple-900/20 text-purple-500 text-[10px] font-bold uppercase tracking-wider border border-purple-800/50">
-                            Comisión
-                        </span>
                     </div>
                 </header>
 
-                <div className="aspect-square w-full bg-zinc-900 flex justify-center items-center overflow-hidden">
+                <div className="aspect-square w-full flex justify-center items-center overflow-hidden">
                     <Button
                         variant="noneDetails"
                         size="none"

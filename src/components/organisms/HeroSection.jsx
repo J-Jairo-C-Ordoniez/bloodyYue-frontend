@@ -1,23 +1,35 @@
 "use client";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Typography from '../atoms/Typography';
 import Icon from '../atoms/Icon';
 import usePosts from '../../hooks/usePosts';
 import PostRandom from '../molecules/PostRandom';
 import ErrorCard from '../molecules/ErrorCard';
+import Typography from '../atoms/Typography';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function HeroSection({ subtitle }) { 
+export default function HeroSection({ subtitle }) {
     const sectionRef = useRef(null);
     const titleRef = useRef(null);
     const contentRef = useRef(null);
     const canvasRef = useRef(null);
     const { posts, error } = usePosts(null, 'random');
+    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+
+    useEffect(() => {
+        const handleMouseMove = (e) => {
+            setMousePos({
+                x: (e.clientX / window.innerWidth - 0.5) * 2, 
+                y: (e.clientY / window.innerHeight - 0.5) * 2
+            });
+        };
+        window.addEventListener('mousemove', handleMouseMove);
+        return () => window.removeEventListener('mousemove', handleMouseMove);
+    }, []);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -30,26 +42,35 @@ export default function HeroSection({ subtitle }) {
         let height = canvas.height = window.innerHeight;
 
         const particles = [];
-        const particleCount = 60; 
+        const particleCount = 80;
 
         class Particle {
             constructor() {
                 this.x = Math.random() * width;
                 this.y = Math.random() * height;
-                this.vx = (Math.random() - 0.5) * 0.5;
-                this.vy = (Math.random() - 0.5) * 0.5;
+                this.baseX = this.x;
+                this.baseY = this.y;
+                this.vx = (Math.random() - 0.5) * 0.3;
+                this.vy = (Math.random() - 0.5) * 0.3;
                 this.size = Math.random() * 2 + 1;
                 this.alpha = Math.random() * 0.5 + 0.1;
+                this.density = (Math.random() * 30) + 1;
             }
 
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
+            update(mouseX, mouseY) {
+                const dx = mouseX * 50 * this.density * 0.1;
+                const dy = mouseY * 50 * this.density * 0.1;
 
-                if (this.x < 0) this.x = width;
-                if (this.x > width) this.x = 0;
-                if (this.y < 0) this.y = height;
-                if (this.y > height) this.y = 0;
+                this.baseX += this.vx;
+                this.baseY += this.vy;
+
+                if (this.baseX < 0) this.baseX = width;
+                if (this.baseX > width) this.baseX = 0;
+                if (this.baseY < 0) this.baseY = height;
+                if (this.baseY > height) this.baseY = 0;
+
+                this.x = this.baseX - dx;
+                this.y = this.baseY - dy;
             }
 
             draw() {
@@ -66,9 +87,8 @@ export default function HeroSection({ subtitle }) {
 
         const render = () => {
             ctx.clearRect(0, 0, width, height);
-
             particles.forEach(p => {
-                p.update();
+                p.update(mousePos.x, mousePos.y);
                 p.draw();
             });
 
@@ -87,7 +107,6 @@ export default function HeroSection({ subtitle }) {
                     }
                 }
             }
-
             animationFrameId = requestAnimationFrame(render);
         };
 
@@ -104,24 +123,45 @@ export default function HeroSection({ subtitle }) {
             window.removeEventListener('resize', handleResize);
             cancelAnimationFrame(animationFrameId);
         };
-    }, []);
+    }, [mousePos]);
 
     useGSAP(() => {
         const tl = gsap.timeline();
 
-        tl.from(titleRef.current, {
-            y: 50,
-            opacity: 0,
-            duration: 1.2,
-            ease: "power3.out"
-        })
-            .from(contentRef.current, {
+        if (subtitle) {
+            tl.fromTo(titleRef.current,
+                { y: 100, opacity: 0, rotateX: -90 },
+                {
+                    y: 0,
+                    opacity: 1,
+                    rotateX: 0,
+                    stagger: 0.02,
+                    duration: 1,
+                    ease: "back.out()"
+                }
+            );
+        } else {
+            tl.from(titleRef.current, {
                 y: 50,
                 opacity: 0,
-                scale: 0.95,
                 duration: 1.2,
                 ease: "power3.out"
-            }, "-=0.8");
+            });
+        }
+
+        tl.fromTo(contentRef.current,
+            {
+                clipPath: "inset(50% 50% 50% 50%)",
+                scale: 1.1,
+                autoAlpha: 0
+            },
+            {
+                clipPath: "inset(0% 0% 0% 0%)",
+                scale: 1,
+                autoAlpha: 1,
+                duration: 1.5,
+                ease: "expo.out"
+            }, "-=0.5");
 
         gsap.to(sectionRef.current, {
             scrollTrigger: {
@@ -136,12 +176,12 @@ export default function HeroSection({ subtitle }) {
             filter: "blur(10px)"
         });
 
-    }, { scope: sectionRef });
+    }, { scope: sectionRef, dependencies: [subtitle] });
 
     return (
         <section
             ref={sectionRef}
-            className="relative min-h-[85vh] flex flex-col justify-center items-center overflow-hidden bg-[#050505]" // Darker background
+            className="relative min-h-[85vh] flex flex-col justify-center items-center overflow-hidden"
         >
             <canvas
                 ref={canvasRef}
@@ -149,22 +189,19 @@ export default function HeroSection({ subtitle }) {
             />
 
             <div className="container relative z-10 px-4 md:px-10 flex flex-col items-center">
-                <article ref={titleRef} className="mb-8 md:mb-12 text-center max-w-4xl mx-auto">
-                    <Typography
-                        variant="h1"
-                        className="text-4xl md:text-6xl lg:text-7xl font-light tracking-tighter text-transparent bg-clip-text bg-linear-to-r from-gray-100 to-gray-400"
-                    >
-                        {subtitle}
+                <article ref={titleRef} className="mb-8 md:mb-12 text-center max-w-4xl mx-auto perspective-500 min-h-[60px]">
+                    <Typography type="h1" className="text-4xl md:text-6xl lg:text-7xl font-light tracking-tighter text-transparent bg-clip-text bg-linear-to-r from-gray-100 to-gray-400 overflow-hidden">
+                        {subtitle || "Portfolio"}
                     </Typography>
                 </article>
 
-                <article ref={contentRef} className="relative w-full max-w-4xl aspect-video md:aspect-21/9 mx-auto perspective-1000">
+                <article ref={contentRef} className="relative w-full max-w-4xl aspect-video md:aspect-21/9 mx-auto perspective-1000 invisible">
                     <div className="w-full h-full rounded-2xl overflow-hidden shadow-2xl shadow-purple-900/10 border border-white/5 bg-white/5 backdrop-blur-sm">
                         {error && (
                             <ErrorCard message={error || 'Error al cargar el post destacado'} />
                         )}
-                        
-                        {posts && <PostRandom post={posts} width="200" height="200" className="w-full h-full object-cover" />}
+
+                        {posts && <PostRandom post={posts} width="600" height="600" className="w-full h-full object-cover" />}
                     </div>
                 </article>
             </div>

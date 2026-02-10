@@ -10,13 +10,13 @@ import useAuth from "../../hooks/useAuth";
 export default function VerifyAccountPanel() {
     const router = useRouter();
     const [errors, setErrors] = useState(null);
-    const { auth } = useAuth('codeGet');
+    const { codeGet } = useAuth('none');
 
     useEffect(() => {
         (async () => {
             const email = useCodeStore.getState().email;
             if (!email) return setErrors('No se proporciono un correo')
-            const res = await auth({ email, type: 'verify' })
+            const res = await codeGet({ email, type: 'verify' })
             if (res.error) {
                 return setErrors(res.message)
             }

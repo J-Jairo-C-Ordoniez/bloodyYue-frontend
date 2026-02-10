@@ -10,8 +10,8 @@ import useAuthStore from "../../store/auth.store"
 
 export default function SectionCards() {
   const { user } = useAuthStore()
-  const { sales, loading: salesLoading, error: salesError } = useSales('salesGetLisGet', { id: user?.userId || 0 })
-  const { userData: users, loading: usersLoading } = useUsers('usersGet')
+  const { sales, loading: salesLoading, error: salesError } = useSales(user?.userId ? 'salesGetLisGet' : 'none', { id: 0})
+  const { userData: users, loading: usersLoading } = useUsers(user?.userId ? 'usersGet' : 'none')
 
   const metrics = useMemo(() => {
     const salesArray = Array.isArray(sales) ? sales : []

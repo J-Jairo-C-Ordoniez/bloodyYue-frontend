@@ -25,9 +25,7 @@ export default function Dashboard() {
 
             const res = await refreshToken();
 
-            setErrors(user?.data?.status);
-
-            if (user && user?.data?.status !== 'active') {
+            if (res && res?.data?.user?.status !== 'active') {
                 return setErrors('Su cuenta no esta activa');
             }
 

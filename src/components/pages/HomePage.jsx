@@ -52,10 +52,10 @@ export default function HomePage({ initialTab = 'home' }) {
                 <div className="container mx-auto px-6 h-full flex items-end pb-8">
                     <article className="flex items-center gap-8 w-full translate-y-12">
                         <div className="relative group">
-                            <div className="w-40 h-40 flex items-center justify-center rounded-full overflow-hidden ring-4 ring-[#0B0B0E] bg-zinc-900 shadow-2xl relative z-10">
+                            <div className="w-40 h-40 flex items-center justify-center rounded-full overflow-hidden bg-zinc-900 shadow-2xl relative z-10">
                                 {user?.avatar
                                     ? <Image src={user.avatar} alt={user.name} fill className="object-cover" />
-                                    : <Icon name="User" size={100} className="text-zinc-600" />
+                                    : <Icon name="User" size={80} className="text-zinc-700" />
                                 }
                             </div>
                             <Button

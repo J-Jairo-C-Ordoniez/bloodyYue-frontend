@@ -68,6 +68,19 @@ export default function useAuth(variant = 'loginPost') {
     }
   }, []);
 
+  const register = useCallback(async (postData) => {
+    setLoading(true);
+    try {
+      const res = await auth.registerPost(postData);
+      if (res.error) setError(res.message);
+      return res;
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   const login = useCallback(async (postData) => {
     setLoading(true);
     try {
@@ -115,6 +128,7 @@ export default function useAuth(variant = 'loginPost') {
     codeGet,
     resetPassword,
     login,
+    register,
     refreshToken,
     logout
   };

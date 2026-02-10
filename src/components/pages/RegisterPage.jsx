@@ -11,7 +11,7 @@ import useCodeStore from '../../store/code.store';
 
 export default function RegisterPage({ data }) {
     const router = useRouter();
-    const { auth } = useAuth('registerPost');
+    const { register } = useAuth('none');
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -48,7 +48,7 @@ export default function RegisterPage({ data }) {
             return;
         }
 
-        const res = await auth(formData);
+        const res = await register(formData);
         if (res?.error) {
             return setErrors(res.message);
         }

@@ -9,7 +9,7 @@ import useAuthStore from "../../store/auth.store"
 
 export default function RecentSalesSummary() {
     const { user } = useAuthStore()
-    const { sales, loading, error } = useSales('salesGetLisGet', { id: user?.userId || 0 })
+    const { sales, loading, error } = useSales(user?.userId ? 'salesGetLisGet' : 'none', { id: 0})
 
     const salesArray = Array.isArray(sales) ? sales : []
     const recentSales = salesArray.slice(0, 5)

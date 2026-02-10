@@ -133,8 +133,8 @@ export default function Form({ handleSubmit, formData, handleChange, variant = '
                         <div key={input.id} className={input.colSpan}>
                             <Component
                                 id={input.id}
-                                name={input.name}
                                 label={input.label}
+                                name={input.name}
                                 type={input.type}
                                 placeholder={input.placeholder}
                                 value={input.value}

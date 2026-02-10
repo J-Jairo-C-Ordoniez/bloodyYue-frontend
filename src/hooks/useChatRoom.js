@@ -56,6 +56,7 @@ export default function useChatRoom(chatId) {
         if (!content.trim() || !chatId) return;
 
         const messageData = {
+            messageId: `temp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
             chatId,
             content,
             senderId: user?.userId,
